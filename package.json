@@ -13,7 +13,7 @@
     "dev:mobile": "pnpm --filter @belle-ame/mobile dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "postinstall": "pnpm --filter @belle-ame/database db:generate",
+    "postinstall": "pnpm --filter @belle-ame/database db:generate || true",
     "db:generate": "pnpm --filter @belle-ame/database db:generate",
     "db:migrate": "pnpm --filter @belle-ame/database db:migrate",
     "db:seed": "pnpm --filter @belle-ame/database db:seed",
