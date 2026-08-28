@@ -92,7 +92,11 @@ Domaine : belleame.africa          Domaine : admin.belleame.africa        Domain
 | :--- | :--- | :--- |
 | `NODE_ENV` | `production` | Environnement d'exécution |
 | `VERCEL` | `1` | Marqueur d'exécution Serverless |
-| `DATABASE_URL` | `postgres://user:pass@ep-pooler.neon.tech/belleame_db?sslmode=require&pgbouncer=true` | Chaîne de connexion PostgreSQL avec connection pooler |
+| `DATABASE_URL` | `postgresql://postgres:Ndiaye2511%40@db.xsluoitjnkuiuqpgmknj.supabase.co:5432/postgres` | Connexion PostgreSQL Supabase |
+| `DIRECT_URL` | `postgresql://postgres:Ndiaye2511%40@db.xsluoitjnkuiuqpgmknj.supabase.co:5432/postgres` | Connexion directe Prisma DDL Supabase |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xsluoitjnkuiuqpgmknj.supabase.co` | URL du projet Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Clé API publique Anon Supabase |
+| `JWT_SECRET` | `openssl rand -base64 48` | Clé secrète de signature des tokens |
 | `REDIS_URL` | `redis://default:token@upstash.io:6379` | Instance Redis managée (Upstash Redis recommandé pour Vercel) |
 | `JWT_ACCESS_SECRET` | Chaîne aléatoire 64 octets (`openssl rand -hex 64`) | Signature des jetons d'accès (15 min) |
 | `JWT_REFRESH_SECRET` | Chaîne aléatoire 64 octets (`openssl rand -hex 64`) | Signature des refresh tokens (30 jours) |
