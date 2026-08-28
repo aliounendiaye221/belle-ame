@@ -2,7 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, MessageCircle, Crown, Sparkles, Clock, CheckCircle } from "lucide-react";
+import { ShieldCheck, MessageCircle, Crown, Sparkles, Clock, CheckCircle, Flame, ArrowRight, Lock } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
+import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 
 export default function MatchesPage() {
   const matches = [
@@ -11,124 +13,272 @@ export default function MatchesPage() {
       firstName: "Grace",
       age: 26,
       location: "Douala, Cameroun 🇨🇲",
-      score: 94,
+      score: 96,
       photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
       lastMessage: "Bonjour ! J'ai lu ta présentation sur tes valeurs spirituelles...",
       timeAgo: "Il y a 10 min",
       verified: true,
-      unread: true
+      unread: true,
+      expiresIn: "18h 24m",
     },
     {
       id: "match-102",
       firstName: "Marie-Joséphine",
       age: 28,
       location: "Abidjan, Côte d'Ivoire 🇨🇮",
-      score: 91,
+      score: 92,
       photoUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80",
       lastMessage: "Accord mutuel validé ! Vous pouvez échanger en toute sérénité.",
       timeAgo: "Hier",
       verified: true,
-      unread: false
-    }
+      unread: false,
+      expiresIn: "Actif permanent",
+    },
   ];
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#0b130e", color: "#f8f9fa", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
-      
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#070d09",
+        color: "#fbfbfb",
+        fontFamily: "var(--font-sans)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <LiveSocialProofToast />
+
       {/* Top Navbar */}
-      <header style={{ padding: "1rem 2rem", borderBottom: "1px solid rgba(212, 163, 115, 0.15)", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#14231a" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ width: "36px", height: "36px", borderRadius: "50%", backgroundColor: "#d4a373", color: "#0b130e", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
-            Â
-          </div>
-          <span style={{ fontWeight: "800", fontSize: "1.1rem" }}>À Chacun Une Belle Âme</span>
-        </div>
+      <header
+        style={{
+          padding: "1rem 2rem",
+          borderBottom: "1px solid rgba(212, 163, 115, 0.18)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "rgba(16, 32, 23, 0.85)",
+          backdropFilter: "blur(20px)",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+        }}
+      >
+        <BrandLogo size="md" />
 
         <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/discover" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500" }}>
+          <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Découverte
           </Link>
-          <Link href="/matches" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem" }}>
+          <Link
+            href="/matches"
+            style={{
+              color: "#f4c07c",
+              fontWeight: "700",
+              textDecoration: "none",
+              borderBottom: "2px solid #f4c07c",
+              paddingBottom: "0.25rem",
+              fontSize: "0.92rem",
+            }}
+          >
             Correspondances ({matches.length})
           </Link>
-          <Link href="/subscription" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-            <Crown size={16} color="#d4a373" /> Offres
+          <Link
+            href="/subscription"
+            style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}
+          >
+            <Crown size={16} color="#f4c07c" /> Offres
           </Link>
-          <Link href="/profile" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500" }}>
+          <Link href="/profile" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Profil
           </Link>
         </nav>
       </header>
 
-      <main style={{ flex: 1, maxWidth: "800px", width: "100%", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
-        <div style={{ marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: "800", marginBottom: "0.5rem" }}>Vos Correspondances Sincères</h1>
-          <p style={{ color: "#a0aba4", fontSize: "0.95rem" }}>
-            Seules les personnes ayant exprimé un intérêt mutuel réciproque (Opt-in strict) apparaissent ici.
-          </p>
+      {/* Main Content */}
+      <main style={{ flex: 1, padding: "2.5rem 1.5rem", maxWidth: "920px", width: "100%", margin: "0 auto" }}>
+        
+        {/* Title Header with Urgency Alert */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
+          <div>
+            <span className="badge-gold" style={{ marginBottom: "0.5rem" }}>
+              <Sparkles size={13} /> AFFINITÉS MUTUELLES ACTIVES
+            </span>
+            <h1 style={{ fontSize: "2rem", fontWeight: "900", color: "#fbfbfb", margin: 0 }}>
+              Vos Correspondances d&apos;Âme
+            </h1>
+            <p style={{ fontSize: "0.88rem", color: "#c7cfcb", marginTop: "4px" }}>
+              Chaque correspondance représente un intérêt réciproque confirmé. Engagez la conversation avec sincérité.
+            </p>
+          </div>
+
+          <div
+            style={{
+              padding: "0.6rem 1rem",
+              borderRadius: "14px",
+              backgroundColor: "rgba(224, 122, 95, 0.15)",
+              border: "1px solid rgba(224, 122, 95, 0.35)",
+              color: "#f4a261",
+              fontSize: "0.78rem",
+              fontWeight: "700",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <Clock size={15} /> Règle anti-ghosting : 24h pour initier l&apos;échange
+          </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {matches.map((item) => (
+        {/* Matches List */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {matches.map((match) => (
             <Link
-              key={item.id}
-              href={`/chat/${item.id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
+              key={match.id}
+              href={`/chat/${match.id}`}
+              className="glass-panel"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "1.25rem 1.5rem",
+                borderRadius: "24px",
+                textDecoration: "none",
+                gap: "1.25rem",
+                position: "relative",
+                border: match.unread ? "1.5px solid rgba(244, 192, 124, 0.45)" : "1px solid rgba(212, 163, 115, 0.18)",
+              }}
             >
-              <div
-                style={{
-                  backgroundColor: "#14231a",
-                  borderRadius: "20px",
-                  border: item.unread ? "1px solid #d4a373" : "1px solid rgba(212, 163, 115, 0.2)",
-                  padding: "1.25rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1.25rem",
-                  transition: "transform 0.2s ease, border-color 0.2s ease"
-                }}
-              >
-                {/* Photo Avatar with Online Badge */}
-                <div style={{ position: "relative" }}>
-                  <img
-                    src={item.photoUrl}
-                    alt={item.firstName}
-                    style={{ width: "70px", height: "70px", borderRadius: "50%", objectFit: "cover", border: "2px solid #d4a373" }}
+              {/* Candidate Avatar with Status */}
+              <div style={{ position: "relative", flexShrink: 0 }}>
+                <img
+                  src={match.photoUrl}
+                  alt={match.firstName}
+                  style={{
+                    width: "72px",
+                    height: "72px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: "2.5px solid #d4a373",
+                  }}
+                />
+                {match.unread && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      width: "14px",
+                      height: "14px",
+                      borderRadius: "50%",
+                      backgroundColor: "#52b788",
+                      border: "2px solid #102017",
+                      boxShadow: "0 0 10px #52b788",
+                    }}
                   />
-                  <div style={{ position: "absolute", bottom: "2px", right: "2px", width: "16px", height: "16px", borderRadius: "50%", backgroundColor: "#52b788", border: "2px solid #14231a" }} />
+                )}
+              </div>
+
+              {/* Match Details */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                  <span style={{ fontSize: "1.15rem", fontWeight: "900", color: "#fbfbfb" }}>
+                    {match.firstName}, {match.age}
+                  </span>
+                  <span className="badge-gold" style={{ fontSize: "0.72rem" }}>
+                    <Sparkles size={11} /> {match.score}% Compatibilité
+                  </span>
+                  {match.verified && (
+                    <span className="badge-emerald" style={{ fontSize: "0.72rem" }}>
+                      <ShieldCheck size={11} /> Certifié
+                    </span>
+                  )}
                 </div>
 
-                {/* Info & Last Message */}
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <span style={{ fontSize: "1.1rem", fontWeight: "700" }}>{item.firstName}, {item.age} ans</span>
-                      {item.verified && (
-                        <span style={{ color: "#52b788", display: "flex", alignItems: "center", gap: "0.2rem", fontSize: "0.75rem", backgroundColor: "rgba(82, 183, 136, 0.15)", padding: "0.2rem 0.5rem", borderRadius: "10px" }}>
-                          <ShieldCheck size={12} /> Vérifiée
-                        </span>
-                      )}
-                    </div>
-                    <span style={{ fontSize: "0.75rem", color: "#a0aba4" }}>{item.timeAgo}</span>
-                  </div>
-
-                  <div style={{ fontSize: "0.85rem", color: "#d4a373", fontWeight: "600", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.3rem" }}>
-                    <Sparkles size={14} /> Score de compatibilité : {item.score}%
-                  </div>
-
-                  <div style={{ fontSize: "0.85rem", color: item.unread ? "#ffffff" : "#a0aba4", fontWeight: item.unread ? "600" : "400", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "420px" }}>
-                    {item.lastMessage}
-                  </div>
+                <div style={{ fontSize: "0.8rem", color: "#d4a373", fontWeight: "600", marginTop: "2px" }}>
+                  {match.location}
                 </div>
 
-                {/* Action Icon */}
-                <div style={{ width: "44px", height: "44px", borderRadius: "50%", backgroundColor: "rgba(212, 163, 115, 0.15)", color: "#d4a373", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <MessageCircle size={20} />
-                </div>
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: match.unread ? "#fbfbfb" : "#8a968f",
+                    fontWeight: match.unread ? "700" : "400",
+                    margin: "6px 0 0 0",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {match.lastMessage}
+                </p>
+              </div>
 
+              {/* Expiration Timer & CTA */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px", flexShrink: 0 }}>
+                <span style={{ fontSize: "0.75rem", color: "#8a968f" }}>{match.timeAgo}</span>
+                {match.expiresIn.includes("h") ? (
+                  <span
+                    style={{
+                      fontSize: "0.72rem",
+                      padding: "3px 8px",
+                      borderRadius: "999px",
+                      backgroundColor: "rgba(224, 122, 95, 0.2)",
+                      color: "#f4a261",
+                      fontWeight: "700",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <Clock size={11} /> Expire: {match.expiresIn}
+                  </span>
+                ) : (
+                  <span style={{ fontSize: "0.72rem", color: "#52b788", fontWeight: "700" }}>
+                    ✓ Discussion active
+                  </span>
+                )}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    color: "#f4c07c",
+                    fontSize: "0.82rem",
+                    fontWeight: "800",
+                    marginTop: "4px",
+                  }}
+                >
+                  Ouvrir le Chat <ArrowRight size={14} />
+                </div>
               </div>
             </Link>
           ))}
         </div>
+
+        {/* Locked Admirers Banner (Endowed Progress / Curiosity) */}
+        <div
+          className="glass-panel"
+          style={{
+            marginTop: "2.5rem",
+            padding: "2rem",
+            borderRadius: "28px",
+            border: "1.5px dashed rgba(212, 163, 115, 0.35)",
+            textAlign: "center",
+            background: "linear-gradient(135deg, rgba(16, 32, 23, 0.6), rgba(11, 21, 16, 0.8))",
+          }}
+        >
+          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>👀</div>
+          <h3 style={{ fontSize: "1.25rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.4rem" }}>
+            3 Personnes Compatibles Ont Aimé Votre Profil
+          </h3>
+          <p style={{ fontSize: "0.85rem", color: "#c7cfcb", maxWidth: "480px", margin: "0 auto 1.5rem" }}>
+            Elles attendent un signe de votre part à Douala et Abidjan. Débloquez la liste intégrale avec le Pass Privilège.
+          </p>
+          <Link href="/subscription" className="btn-primary" style={{ fontSize: "0.9rem", padding: "12px 28px" }}>
+            <Lock size={15} /> Voir Mes Admirateurs Secrets
+          </Link>
+        </div>
+
       </main>
     </div>
   );

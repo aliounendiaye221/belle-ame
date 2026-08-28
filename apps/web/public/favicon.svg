@@ -1,15 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0b130e"/>
-      <stop offset="100%" style="stop-color:#14231a"/>
+      <stop offset="0%" style="stop-color:#070d09"/>
+      <stop offset="100%" style="stop-color:#102017"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#d4a373"/>
+    <linearGradient id="goldSheen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="35%" style="stop-color:#f4c07c"/>
+      <stop offset="70%" style="stop-color:#d4a373"/>
       <stop offset="100%" style="stop-color:#e07a5f"/>
     </linearGradient>
+    <linearGradient id="emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#74c69d"/>
+      <stop offset="100%" style="stop-color:#1f5a3a"/>
+    </linearGradient>
   </defs>
-  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#gold)" stroke-width="4" opacity="0.3"/>
-  <text x="256" y="290" text-anchor="middle" font-family="serif" font-size="200" font-weight="bold" fill="url(#gold)">Â</text>
+  <rect width="512" height="512" rx="128" fill="url(#bg)"/>
+  <rect width="496" height="496" x="8" y="8" rx="120" fill="none" stroke="url(#goldSheen)" stroke-width="4" opacity="0.35"/>
+  <!-- Infinity Heart Knot -->
+  <path d="M256 420 C110 320, 50 220, 90 140 C125 75, 210 80, 256 150 C302 80, 387 75, 422 140 C462 220, 402 320, 256 420 Z" stroke="url(#goldSheen)" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <!-- Monogram Â -->
+  <text x="256" y="300" text-anchor="middle" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="180" font-weight="900" fill="url(#goldSheen)">Â</text>
+  <!-- Crown Gem -->
+  <circle cx="256" cy="115" r="18" fill="url(#emerald)" stroke="#ffffff" stroke-width="4"/>
 </svg>
