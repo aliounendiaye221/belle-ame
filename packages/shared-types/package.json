@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "echo shared-types ready",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit"

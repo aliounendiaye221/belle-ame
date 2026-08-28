@@ -20,8 +20,8 @@ export const CreateProfileSchema = z.object({
     .trim(),
   birthDate: z
     .string()
-    .refine((val) => !isNaN(Date.parse(val)), "Date de naissance invalide")
-    .refine((val) => {
+    .refine((val: string) => !isNaN(Date.parse(val)), "Date de naissance invalide")
+    .refine((val: string) => {
       const age = calculateAge(new Date(val));
       return age >= 18;
     }, "L'accès à la plateforme est strictement réservé aux personnes majeures (18 ans ou plus)"),
@@ -53,7 +53,7 @@ export const UpdatePreferencesSchema = z.object({
   targetCountries: z.array(z.string()).default([]),
   targetCities: z.array(z.string()).default([]),
   targetFamilyStatus: z.array(z.nativeEnum(FamilyStatus)).default([]),
-}).refine((data) => data.minAge <= data.maxAge, {
+}).refine((data: { minAge: number; maxAge: number }) => data.minAge <= data.maxAge, {
   message: "L'âge minimum doit être inférieur ou égal à l'âge maximum",
   path: ["minAge"],
 });
