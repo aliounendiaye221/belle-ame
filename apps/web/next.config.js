@@ -3,7 +3,7 @@ const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@belle-ame/shared-types"],
+  transpilePackages: ["@belle-ame/shared-types", "lucide-react"],
   experimental: {
     outputFileTracingRoot: path.resolve(__dirname, "../../"),
   },
