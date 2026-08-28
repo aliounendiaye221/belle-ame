@@ -1,0 +1,42 @@
+# Dépendances
+node_modules
+.pnpm-store
+
+# Compilations & Builds
+dist
+build
+.turbo
+.next
+out
+.vercel
+
+# Fichiers d'environnement (Sécurité stricte)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Expo & React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Données locales & Mocks
+.docker-data/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,78 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality_and_tests:
+    name: Code Quality & Automated Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: belleame_user
+          POSTGRES_PASSWORD: belleame_password_local
+          POSTGRES_DB: belleame_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.12.0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint code
+        run: pnpm lint
+
+      - name: Typecheck TypeScript
+        run: pnpm build --filter=@belle-ame/shared-types
+
+      - name: Apply Prisma Migrations & Generate Client
+        env:
+          DATABASE_URL: "postgresql://belleame_user:belleame_password_local@localhost:5432/belleame_test_db?schema=public"
+        run: |
+          pnpm db:generate
+
+      - name: Run Unit & Integration Tests
+        env:
+          DATABASE_URL: "postgresql://belleame_user:belleame_password_local@localhost:5432/belleame_test_db?schema=public"
+          JWT_ACCESS_SECRET: "github-actions-test-secret-at-least-32-chars-long"
+          JWT_REFRESH_SECRET: "github-actions-test-refresh-secret-32-chars"
+          APP_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+        run: pnpm test
+
+      - name: Build applications
+        run: pnpm build

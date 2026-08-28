@@ -1,0 +1,28 @@
+{
+  "name": "À Chacun Une Belle Âme",
+  "short_name": "Belle Âme",
+  "description": "Rencontres sérieuses & vérifiées en Afrique francophone — Cameroun, Bénin, Côte d'Ivoire et Diaspora.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b130e",
+  "theme_color": "#0b130e",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "categories": ["social", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
