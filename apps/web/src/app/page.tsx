@@ -45,7 +45,7 @@ export default function HomePage() {
           zIndex: 50,
         }}
       >
-        <BrandLogo size="md" />
+        <BrandLogo size="md" useImage={true} />
 
         <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
           <Link href="/discover" style={{ color: "#f4c07c", textDecoration: "none", fontWeight: "700", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "4px" }}>
@@ -307,6 +307,71 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Haute Couture African Couple Feature Section */}
+      <section style={{ padding: "4rem 2rem", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
+        <div
+          className="glass-panel"
+          style={{
+            borderRadius: "36px",
+            overflow: "hidden",
+            border: "2px solid rgba(244, 192, 124, 0.4)",
+            display: "grid",
+            gridTemplateColumns: "1fr 1.15fr",
+            backgroundColor: "#0d1b13",
+          }}
+        >
+          {/* Couple Image with warm gradient glow */}
+          <div style={{ position: "relative", minHeight: "380px" }}>
+            <img
+              src="/images/hero-couple.jpg"
+              alt="Couple uni par À Chacun Une Belle Âme"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to right, transparent 60%, rgba(13, 27, 19, 1) 100%)",
+              }}
+            />
+          </div>
+
+          {/* Narrative Content */}
+          <div style={{ padding: "3rem 2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1rem" }}>
+              <img
+                src="/images/brand-logo.jpg"
+                alt="Emblème Joaillerie"
+                style={{ width: "42px", height: "42px", borderRadius: "50%", border: "1.5px solid #f4c07c", boxShadow: "0 0 15px rgba(244, 192, 124, 0.5)" }}
+              />
+              <span className="badge-gold" style={{ fontSize: "0.8rem" }}>
+                LA PROMESSE DES ÂMES SINCÈRES
+              </span>
+            </div>
+
+            <h2 style={{ fontSize: "2.1rem", fontWeight: "900", lineHeight: "1.2", marginBottom: "1rem" }}>
+              Plus Qu&apos;une Rencontre : <span className="gradient-text-gold">Une Alliance d&apos;Honneur</span>
+            </h2>
+
+            <p style={{ fontSize: "0.95rem", color: "#c7cfcb", lineHeight: "1.65", marginBottom: "1.5rem" }}>
+              Nous ne croyons pas au swipe infini et superficiel. Chaque profil sur <strong>À Chacun Une Belle Âme</strong> est minutieusement vérifié pour vous permettre de bâtir un foyer fort, respectueux de vos valeurs spirituelles et de vos traditions familiales africaines.
+            </p>
+
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
+                <CheckCircle2 size={16} /> Respect mutuel garanti
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
+                <CheckCircle2 size={16} /> Zéro faux profils
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
+                <CheckCircle2 size={16} /> Accompagnement bienveillant
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pillars of Trust Section */}
       <section style={{ padding: "4rem 2rem", backgroundColor: "#0b1510", borderTop: "1px solid rgba(212, 163, 115, 0.12)", borderBottom: "1px solid rgba(212, 163, 115, 0.12)" }}>
         <div style={{ maxWidth: "1140px", margin: "0 auto", textAlign: "center" }}>
@@ -469,7 +534,7 @@ export default function HomePage() {
           gap: "1rem",
         }}
       >
-        <BrandLogo size="sm" showText={false} />
+        <BrandLogo size="sm" showText={false} useImage={true} />
         <div>© 2026 À Chacun Une Belle Âme. Tous droits réservés.</div>
         <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
           <Link href="/settings/privacy" style={{ color: "#d4a373", textDecoration: "none" }}>Portail RGPD</Link>

@@ -5,23 +5,25 @@ interface BrandLogoProps {
   size?: "sm" | "md" | "lg" | "hero";
   showText?: boolean;
   withLink?: boolean;
+  useImage?: boolean;
 }
 
 export default function BrandLogo({
   size = "md",
   showText = true,
   withLink = true,
+  useImage = false,
 }: BrandLogoProps) {
   const dimensions = {
     sm: { icon: 34, font: "1rem", sub: "0.65rem", gap: "0.6rem" },
-    md: { icon: 42, font: "1.15rem", sub: "0.7rem", gap: "0.75rem" },
-    lg: { icon: 54, font: "1.35rem", sub: "0.8rem", gap: "0.9rem" },
-    hero: { icon: 72, font: "1.75rem", sub: "0.95rem", gap: "1.1rem" },
+    md: { icon: 44, font: "1.18rem", sub: "0.7rem", gap: "0.75rem" },
+    lg: { icon: 56, font: "1.38rem", sub: "0.82rem", gap: "0.9rem" },
+    hero: { icon: 78, font: "1.85rem", sub: "0.95rem", gap: "1.1rem" },
   }[size];
 
   const logoContent = (
     <div style={{ display: "inline-flex", alignItems: "center", gap: dimensions.gap, cursor: withLink ? "pointer" : "default" }}>
-      {/* Emblem SVG with glowing gold and emerald heart knot */}
+      {/* Emblem: High-resolution jewelry image or vector SVG */}
       <div
         style={{
           width: dimensions.icon,
@@ -32,59 +34,68 @@ export default function BrandLogo({
           justifyContent: "center",
           flexShrink: 0,
           borderRadius: "50%",
-          background: "radial-gradient(circle at 30% 30%, rgba(244, 192, 124, 0.25) 0%, rgba(16, 32, 23, 0.9) 70%)",
-          border: "1.5px solid rgba(244, 192, 124, 0.5)",
-          boxShadow: "0 4px 20px rgba(212, 163, 115, 0.35), inset 0 0 12px rgba(82, 183, 136, 0.25)",
+          overflow: "hidden",
+          background: "radial-gradient(circle at 30% 30%, rgba(244, 192, 124, 0.3) 0%, rgba(16, 32, 23, 0.95) 70%)",
+          border: "2px solid rgba(244, 192, 124, 0.6)",
+          boxShadow: "0 4px 20px rgba(212, 163, 115, 0.4), 0 0 15px rgba(82, 183, 136, 0.3)",
           transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        <svg
-          viewBox="0 0 100 100"
-          width="82%"
-          height="82%"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="goldSheen" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="30%" stopColor="#f4c07c" />
-              <stop offset="70%" stopColor="#d4a373" />
-              <stop offset="100%" stopColor="#e07a5f" />
-            </linearGradient>
-            <linearGradient id="emeraldDrop" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#74c69d" />
-              <stop offset="100%" stopColor="#2d6a4f" />
-            </linearGradient>
-          </defs>
-
-          {/* Infinity Heart Knot */}
-          <path
-            d="M50 82 C22 62, 10 44, 18 28 C25 15, 42 16, 50 30 C58 16, 75 15, 82 28 C90 44, 78 62, 50 82 Z"
-            stroke="url(#goldSheen)"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.85"
+        {useImage ? (
+          <img
+            src="/images/brand-logo.jpg"
+            alt="Logo À Chacun Une Belle Âme"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
-
-          {/* Letter Â Silhouette inside */}
-          <text
-            x="50"
-            y="59"
-            textAnchor="middle"
-            fill="url(#goldSheen)"
-            fontSize="36"
-            fontFamily="'Cinzel', 'Playfair Display', Georgia, serif"
-            fontWeight="900"
-            style={{ letterSpacing: "-1px" }}
+        ) : (
+          <svg
+            viewBox="0 0 100 100"
+            width="82%"
+            height="82%"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Â
-          </text>
+            <defs>
+              <linearGradient id="goldSheen" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="30%" stopColor="#f4c07c" />
+                <stop offset="70%" stopColor="#d4a373" />
+                <stop offset="100%" stopColor="#e07a5f" />
+              </linearGradient>
+              <linearGradient id="emeraldDrop" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#74c69d" />
+                <stop offset="100%" stopColor="#2d6a4f" />
+              </linearGradient>
+            </defs>
 
-          {/* Emerald Jewel Dot (Crowning the Â) */}
-          <circle cx="50" cy="23" r="3.5" fill="url(#emeraldDrop)" stroke="#ffffff" strokeWidth="0.8" />
-        </svg>
+            {/* Infinity Heart Knot */}
+            <path
+              d="M50 82 C22 62, 10 44, 18 28 C25 15, 42 16, 50 30 C58 16, 75 15, 82 28 C90 44, 78 62, 50 82 Z"
+              stroke="url(#goldSheen)"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="0.85"
+            />
+
+            {/* Letter Â Silhouette */}
+            <text
+              x="50"
+              y="59"
+              textAnchor="middle"
+              fill="url(#goldSheen)"
+              fontSize="36"
+              fontFamily="'Cinzel', 'Playfair Display', Georgia, serif"
+              fontWeight="900"
+              style={{ letterSpacing: "-1px" }}
+            >
+              Â
+            </text>
+
+            {/* Emerald Jewel Dot */}
+            <circle cx="50" cy="23" r="3.5" fill="url(#emeraldDrop)" stroke="#ffffff" strokeWidth="0.8" />
+          </svg>
+        )}
       </div>
 
       {/* Brand Typography */}
