@@ -172,12 +172,14 @@ a {
 .gradient-text-gold {
   background: linear-gradient(135deg, #ffffff 15%, var(--color-gold-bright) 60%, var(--color-terracotta) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-text-emerald {
   background: linear-gradient(135deg, #ffffff 20%, var(--color-emerald-light) 70%, var(--color-emerald-vibrant) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
