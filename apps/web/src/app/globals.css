@@ -305,3 +305,26 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold-warm);
 }
+
+/* Barre d'Action Flottante Mobile (Inspirée de Farata) */
+@media (min-width: 768px) {
+  .mobile-sticky-bar {
+    display: none !important;
+  }
+}
+
+/* Animations de transition douces */
+@keyframes pulseSubtle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 3s infinite ease-in-out;
+}

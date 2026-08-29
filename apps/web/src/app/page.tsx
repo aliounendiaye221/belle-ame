@@ -6,21 +6,27 @@ import {
   ShieldCheck,
   Heart,
   Sparkles,
-  MessageCircle,
   Crown,
   Lock,
   ArrowRight,
   UserCheck,
   CheckCircle2,
   Zap,
-  Flame,
   Star,
   Users,
   Award,
   ChevronRight,
+  Compass,
+  Check,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import InteractiveMatchFinder from "@/components/InteractiveMatchFinder";
+import InteractiveProfileShowcase from "@/components/InteractiveProfileShowcase";
+import FourStepsJourney from "@/components/FourStepsJourney";
+import AiMatrimonialAdvisor from "@/components/AiMatrimonialAdvisor";
+import FaqSection from "@/components/FaqSection";
+import MobileStickyCta from "@/components/MobileStickyCta";
 
 export default function HomePage() {
   const [demoLiked, setDemoLiked] = useState(false);
@@ -29,6 +35,9 @@ export default function HomePage() {
     <div style={{ minHeight: "100vh", backgroundColor: "#070d09", color: "#fbfbfb", fontFamily: "var(--font-sans)", display: "flex", flexDirection: "column" }}>
       {/* Live Social Proof Toast */}
       <LiveSocialProofToast />
+
+      {/* Floating Bottom Sticky Action Bar on Mobile Screens (Farata Inspired) */}
+      <MobileStickyCta />
 
       {/* Top Navbar */}
       <header
@@ -51,14 +60,17 @@ export default function HomePage() {
           <Link href="/discover" style={{ color: "#f4c07c", textDecoration: "none", fontWeight: "700", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "4px" }}>
             <Sparkles size={16} /> Découverte
           </Link>
-          <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Correspondances
+          <Link href="#parcours" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+            Comment ça marche
           </Link>
-          <Link href="/subscription" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+          <Link href="#profils-verifies" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+            Profils Vérifiés
+          </Link>
+          <Link href="#conseiller-ia" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+            Conseiller IA
+          </Link>
+          <Link href="#tarifs" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
             <Crown size={15} color="#f4c07c" /> Abonnements FCFA
-          </Link>
-          <Link href="/faq" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            FAQ
           </Link>
           <Link
             href="/auth/login"
@@ -71,6 +83,7 @@ export default function HomePage() {
               textDecoration: "none",
               fontSize: "0.9rem",
               boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
+              transition: "transform 0.2s ease",
             }}
           >
             Se Connecter
@@ -78,233 +91,276 @@ export default function HomePage() {
         </nav>
       </header>
 
-      {/* Hero Section with 3D Interactive Card Showcase */}
-      <section style={{ padding: "4.5rem 2rem 3rem", maxWidth: "1240px", margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1.15fr 0.85fr", gap: "3.5rem", alignItems: "center" }}>
-        
-        {/* Left: Persuasive Hook Copy */}
-        <div>
-          {/* Trust Badge Pill */}
-          <div
-            style={{
-              inlineSize: "fit-content",
-              backgroundColor: "rgba(82, 183, 136, 0.15)",
-              border: "1px solid rgba(82, 183, 136, 0.35)",
-              padding: "0.55rem 1.25rem",
-              borderRadius: "999px",
-              color: "#52b788",
-              fontSize: "0.85rem",
-              fontWeight: "800",
-              marginBottom: "1.5rem",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <ShieldCheck size={18} /> 100% Profils Majeurs &amp; Vérifiés KYC | Anti-Broutage Certifié
-          </div>
-
-          <h1
-            style={{
-              fontSize: "3.2rem",
-              fontWeight: "900",
-              lineHeight: "1.12",
-              letterSpacing: "-0.03em",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Bâtissez Une <span className="gradient-text-gold">Union Sacrée &amp; Durable</span> en Afrique &amp; Diaspora
-          </h1>
-
-          <p style={{ fontSize: "1.15rem", color: "#c7cfcb", lineHeight: "1.65", marginBottom: "2.5rem", maxWidth: "580px" }}>
-            Fini les profils fantômes et les arnaques. Rejoignez le premier cercle matrimonial d&apos;élite d&apos;Afrique francophone (Cameroun, Bénin, Côte d&apos;Ivoire) fondé sur la sincérité, la foi et le mariage traditionnel &amp; civil.
-          </p>
-
-          {/* CTAs with Social Proof Micro-Tag */}
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
-            <Link
-              href="/auth/login"
-              className="btn-primary"
-              style={{ padding: "16px 36px", fontSize: "1.05rem" }}
-            >
-              Trouver Mon Âme Sœur <ArrowRight size={20} />
-            </Link>
-
-            <Link
-              href="/onboarding"
-              className="btn-secondary"
-              style={{ padding: "16px 28px", fontSize: "1.05rem" }}
-            >
-              Créer Mon Profil (Gratuit)
-            </Link>
-          </div>
-
-          {/* Live Micro Metric Counters */}
-          <div style={{ display: "flex", gap: "2rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "1.5rem" }}>
-            <div>
-              <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#fbfbfb" }}>9 420+</div>
-              <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Membres Vérifiés</div>
-            </div>
-            <div>
-              <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#52b788" }}>842</div>
-              <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Unions &amp; Mariages</div>
-            </div>
-            <div>
-              <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#f4a261" }}>94.8%</div>
-              <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Taux de Compatibilité</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Floating 3D Interactive Dating Card Mockup */}
-        <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-          {/* Ambient Glow behind card */}
-          <div
-            style={{
-              position: "absolute",
-              width: "360px",
-              height: "480px",
-              background: "radial-gradient(circle, rgba(212, 163, 115, 0.25) 0%, rgba(82, 183, 136, 0.15) 50%, transparent 70%)",
-              filter: "blur(40px)",
-              zIndex: 0,
-            }}
-          />
-
-          {/* Interactive Card */}
-          <div
-            className="animate-float"
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: "340px",
-              backgroundColor: "#102017",
-              borderRadius: "32px",
-              overflow: "hidden",
-              border: "2px solid rgba(244, 192, 124, 0.4)",
-              boxShadow: "0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 163, 115, 0.25)",
-            }}
-          >
-            {/* Candidate Image with Badges */}
-            <div style={{ position: "relative", height: "360px" }}>
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=80"
-                alt="Grace"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              
-              {/* Top Bar Badges */}
-              <div style={{ position: "absolute", top: "14px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between" }}>
-                <span className="badge-gold">
-                  <Sparkles size={13} /> 96% AFFINITÉ
-                </span>
-                <span className="badge-emerald">
-                  <ShieldCheck size={13} /> KYC VÉRIFIÉ
-                </span>
-              </div>
-
-              {/* Gradient Vignette for Text Readability */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(to top, rgba(16, 32, 23, 1) 12%, rgba(16, 32, 23, 0.4) 40%, transparent 70%)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  padding: "1.25rem",
-                }}
-              >
-                <div style={{ fontSize: "1.4rem", fontWeight: "900", color: "#fbfbfb", display: "flex", alignItems: "center", gap: "6px" }}>
-                  Grace, 27 🇨🇲
-                </div>
-                <div style={{ fontSize: "0.82rem", color: "#d4a373", fontWeight: "700" }}>
-                  Médecin Pédiatre · Douala
-                </div>
-                <div style={{ fontSize: "0.78rem", color: "#c7cfcb", marginTop: "4px" }}>
-                  « Engagée pour une famille pieuse et harmonieuse. »
-                </div>
-              </div>
-            </div>
-
-            {/* Interactive Action Buttons */}
+      {/* Hero Section with Interactive Match Finder (Inspired by Farata) */}
+      <section style={{ padding: "4rem 2rem 2.5rem", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "3rem", alignItems: "center", marginBottom: "3.5rem" }}>
+          
+          {/* Left: Persuasive Hook Copy */}
+          <div>
+            {/* Trust Badge Pill */}
             <div
               style={{
-                padding: "1rem 1.25rem",
-                backgroundColor: "#102017",
-                display: "flex",
-                justifyContent: "center",
+                inlineSize: "fit-content",
+                backgroundColor: "rgba(82, 183, 136, 0.15)",
+                border: "1px solid rgba(82, 183, 136, 0.35)",
+                padding: "0.55rem 1.25rem",
+                borderRadius: "999px",
+                color: "#52b788",
+                fontSize: "0.85rem",
+                fontWeight: "800",
+                marginBottom: "1.5rem",
+                display: "inline-flex",
                 alignItems: "center",
-                gap: "1.25rem",
+                gap: "8px",
               }}
             >
-              <button
-                style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.05)",
-                  border: "1.5px solid rgba(255, 255, 255, 0.15)",
-                  color: "#8a968f",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  fontSize: "1.2rem",
-                  transition: "all 0.2s ease",
-                }}
-                onClick={() => setDemoLiked(false)}
-              >
-                ✕
-              </button>
-
-              <button
-                onClick={() => setDemoLiked(true)}
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "50%",
-                  background: demoLiked
-                    ? "linear-gradient(135deg, #52b788, #1f5a3a)"
-                    : "linear-gradient(135deg, #f4c07c, #e07a5f)",
-                  border: "none",
-                  color: "#070d09",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  boxShadow: "0 8px 25px rgba(224, 122, 95, 0.5)",
-                  transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  transform: demoLiked ? "scale(1.15)" : "scale(1)",
-                }}
-              >
-                <Heart size={30} fill="#070d09" />
-              </button>
-
-              <button
-                style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(244, 192, 124, 0.1)",
-                  border: "1.5px solid rgba(244, 192, 124, 0.35)",
-                  color: "#f4c07c",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <Star size={20} fill="#f4c07c" />
-              </button>
+              <ShieldCheck size={18} /> 100% Profils Majeurs &amp; Vérifiés KYC | Anti-Broutage Certifié
             </div>
 
-            {demoLiked && (
-              <div style={{ padding: "0.5rem", textAlign: "center", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", fontSize: "0.78rem", fontWeight: "800" }}>
-                ✨ Coup de cœur enregistré ! Inscrivez-vous pour échanger.
+            <h1
+              style={{
+                fontSize: "clamp(2.4rem, 4.2vw, 3.6rem)",
+                fontWeight: "900",
+                lineHeight: "1.15",
+                letterSpacing: "-0.03em",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Bâtissez Une <span className="gradient-text-gold">Union Sacrée &amp; Durable</span> en Afrique &amp; Diaspora
+            </h1>
+
+            <p style={{ fontSize: "1.15rem", color: "#c7cfcb", lineHeight: "1.65", marginBottom: "2.5rem", maxWidth: "580px" }}>
+              Fini les faux profils, les arnaques et le gaspillage de temps. Rejoignez le sanctuaire matrimonial d&apos;honneur d&apos;Afrique subsaharienne (Cameroun, Côte d&apos;Ivoire, Bénin, Sénégal) fondé sur la foi, le respect des traditions et le mariage béni.
+            </p>
+
+            {/* CTAs */}
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
+              <Link
+                href="/register"
+                className="btn-primary"
+                style={{ padding: "16px 36px", fontSize: "1.05rem" }}
+              >
+                Trouver Mon Âme Sœur <ArrowRight size={20} />
+              </Link>
+
+              <Link
+                href="/auth/login"
+                className="btn-secondary"
+                style={{ padding: "16px 28px", fontSize: "1.05rem" }}
+              >
+                Accéder à Mon Espace
+              </Link>
+            </div>
+
+            {/* Micro Metric Counters */}
+            <div style={{ display: "flex", gap: "2rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "1.5rem" }}>
+              <div>
+                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#fbfbfb" }}>9 420+</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Membres Vérifiés</div>
               </div>
-            )}
+              <div>
+                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#52b788" }}>842</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Unions &amp; Fiançailles</div>
+              </div>
+              <div>
+                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#f4a261" }}>96.4%</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Taux de Sérieux</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Floating 3D Interactive Dating Card Mockup */}
+          <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+            {/* Ambient Glow */}
+            <div
+              style={{
+                position: "absolute",
+                width: "360px",
+                height: "480px",
+                background: "radial-gradient(circle, rgba(212, 163, 115, 0.25) 0%, rgba(82, 183, 136, 0.15) 50%, transparent 70%)",
+                filter: "blur(40px)",
+                zIndex: 0,
+              }}
+            />
+
+            {/* Interactive Card */}
+            <div
+              className="animate-float"
+              style={{
+                position: "relative",
+                zIndex: 1,
+                width: "340px",
+                backgroundColor: "#102017",
+                borderRadius: "32px",
+                overflow: "hidden",
+                border: "2px solid rgba(244, 192, 124, 0.4)",
+                boxShadow: "0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 163, 115, 0.25)",
+              }}
+            >
+              {/* Image */}
+              <div style={{ position: "relative", height: "360px" }}>
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=80"
+                  alt="Grace"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                
+                {/* Top Badges */}
+                <div style={{ position: "absolute", top: "14px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between" }}>
+                  <span className="badge-gold">
+                    <Sparkles size={13} /> 96% AFFINITÉ
+                  </span>
+                  <span className="badge-emerald">
+                    <ShieldCheck size={13} /> KYC VÉRIFIÉ
+                  </span>
+                </div>
+
+                {/* Gradient Vignette */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(to top, rgba(16, 32, 23, 1) 12%, rgba(16, 32, 23, 0.4) 40%, transparent 70%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    padding: "1.25rem",
+                  }}
+                >
+                  <div style={{ fontSize: "1.4rem", fontWeight: "900", color: "#fbfbfb", display: "flex", alignItems: "center", gap: "6px" }}>
+                    Grace, 27 🇨🇲
+                  </div>
+                  <div style={{ fontSize: "0.82rem", color: "#d4a373", fontWeight: "700" }}>
+                    Médecin Pédiatre · Douala
+                  </div>
+                  <div style={{ fontSize: "0.78rem", color: "#c7cfcb", marginTop: "4px" }}>
+                    « Engagée pour une famille pieuse et harmonieuse. »
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div
+                style={{
+                  padding: "1rem 1.25rem",
+                  backgroundColor: "#102017",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1.25rem",
+                }}
+              >
+                <button
+                  style={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(255, 255, 255, 0.05)",
+                    border: "1.5px solid rgba(255, 255, 255, 0.15)",
+                    color: "#8a968f",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    fontSize: "1.2rem",
+                    transition: "all 0.2s ease",
+                  }}
+                  onClick={() => setDemoLiked(false)}
+                >
+                  ✕
+                </button>
+
+                <button
+                  onClick={() => setDemoLiked(true)}
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    borderRadius: "50%",
+                    background: demoLiked
+                      ? "linear-gradient(135deg, #52b788, #1f5a3a)"
+                      : "linear-gradient(135deg, #f4c07c, #e07a5f)",
+                    border: "none",
+                    color: "#070d09",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    boxShadow: "0 8px 25px rgba(224, 122, 95, 0.5)",
+                    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                    transform: demoLiked ? "scale(1.15)" : "scale(1)",
+                  }}
+                >
+                  <Heart size={30} fill="#070d09" />
+                </button>
+
+                <button
+                  style={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(244, 192, 124, 0.1)",
+                    border: "1.5px solid rgba(244, 192, 124, 0.35)",
+                    color: "#f4c07c",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <Star size={20} fill="#f4c07c" />
+                </button>
+              </div>
+
+              {demoLiked && (
+                <div style={{ padding: "0.5rem", textAlign: "center", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", fontSize: "0.78rem", fontWeight: "800" }}>
+                  ✨ Coup de cœur enregistré ! Créez votre profil pour échanger.
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Farata-Inspired Fast Match Finder Bar */}
+        <InteractiveMatchFinder />
+      </section>
+
+      {/* 4 Steps Journey (Farata-Inspired Step Cards) */}
+      <div id="parcours">
+        <FourStepsJourney />
+      </div>
+
+      {/* Interactive Profiles Showcase Section (with Modesty Blur & Voice Notes) */}
+      <section id="profils-verifies" style={{ padding: "4rem 2rem", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.78rem",
+              textTransform: "uppercase",
+              letterSpacing: "1.5px",
+              color: "#f4c07c",
+              fontWeight: 800,
+              backgroundColor: "rgba(212, 163, 115, 0.12)",
+              padding: "5px 14px",
+              borderRadius: "999px",
+              border: "1px solid rgba(212, 163, 115, 0.25)",
+              marginBottom: "10px",
+            }}
+          >
+            ✦ Galerie Sélective ✦
+          </span>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800, color: "#fbfbfb" }}>
+            Profils Certifiés en Quête d&apos;Alliance Sincère
+          </h2>
+          <p style={{ color: "#c7cfcb", fontSize: "1rem", maxWidth: "620px", margin: "10px auto 0" }}>
+            Testez le « Mode Discrétion » pour préserver votre pudeur et écoutez les présentations vocales vérifiées de nos membres.
+          </p>
+        </div>
+
+        <InteractiveProfileShowcase />
       </section>
 
       {/* Haute Couture African Couple Feature Section */}
@@ -320,7 +376,7 @@ export default function HomePage() {
             backgroundColor: "#0d1b13",
           }}
         >
-          {/* Couple Image with warm gradient glow */}
+          {/* Couple Image */}
           <div style={{ position: "relative", minHeight: "380px" }}>
             <img
               src="/images/hero-couple.jpg"
@@ -372,6 +428,11 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* AI Matrimonial Advisor (Farata-Inspired Coach) */}
+      <section id="conseiller-ia" style={{ padding: "4rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%" }}>
+        <AiMatrimonialAdvisor />
+      </section>
+
       {/* Pillars of Trust Section */}
       <section style={{ padding: "4rem 2rem", backgroundColor: "#0b1510", borderTop: "1px solid rgba(212, 163, 115, 0.12)", borderBottom: "1px solid rgba(212, 163, 115, 0.12)" }}>
         <div style={{ maxWidth: "1140px", margin: "0 auto", textAlign: "center" }}>
@@ -388,7 +449,7 @@ export default function HomePage() {
             Chaque fonctionnalité est minutieusement conçue pour décourager les imposteurs et valoriser les personnes prêtes pour le grand engagement.
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem", textAlign: "left" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", textAlign: "left" }}>
             {/* Feature 1 */}
             <div className="glass-panel" style={{ padding: "2rem" }}>
               <div style={{ width: "52px", height: "52px", borderRadius: "16px", backgroundColor: "rgba(244, 192, 124, 0.15)", color: "#f4c07c", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
@@ -411,7 +472,7 @@ export default function HomePage() {
                 Coffre-Fort KYC Isolant
               </h3>
               <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: "1.6" }}>
-                Vérification humaine des pièces d&apos;identité sous 24h. Les documents sont hébergés dans un compartiment chiffré hermétique et détruits après audit.
+                Vérification humaine des pièces d&apos;identité sous 24h. Les documents sont hébergés dans un compartiment chiffré hermétique et protégés contre tout usage externe.
               </p>
             </div>
 
@@ -432,6 +493,195 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Pricing Section (Farata-Inspired Clean FCFA Cards) */}
+      <section id="tarifs" style={{ padding: "5rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <span className="glass-pill" style={{ marginBottom: "1rem" }}>
+            <Crown size={15} color="#f4c07c" /> FORMULES &amp; ENGAGEMENT
+          </span>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.7rem)", fontWeight: 900, color: "#fbfbfb" }}>
+            Tarifs Transparents en FCFA
+          </h2>
+          <p style={{ color: "#c7cfcb", fontSize: "1.05rem", maxWidth: "620px", margin: "10px auto 0" }}>
+            Une modeste contribution pour garantir un sanctuaire sérieux et décourager toute dérive superficielle.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+          {/* Plan 1: Pass Découverte */}
+          <div
+            className="glass-panel"
+            style={{
+              padding: "2.25rem 1.75rem",
+              borderRadius: "24px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#94a39b", fontWeight: 800 }}>
+                Découverte 7 Jours
+              </span>
+              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+                Pass Sérénité Express
+              </h3>
+              <div style={{ margin: "1.25rem 0" }}>
+                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#fbfbfb" }}>3 000</span>
+                <span style={{ fontSize: "1rem", color: "#f4c07c", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
+                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>Pour 7 jours d&apos;accès</span>
+              </div>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> 10 demandes de contact par jour</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Déblocage du Mode Discrétion</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Écoute des présentations vocales</li>
+              </ul>
+            </div>
+
+            <Link
+              href="/subscription"
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                color: "#fbfbfb",
+                textAlign: "center",
+                padding: "12px",
+                borderRadius: "12px",
+                fontWeight: 700,
+                textDecoration: "none",
+                fontSize: "0.92rem",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                transition: "all 0.2s",
+              }}
+            >
+              Choisir le Pass 3 000 FCFA
+            </Link>
+          </div>
+
+          {/* Plan 2: Sérénité (Le Plus Populaire) */}
+          <div
+            className="glass-panel"
+            style={{
+              padding: "2.25rem 1.75rem",
+              borderRadius: "24px",
+              border: "2px solid #f4c07c",
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: "0 15px 40px rgba(212, 163, 115, 0.25)",
+            }}
+          >
+            <span
+              style={{
+                position: "absolute",
+                top: "-12px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                backgroundColor: "#f4c07c",
+                color: "#070d09",
+                fontSize: "0.75rem",
+                fontWeight: 900,
+                padding: "4px 14px",
+                borderRadius: "999px",
+                letterSpacing: "1px",
+              }}
+            >
+              LE PLUS POPULAIRE
+            </span>
+
+            <div>
+              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f4c07c", fontWeight: 800 }}>
+                1 Mois Complet
+              </span>
+              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+                Formule Sérénité
+              </h3>
+              <div style={{ margin: "1.25rem 0" }}>
+                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#f4c07c" }}>7 500</span>
+                <span style={{ fontSize: "1rem", color: "#f4c07c", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
+                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>Par mois • Wave, MTN, Orange</span>
+              </div>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Demandes de contact illimitées</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Accès prioritaire aux profils certifiés</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Présentation vocale personnalisée</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Conseils du Conseiller IA 24h/24</li>
+              </ul>
+            </div>
+
+            <Link
+              href="/subscription"
+              style={{
+                background: "linear-gradient(135deg, #f4c07c, #d4a373)",
+                color: "#070d09",
+                textAlign: "center",
+                padding: "13px",
+                borderRadius: "12px",
+                fontWeight: 800,
+                textDecoration: "none",
+                fontSize: "0.95rem",
+                boxShadow: "0 4px 15px rgba(212, 163, 115, 0.4)",
+              }}
+            >
+              Rejoindre en Sérénité (7 500 FCFA)
+            </Link>
+          </div>
+
+          {/* Plan 3: Alliance Annuelle */}
+          <div
+            className="glass-panel"
+            style={{
+              padding: "2.25rem 1.75rem",
+              borderRadius: "24px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#52b788", fontWeight: 800 }}>
+                Engagement 12 Mois
+              </span>
+              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+                Cercle Alliance
+              </h3>
+              <div style={{ margin: "1.25rem 0" }}>
+                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#52b788" }}>24 000</span>
+                <span style={{ fontSize: "1rem", color: "#52b788", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
+                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>2 000 FCFA/mois (Économie de 73%)</span>
+              </div>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Tous les privilèges Sérénité</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Badge d&apos;Honneur Prestige sur le profil</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Mise en avant dans le radar hebdomadaire</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Assistance directe par conciergerie</li>
+              </ul>
+            </div>
+
+            <Link
+              href="/subscription"
+              style={{
+                backgroundColor: "rgba(82, 183, 136, 0.15)",
+                color: "#52b788",
+                textAlign: "center",
+                padding: "12px",
+                borderRadius: "12px",
+                fontWeight: 700,
+                textDecoration: "none",
+                fontSize: "0.92rem",
+                border: "1px solid rgba(82, 183, 136, 0.3)",
+                transition: "all 0.2s",
+              }}
+            >
+              Activer le Cercle Alliance
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section style={{ padding: "4.5rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%", textAlign: "center" }}>
         <span className="glass-pill" style={{ marginBottom: "1rem" }}>
@@ -442,7 +692,7 @@ export default function HomePage() {
           Ils Se Sont Aimés, Ils Se Sont <span className="gradient-text-gold">Mariés</span>
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem", textAlign: "left" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", textAlign: "left" }}>
           {[
             {
               names: "Sandrine & Paul",
@@ -491,6 +741,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Interactive FAQ Accordion (Farata Inspired) */}
+      <FaqSection />
+
       {/* Final High-Converting CTA Banner */}
       <section style={{ padding: "4rem 2rem", maxWidth: "980px", margin: "0 auto 4rem", width: "100%" }}>
         <div
@@ -510,7 +763,7 @@ export default function HomePage() {
             Rejoignez plus de 9 000 célibataires certifiés en Afrique et dans la diaspora. L&apos;accès gratuit inclut 10 découvertes quotidiennes et l&apos;assistance modérateur prioritaire.
           </p>
           <Link
-            href="/auth/login"
+            href="/register"
             className="btn-primary"
             style={{ padding: "18px 44px", fontSize: "1.1rem" }}
           >
