@@ -47,7 +47,8 @@ const ADVICE_LIST: AdvicePrompt[] = [
 
 export default function AiMatrimonialAdvisor() {
   const [selectedId, setSelectedId] = useState<string>("icebreaker");
-  const currentAdvice = ADVICE_LIST.find((a) => a.id === selectedId) || ADVICE_LIST[0];
+  const fallbackAdvice = ADVICE_LIST[0] as AdvicePrompt;
+  const currentAdvice = (ADVICE_LIST.find((a) => a.id === selectedId) || fallbackAdvice) as AdvicePrompt;
 
   return (
     <div

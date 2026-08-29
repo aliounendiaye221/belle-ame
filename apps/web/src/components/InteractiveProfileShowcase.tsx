@@ -91,7 +91,7 @@ export default function InteractiveProfileShowcase() {
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
   const [likedProfiles, setLikedProfiles] = useState<Record<string, boolean>>({});
 
-  const profile = SAMPLE_PROFILES[activeIdx];
+  const profile = (SAMPLE_PROFILES[activeIdx] || SAMPLE_PROFILES[0]) as ProfileItem;
   const isLiked = likedProfiles[profile.id] || false;
 
   const handleLike = () => {
