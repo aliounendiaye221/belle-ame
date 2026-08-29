@@ -2,16 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, Heart, Sparkles, MapPin, Calendar, Compass, ShieldCheck } from "lucide-react";
+import { Search, Compass, ShieldCheck } from "lucide-react";
 
 export default function InteractiveMatchFinder() {
   const [gender, setGender] = useState<"F" | "M">("F");
   const [targetGender, setTargetGender] = useState<"M" | "F">("M");
   const [ageRange, setAgeRange] = useState<string>("24-34");
   const [country, setCountry] = useState<string>("ALL");
-  const [goal, setGoal] = useState<string>("MARRIAGE");
 
-  // Dynamic estimate based on criteria
   const estimatedMatches = React.useMemo(() => {
     let base = 1240;
     if (country === "CM") base = 480;
@@ -21,8 +19,8 @@ export default function InteractiveMatchFinder() {
     else if (country === "DIASPORA") base = 620;
 
     if (ageRange === "20-25") base = Math.round(base * 0.35);
-    else if (ageRange === "26-32") base = Math.round(base * 0.55);
-    else if (ageRange === "33-40") base = Math.round(base * 0.45);
+    else if (ageRange === "24-34") base = Math.round(base * 0.55);
+    else if (ageRange === "33-42") base = Math.round(base * 0.45);
     else base = Math.round(base * 0.25);
 
     return Math.max(120, base);
@@ -31,27 +29,14 @@ export default function InteractiveMatchFinder() {
   return (
     <div
       style={{
-        background: "linear-gradient(145deg, rgba(16, 32, 23, 0.95), rgba(8, 16, 12, 0.98))",
+        background: "linear-gradient(145deg, rgba(16, 32, 23, 0.92), rgba(8, 16, 12, 0.96))",
         border: "1px solid rgba(212, 163, 115, 0.3)",
         borderRadius: "24px",
-        padding: "2rem",
-        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 163, 115, 0.1)",
+        padding: "clamp(1.25rem, 3vw, 2.25rem)",
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
         position: "relative",
-        overflow: "hidden",
       }}
     >
-      {/* Decorative top glow */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "20%",
-          right: "20%",
-          height: "2px",
-          background: "linear-gradient(90deg, transparent, #f4c07c, transparent)",
-        }}
-      />
-
       {/* Widget Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "10px" }}>
         <div>
@@ -73,19 +58,19 @@ export default function InteractiveMatchFinder() {
           >
             <Compass size={13} /> Radar d'Affinités Vérifié
           </span>
-          <h3 style={{ fontSize: "1.35rem", fontWeight: 800, marginTop: "8px", color: "#fbfbfb", letterSpacing: "-0.5px" }}>
-            Trouvez votre moitié par critères & valeurs
+          <h3 style={{ fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)", fontWeight: 800, marginTop: "8px", color: "#fbfbfb", letterSpacing: "-0.5px" }}>
+            Recherche par critères & valeurs sacrées
           </h3>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "#52b788", backgroundColor: "rgba(82, 183, 136, 0.12)", padding: "5px 12px", borderRadius: "999px", border: "1px solid rgba(82, 183, 136, 0.25)" }}>
           <ShieldCheck size={15} />
-          <span><strong>{estimatedMatches}</strong> profils certifiés 18+</span>
+          <span><strong>{estimatedMatches}</strong> profils certifiés</span>
         </div>
       </div>
 
       {/* Filter Form Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
         
         {/* Je suis */}
         <div>
@@ -173,10 +158,10 @@ export default function InteractiveMatchFinder() {
           </div>
         </div>
 
-        {/* Tranche d'Âge */}
+        {/* Âge */}
         <div>
           <label style={{ display: "block", fontSize: "0.78rem", color: "#c7cfcb", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>
-            <Calendar size={12} style={{ display: "inline", marginRight: "4px" }} /> Âge recherché
+            Tranche d'âge
           </label>
           <select
             value={ageRange}
@@ -200,10 +185,10 @@ export default function InteractiveMatchFinder() {
           </select>
         </div>
 
-        {/* Pays / Région */}
+        {/* Localisation */}
         <div>
           <label style={{ display: "block", fontSize: "0.78rem", color: "#c7cfcb", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>
-            <MapPin size={12} style={{ display: "inline", marginRight: "4px" }} /> Localisation
+            Localisation
           </label>
           <select
             value={country}
@@ -221,20 +206,19 @@ export default function InteractiveMatchFinder() {
             }}
           >
             <option value="ALL">🌍 Tout pays & Diaspora</option>
-            <option value="CM">🇨🇲 Cameroun (Douala, Yaoundé...)</option>
-            <option value="CI">🇨🇮 Côte d'Ivoire (Abidjan, Yamoussoukro...)</option>
-            <option value="BJ">🇧🇯 Bénin (Cotonou, Porto-Novo...)</option>
-            <option value="SN">🇸🇳 Sénégal (Dakar, Saint-Louis...)</option>
-            <option value="DIASPORA">✈️ Diaspora (France, Canada, USA...)</option>
+            <option value="CM">🇨🇲 Cameroun</option>
+            <option value="CI">🇨🇮 Côte d'Ivoire</option>
+            <option value="BJ">🇧🇯 Bénin</option>
+            <option value="SN">🇸🇳 Sénégal</option>
+            <option value="DIASPORA">✈️ Diaspora</option>
           </select>
         </div>
       </div>
 
       {/* Action Footer */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "#94a39b" }}>
-          <Sparkles size={16} color="#f4c07c" />
-          <span>Filtre d'affinités respectueux : <strong>100% confidentialité garantie</strong></span>
+        <div style={{ fontSize: "0.85rem", color: "#94a39b" }}>
+          Confidentialité totale • Profils 100% majeurs vérifiés
         </div>
 
         <Link
@@ -244,14 +228,15 @@ export default function InteractiveMatchFinder() {
             color: "#070d09",
             fontWeight: 800,
             fontSize: "0.95rem",
-            padding: "12px 28px",
+            padding: "12px 24px",
             borderRadius: "999px",
             textDecoration: "none",
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
-            boxShadow: "0 6px 20px rgba(212, 163, 115, 0.4)",
+            boxShadow: "0 6px 20px rgba(212, 163, 115, 0.35)",
             transition: "all 0.2s ease",
+            justifyContent: "center",
           }}
         >
           <Search size={18} /> Voir les profils compatibles

@@ -14,28 +14,28 @@ interface SocialPulse {
 const LIVE_EVENTS: SocialPulse[] = [
   {
     id: "e1",
-    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    avatarUrl: "/images/avatar-woman.jpg",
     title: "Nouveau Match Validé (96%)",
     subtitle: "Grace & Bertrand viennent de se connecter à Douala 🇨🇲",
     badge: "Match Récent"
   },
   {
     id: "e2",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
+    avatarUrl: "/images/avatar-man.jpg",
     title: "Vérification KYC Approuvée 🛡️",
     subtitle: "Fabrice K. (Abidjan 🇨🇮) a obtenu son badge certifié",
     badge: "100% Vérifié"
   },
   {
     id: "e3",
-    avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
+    avatarUrl: "/images/hero-couple.jpg",
     title: "Témoignage Mariage 💍",
     subtitle: "Mireille & Serge (Diaspora Paris 🇫🇷) : « Mariés grâce à la plateforme »",
     badge: "Union Célébrée"
   },
   {
     id: "e4",
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80",
+    avatarUrl: "/images/avatar-woman.jpg",
     title: "Forte Activité Communautaire",
     subtitle: "84 membres compatibles sont en ligne actuellement",
     badge: "En Ligne"

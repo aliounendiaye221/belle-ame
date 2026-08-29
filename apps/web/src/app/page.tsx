@@ -7,16 +7,11 @@ import {
   Heart,
   Sparkles,
   Crown,
-  Lock,
   ArrowRight,
-  UserCheck,
   CheckCircle2,
   Zap,
   Star,
-  Users,
   Award,
-  ChevronRight,
-  Compass,
   Check,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
@@ -24,7 +19,6 @@ import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import InteractiveMatchFinder from "@/components/InteractiveMatchFinder";
 import InteractiveProfileShowcase from "@/components/InteractiveProfileShowcase";
 import FourStepsJourney from "@/components/FourStepsJourney";
-import AiMatrimonialAdvisor from "@/components/AiMatrimonialAdvisor";
 import FaqSection from "@/components/FaqSection";
 import MobileStickyCta from "@/components/MobileStickyCta";
 
@@ -32,22 +26,22 @@ export default function HomePage() {
   const [demoLiked, setDemoLiked] = useState(false);
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#070d09", color: "#fbfbfb", fontFamily: "var(--font-sans)", display: "flex", flexDirection: "column" }}>
-      {/* Live Social Proof Toast */}
+    <div style={{ minHeight: "100vh", backgroundColor: "#070d09", color: "#fbfbfb", fontFamily: "var(--font-sans)", display: "flex", flexDirection: "column", overflowX: "hidden" }}>
+      {/* Toast de Réassurance Live avec Avatars Locaux */}
       <LiveSocialProofToast />
 
-      {/* Floating Bottom Sticky Action Bar on Mobile Screens (Farata Inspired) */}
+      {/* Barre d'Action Flottante Exclusive Mobile */}
       <MobileStickyCta />
 
-      {/* Top Navbar */}
+      {/* Navigation Épurée & Responsive */}
       <header
         style={{
-          padding: "1.1rem 2rem",
+          padding: "1rem clamp(1rem, 4vw, 2.5rem)",
           borderBottom: "1px solid rgba(212, 163, 115, 0.18)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "rgba(16, 32, 23, 0.85)",
+          backgroundColor: "rgba(16, 32, 23, 0.9)",
           backdropFilter: "blur(20px)",
           position: "sticky",
           top: 0,
@@ -56,193 +50,191 @@ export default function HomePage() {
       >
         <BrandLogo size="md" useImage={true} />
 
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
-          <Link href="/discover" style={{ color: "#f4c07c", textDecoration: "none", fontWeight: "700", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "4px" }}>
+        <nav className="desktop-nav-links" style={{ display: "flex", gap: "1.75rem", alignItems: "center" }}>
+          <Link href="/discover" style={{ color: "#f4c07c", textDecoration: "none", fontWeight: 700, fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "4px" }}>
             <Sparkles size={16} /> Découverte
           </Link>
-          <Link href="#parcours" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+          <Link href="#parcours" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: 500, fontSize: "0.92rem" }}>
             Comment ça marche
           </Link>
-          <Link href="#profils-verifies" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+          <Link href="#profils-verifies" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: 500, fontSize: "0.92rem" }}>
             Profils Vérifiés
           </Link>
-          <Link href="#conseiller-ia" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Conseiller IA
+          <Link href="#alliance" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: 500, fontSize: "0.92rem" }}>
+            L&apos;Alliance
           </Link>
-          <Link href="#tarifs" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+          <Link href="#tarifs" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: 500, fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
             <Crown size={15} color="#f4c07c" /> Abonnements FCFA
           </Link>
-          <Link
-            href="/auth/login"
-            style={{
-              background: "linear-gradient(135deg, #f4c07c, #d4a373)",
-              color: "#070d09",
-              fontWeight: "800",
-              padding: "0.6rem 1.4rem",
-              borderRadius: "999px",
-              textDecoration: "none",
-              fontSize: "0.9rem",
-              boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
-              transition: "transform 0.2s ease",
-            }}
-          >
-            Se Connecter
-          </Link>
         </nav>
+
+        <Link
+          href="/auth/login"
+          style={{
+            background: "linear-gradient(135deg, #f4c07c, #d4a373)",
+            color: "#070d09",
+            fontWeight: 800,
+            padding: "0.6rem 1.4rem",
+            borderRadius: "999px",
+            textDecoration: "none",
+            fontSize: "0.9rem",
+            boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
+            transition: "transform 0.2s ease",
+            flexShrink: 0,
+          }}
+        >
+          Se Connecter
+        </Link>
       </header>
 
-      {/* Hero Section with Interactive Match Finder (Inspired by Farata) */}
-      <section style={{ padding: "4rem 2rem 2.5rem", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "3rem", alignItems: "center", marginBottom: "3.5rem" }}>
+      {/* Hero Section Épuré & Aéré (Haute Couture) */}
+      <section className="section-container" style={{ padding: "clamp(3rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem)", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
+        <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1.15fr 0.85fr", gap: "3.5rem", alignItems: "center" }}>
           
-          {/* Left: Persuasive Hook Copy */}
+          {/* Côté Gauche : Titre et Proposition de Valeur */}
           <div>
-            {/* Trust Badge Pill */}
             <div
               style={{
                 inlineSize: "fit-content",
                 backgroundColor: "rgba(82, 183, 136, 0.15)",
                 border: "1px solid rgba(82, 183, 136, 0.35)",
-                padding: "0.55rem 1.25rem",
+                padding: "0.5rem 1.15rem",
                 borderRadius: "999px",
                 color: "#52b788",
-                fontSize: "0.85rem",
-                fontWeight: "800",
+                fontSize: "0.82rem",
+                fontWeight: 800,
                 marginBottom: "1.5rem",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
               }}
             >
-              <ShieldCheck size={18} /> 100% Profils Majeurs &amp; Vérifiés KYC | Anti-Broutage Certifié
+              <ShieldCheck size={17} /> 100% Profils Majeurs Vérifiés KYC | Modération Humaine
             </div>
 
             <h1
               style={{
-                fontSize: "clamp(2.4rem, 4.2vw, 3.6rem)",
-                fontWeight: "900",
-                lineHeight: "1.15",
+                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+                fontWeight: 900,
+                lineHeight: 1.15,
                 letterSpacing: "-0.03em",
-                marginBottom: "1.5rem",
+                marginBottom: "1.25rem",
               }}
             >
-              Bâtissez Une <span className="gradient-text-gold">Union Sacrée &amp; Durable</span> en Afrique &amp; Diaspora
+              Bâtissez Une <span className="gradient-text-gold">Union Sacrée &amp; Durable</span> en Afrique
             </h1>
 
-            <p style={{ fontSize: "1.15rem", color: "#c7cfcb", lineHeight: "1.65", marginBottom: "2.5rem", maxWidth: "580px" }}>
-              Fini les faux profils, les arnaques et le gaspillage de temps. Rejoignez le sanctuaire matrimonial d&apos;honneur d&apos;Afrique subsaharienne (Cameroun, Côte d&apos;Ivoire, Bénin, Sénégal) fondé sur la foi, le respect des traditions et le mariage béni.
+            <p style={{ fontSize: "clamp(1rem, 1.6vw, 1.15rem)", color: "#c7cfcb", lineHeight: 1.65, marginBottom: "2rem", maxWidth: "560px" }}>
+              Le sanctuaire matrimonial d&apos;Afrique subsaharienne (Cameroun, Côte d&apos;Ivoire, Bénin, Sénégal, Diaspora) dédié aux célibataires prêts pour le mariage d&apos;honneur, dans le respect de la foi et des familles.
             </p>
 
-            {/* CTAs */}
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
+            {/* Boutons d'Action */}
+            <div className="hero-cta-group" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
               <Link
                 href="/register"
                 className="btn-primary"
-                style={{ padding: "16px 36px", fontSize: "1.05rem" }}
+                style={{ padding: "15px 32px", fontSize: "1rem", borderRadius: "999px" }}
               >
-                Trouver Mon Âme Sœur <ArrowRight size={20} />
+                Trouver Mon Âme Sœur <ArrowRight size={18} />
               </Link>
 
               <Link
                 href="/auth/login"
                 className="btn-secondary"
-                style={{ padding: "16px 28px", fontSize: "1.05rem" }}
+                style={{ padding: "15px 26px", fontSize: "1rem", borderRadius: "999px" }}
               >
                 Accéder à Mon Espace
               </Link>
             </div>
 
-            {/* Micro Metric Counters */}
-            <div style={{ display: "flex", gap: "2rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "1.5rem" }}>
+            {/* Compteurs Clairs */}
+            <div className="hero-counters" style={{ display: "flex", gap: "2.5rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "1.5rem" }}>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#fbfbfb" }}>9 420+</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Membres Vérifiés</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#fbfbfb" }}>9 420+</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Membres Vérifiés</div>
               </div>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#52b788" }}>842</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Unions &amp; Fiançailles</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#52b788" }}>842</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Unions Célébrées</div>
               </div>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: "900", color: "#f4a261" }}>96.4%</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: "600" }}>Taux de Sérieux</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#f4a261" }}>96.4%</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Taux d&apos;Affinité</div>
               </div>
             </div>
           </div>
 
-          {/* Right: Floating 3D Interactive Dating Card Mockup */}
+          {/* Côté Droit : Carte d'Avatar de Luxe 3D (Substitut Haute Joaillerie des Photos) */}
           <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-            {/* Ambient Glow */}
             <div
               style={{
                 position: "absolute",
-                width: "360px",
-                height: "480px",
+                width: "min(320px, 90%)",
+                height: "400px",
                 background: "radial-gradient(circle, rgba(212, 163, 115, 0.25) 0%, rgba(82, 183, 136, 0.15) 50%, transparent 70%)",
                 filter: "blur(40px)",
                 zIndex: 0,
               }}
             />
 
-            {/* Interactive Card */}
             <div
               className="animate-float"
               style={{
                 position: "relative",
                 zIndex: 1,
-                width: "340px",
+                width: "min(320px, 100%)",
                 backgroundColor: "#102017",
-                borderRadius: "32px",
+                borderRadius: "28px",
                 overflow: "hidden",
                 border: "2px solid rgba(244, 192, 124, 0.4)",
                 boxShadow: "0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 163, 115, 0.25)",
               }}
             >
-              {/* Image */}
-              <div style={{ position: "relative", height: "360px" }}>
+              {/* Image d'Avatar de Luxe Généré */}
+              <div style={{ position: "relative", height: "320px" }}>
                 <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=80"
-                  alt="Grace"
+                  src="/images/avatar-woman.jpg"
+                  alt="Avatar Grace - Profil Certifié"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
                 
-                {/* Top Badges */}
-                <div style={{ position: "absolute", top: "14px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between" }}>
+                {/* Badges de Prestige */}
+                <div style={{ position: "absolute", top: "12px", left: "12px", right: "12px", display: "flex", justifyContent: "space-between" }}>
                   <span className="badge-gold">
-                    <Sparkles size={13} /> 96% AFFINITÉ
+                    <Sparkles size={12} /> 96% AFFINITÉ
                   </span>
                   <span className="badge-emerald">
-                    <ShieldCheck size={13} /> KYC VÉRIFIÉ
+                    <ShieldCheck size={12} /> KYC VÉRIFIÉ
                   </span>
                 </div>
 
-                {/* Gradient Vignette */}
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "linear-gradient(to top, rgba(16, 32, 23, 1) 12%, rgba(16, 32, 23, 0.4) 40%, transparent 70%)",
+                    background: "linear-gradient(to top, rgba(16, 32, 23, 1) 12%, rgba(16, 32, 23, 0.35) 45%, transparent 70%)",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "flex-end",
-                    padding: "1.25rem",
+                    padding: "1.2rem",
                   }}
                 >
-                  <div style={{ fontSize: "1.4rem", fontWeight: "900", color: "#fbfbfb", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "#fbfbfb", display: "flex", alignItems: "center", gap: "6px" }}>
                     Grace, 27 🇨🇲
                   </div>
-                  <div style={{ fontSize: "0.82rem", color: "#d4a373", fontWeight: "700" }}>
+                  <div style={{ fontSize: "0.82rem", color: "#d4a373", fontWeight: 700 }}>
                     Médecin Pédiatre · Douala
                   </div>
-                  <div style={{ fontSize: "0.78rem", color: "#c7cfcb", marginTop: "4px" }}>
+                  <div style={{ fontSize: "0.78rem", color: "#c7cfcb", marginTop: "3px" }}>
                     « Engagée pour une famille pieuse et harmonieuse. »
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Boutons d'Action Festive */}
               <div
                 style={{
-                  padding: "1rem 1.25rem",
+                  padding: "0.85rem 1.25rem",
                   backgroundColor: "#102017",
                   display: "flex",
                   justifyContent: "center",
@@ -252,8 +244,8 @@ export default function HomePage() {
               >
                 <button
                   style={{
-                    width: "52px",
-                    height: "52px",
+                    width: "48px",
+                    height: "48px",
                     borderRadius: "50%",
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
                     border: "1.5px solid rgba(255, 255, 255, 0.15)",
@@ -262,10 +254,11 @@ export default function HomePage() {
                     alignItems: "center",
                     justifyContent: "center",
                     cursor: "pointer",
-                    fontSize: "1.2rem",
+                    fontSize: "1.1rem",
                     transition: "all 0.2s ease",
                   }}
                   onClick={() => setDemoLiked(false)}
+                  title="Passer"
                 >
                   ✕
                 </button>
@@ -273,8 +266,8 @@ export default function HomePage() {
                 <button
                   onClick={() => setDemoLiked(true)}
                   style={{
-                    width: "64px",
-                    height: "64px",
+                    width: "58px",
+                    height: "58px",
                     borderRadius: "50%",
                     background: demoLiked
                       ? "linear-gradient(135deg, #52b788, #1f5a3a)"
@@ -287,16 +280,17 @@ export default function HomePage() {
                     cursor: "pointer",
                     boxShadow: "0 8px 25px rgba(224, 122, 95, 0.5)",
                     transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                    transform: demoLiked ? "scale(1.15)" : "scale(1)",
+                    transform: demoLiked ? "scale(1.1)" : "scale(1)",
                   }}
+                  title="Coup de cœur"
                 >
-                  <Heart size={30} fill="#070d09" />
+                  <Heart size={26} fill="#070d09" />
                 </button>
 
                 <button
                   style={{
-                    width: "52px",
-                    height: "52px",
+                    width: "48px",
+                    height: "48px",
                     borderRadius: "50%",
                     backgroundColor: "rgba(244, 192, 124, 0.1)",
                     border: "1.5px solid rgba(244, 192, 124, 0.35)",
@@ -307,31 +301,34 @@ export default function HomePage() {
                     cursor: "pointer",
                     transition: "all 0.2s ease",
                   }}
+                  title="Favori"
                 >
-                  <Star size={20} fill="#f4c07c" />
+                  <Star size={18} fill="#f4c07c" />
                 </button>
               </div>
 
               {demoLiked && (
-                <div style={{ padding: "0.5rem", textAlign: "center", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", fontSize: "0.78rem", fontWeight: "800" }}>
-                  ✨ Coup de cœur enregistré ! Créez votre profil pour échanger.
+                <div style={{ padding: "0.5rem", textAlign: "center", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", fontSize: "0.78rem", fontWeight: 800 }}>
+                  ✨ Coup de cœur d&apos;honneur enregistré !
                 </div>
               )}
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Farata-Inspired Fast Match Finder Bar */}
+      {/* Section Dédiée : Radar d'Affinités Vérifié */}
+      <section style={{ padding: "1rem clamp(1rem, 4vw, 2rem) 3.5rem", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
         <InteractiveMatchFinder />
       </section>
 
-      {/* 4 Steps Journey (Farata-Inspired Step Cards) */}
+      {/* Parcours d'Honneur en 4 Étapes Claires */}
       <div id="parcours">
         <FourStepsJourney />
       </div>
 
-      {/* Interactive Profiles Showcase Section (with Modesty Blur & Voice Notes) */}
-      <section id="profils-verifies" style={{ padding: "4rem 2rem", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
+      {/* Vitrine Sélective de Profils avec Mode Discrétion & Audio */}
+      <section id="profils-verifies" className="section-container" style={{ padding: "4.5rem clamp(1rem, 4vw, 2rem)", maxWidth: "1240px", margin: "0 auto", width: "100%" }}>
         <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
           <span
             style={{
@@ -352,262 +349,231 @@ export default function HomePage() {
           >
             ✦ Galerie Sélective ✦
           </span>
-          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800, color: "#fbfbfb" }}>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#fbfbfb" }}>
             Profils Certifiés en Quête d&apos;Alliance Sincère
           </h2>
-          <p style={{ color: "#c7cfcb", fontSize: "1rem", maxWidth: "620px", margin: "10px auto 0" }}>
-            Testez le « Mode Discrétion » pour préserver votre pudeur et écoutez les présentations vocales vérifiées de nos membres.
+          <p style={{ color: "#c7cfcb", fontSize: "1rem", maxWidth: "600px", margin: "8px auto 0" }}>
+            Découvrez nos membres avec le Mode Discrétion (pudeur protégée) et leurs présentations vocales authentiques.
           </p>
         </div>
 
         <InteractiveProfileShowcase />
       </section>
 
-      {/* Haute Couture African Couple Feature Section */}
-      <section style={{ padding: "4rem 2rem", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
+      {/* Section L'Alliance Sacrée (Visuel Haute Joaillerie des Alliances en Or) */}
+      <section id="alliance" className="section-container" style={{ padding: "4rem clamp(1rem, 4vw, 2rem)", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
         <div
-          className="glass-panel"
+          className="feature-couple-grid glass-panel"
           style={{
-            borderRadius: "36px",
+            borderRadius: "32px",
             overflow: "hidden",
-            border: "2px solid rgba(244, 192, 124, 0.4)",
+            border: "2px solid rgba(244, 192, 124, 0.35)",
             display: "grid",
             gridTemplateColumns: "1fr 1.15fr",
             backgroundColor: "#0d1b13",
           }}
         >
-          {/* Couple Image */}
-          <div style={{ position: "relative", minHeight: "380px" }}>
+          {/* Image Alliances Sacrées en Or & Émeraude */}
+          <div className="feature-couple-img" style={{ position: "relative", minHeight: "340px" }}>
             <img
-              src="/images/hero-couple.jpg"
-              alt="Couple uni par À Chacun Une Belle Âme"
+              src="/images/alliance-rings.jpg"
+              alt="Alliances sacrées en or pur et émeraudes royales"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(to right, transparent 60%, rgba(13, 27, 19, 1) 100%)",
+                background: "linear-gradient(to right, transparent 50%, rgba(13, 27, 19, 0.95) 100%)",
               }}
             />
           </div>
 
-          {/* Narrative Content */}
-          <div style={{ padding: "3rem 2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          {/* Récit de Valeurs */}
+          <div style={{ padding: "clamp(1.75rem, 4vw, 3rem)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1rem" }}>
               <img
                 src="/images/brand-logo.jpg"
                 alt="Emblème Joaillerie"
-                style={{ width: "42px", height: "42px", borderRadius: "50%", border: "1.5px solid #f4c07c", boxShadow: "0 0 15px rgba(244, 192, 124, 0.5)" }}
+                style={{ width: "38px", height: "38px", borderRadius: "50%", border: "1.5px solid #f4c07c" }}
               />
-              <span className="badge-gold" style={{ fontSize: "0.8rem" }}>
-                LA PROMESSE DES ÂMES SINCÈRES
+              <span className="badge-gold" style={{ fontSize: "0.78rem" }}>
+                LA PROMESSE DES ÂMES DIGNES
               </span>
             </div>
 
-            <h2 style={{ fontSize: "2.1rem", fontWeight: "900", lineHeight: "1.2", marginBottom: "1rem" }}>
+            <h2 style={{ fontSize: "clamp(1.7rem, 2.8vw, 2.2rem)", fontWeight: 900, lineHeight: 1.2, marginBottom: "1rem" }}>
               Plus Qu&apos;une Rencontre : <span className="gradient-text-gold">Une Alliance d&apos;Honneur</span>
             </h2>
 
-            <p style={{ fontSize: "0.95rem", color: "#c7cfcb", lineHeight: "1.65", marginBottom: "1.5rem" }}>
-              Nous ne croyons pas au swipe infini et superficiel. Chaque profil sur <strong>À Chacun Une Belle Âme</strong> est minutieusement vérifié pour vous permettre de bâtir un foyer fort, respectueux de vos valeurs spirituelles et de vos traditions familiales africaines.
+            <p style={{ fontSize: "0.95rem", color: "#c7cfcb", lineHeight: 1.65, marginBottom: "1.5rem" }}>
+              Pas de swipe machinal ni de discussions sans lendemain. Chaque membre certifié est guidé par une intention claire : bâtir une union solide, respectueuse des traditions familiales et bénie pour l&apos;éternité.
             </p>
 
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: 700 }}>
                 <CheckCircle2 size={16} /> Respect mutuel garanti
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
-                <CheckCircle2 size={16} /> Zéro faux profils
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: 700 }}>
+                <CheckCircle2 size={16} /> Modération 100% humaine
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: "700" }}>
-                <CheckCircle2 size={16} /> Accompagnement bienveillant
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.85rem", color: "#52b788", fontWeight: 700 }}>
+                <CheckCircle2 size={16} /> Bénédiction des familles
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* AI Matrimonial Advisor (Farata-Inspired Coach) */}
-      <section id="conseiller-ia" style={{ padding: "4rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%" }}>
-        <AiMatrimonialAdvisor />
-      </section>
-
-      {/* Pillars of Trust Section */}
-      <section style={{ padding: "4rem 2rem", backgroundColor: "#0b1510", borderTop: "1px solid rgba(212, 163, 115, 0.12)", borderBottom: "1px solid rgba(212, 163, 115, 0.12)" }}>
+      {/* Piliers d'Honneur et Différenciateurs */}
+      <section className="section-container" style={{ padding: "4rem clamp(1rem, 4vw, 2rem)", backgroundColor: "#0b1510", borderTop: "1px solid rgba(212, 163, 115, 0.12)", borderBottom: "1px solid rgba(212, 163, 115, 0.12)" }}>
         <div style={{ maxWidth: "1140px", margin: "0 auto", textAlign: "center" }}>
-          
           <span className="glass-pill" style={{ marginBottom: "1rem" }}>
             <Award size={15} /> LA CHARTE D&apos;HONNEUR « BELLE ÂME »
           </span>
           
-          <h2 style={{ fontSize: "2.4rem", fontWeight: "900", marginBottom: "1rem" }}>
-            Pourquoi Notre Communauté Est <span className="gradient-text-gold">Incomparable</span>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.4rem)", fontWeight: 900, marginBottom: "1rem" }}>
+            Pourquoi Notre Sanctuaire Est <span className="gradient-text-gold">Incomparable</span>
           </h2>
           
-          <p style={{ fontSize: "1.05rem", color: "#c7cfcb", maxWidth: "680px", margin: "0 auto 3rem" }}>
-            Chaque fonctionnalité est minutieusement conçue pour décourager les imposteurs et valoriser les personnes prêtes pour le grand engagement.
+          <p style={{ fontSize: "1rem", color: "#c7cfcb", maxWidth: "640px", margin: "0 auto 2.5rem" }}>
+            Chaque règle et chaque filtre découragent la légèreté pour honorer les personnes prêtes pour le grand engagement.
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", textAlign: "left" }}>
-            {/* Feature 1 */}
-            <div className="glass-panel" style={{ padding: "2rem" }}>
-              <div style={{ width: "52px", height: "52px", borderRadius: "16px", backgroundColor: "rgba(244, 192, 124, 0.15)", color: "#f4c07c", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
-                <Sparkles size={26} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", textAlign: "left" }}>
+            <div className="glass-panel" style={{ padding: "1.75rem", borderRadius: "20px" }}>
+              <div style={{ width: "48px", height: "48px", borderRadius: "14px", backgroundColor: "rgba(244, 192, 124, 0.15)", color: "#f4c07c", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <Sparkles size={24} />
               </div>
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "800", marginBottom: "0.6rem", color: "#fbfbfb" }}>
-                Matching Déterministe Jaccard
+              <h3 style={{ fontSize: "1.15rem", fontWeight: 800, marginBottom: "0.5rem", color: "#fbfbfb" }}>
+                Affinités Déterministes Jaccard
               </h3>
-              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: "1.6" }}>
-                Fini le hasard superficiel. Notre algorithme compare mathématiquement la foi, le désir d&apos;enfants, l&apos;ambition professionnelle et l&apos;attachement culturel.
+              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: 1.6 }}>
+                Comparaison mathématique transparente de la foi, des valeurs éducatives, de la vision financière et des traditions familiales.
               </p>
             </div>
 
-            {/* Feature 2 */}
-            <div className="glass-panel" style={{ padding: "2rem" }}>
-              <div style={{ width: "52px", height: "52px", borderRadius: "16px", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
-                <ShieldCheck size={26} />
+            <div className="glass-panel" style={{ padding: "1.75rem", borderRadius: "20px" }}>
+              <div style={{ width: "48px", height: "48px", borderRadius: "14px", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <ShieldCheck size={24} />
               </div>
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "800", marginBottom: "0.6rem", color: "#fbfbfb" }}>
-                Coffre-Fort KYC Isolant
+              <h3 style={{ fontSize: "1.15rem", fontWeight: 800, marginBottom: "0.5rem", color: "#fbfbfb" }}>
+                Contrôle d&apos;Identité Rigoureux
               </h3>
-              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: "1.6" }}>
-                Vérification humaine des pièces d&apos;identité sous 24h. Les documents sont hébergés dans un compartiment chiffré hermétique et protégés contre tout usage externe.
+              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: 1.6 }}>
+                Vérification humaine des pièces officielles sous 24h. Données hébergées dans un compartiment sécurisé et protégé.
               </p>
             </div>
 
-            {/* Feature 3 */}
-            <div className="glass-panel" style={{ padding: "2rem" }}>
-              <div style={{ width: "52px", height: "52px", borderRadius: "16px", backgroundColor: "rgba(224, 122, 95, 0.15)", color: "#e07a5f", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
-                <Zap size={26} />
+            <div className="glass-panel" style={{ padding: "1.75rem", borderRadius: "20px" }}>
+              <div style={{ width: "48px", height: "48px", borderRadius: "14px", backgroundColor: "rgba(224, 122, 95, 0.15)", color: "#e07a5f", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <Zap size={24} />
               </div>
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "800", marginBottom: "0.6rem", color: "#fbfbfb" }}>
-                Mobile Money FCFA Instantané
+              <h3 style={{ fontSize: "1.15rem", fontWeight: 800, marginBottom: "0.5rem", color: "#fbfbfb" }}>
+                Mobile Money Africain Direct
               </h3>
-              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: "1.6" }}>
-                Abonnements mensuels ou annuels réglés facilement via MTN MoMo, Orange Money et Wave avec idempotence bancaire et reçu immédiat.
+              <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: 1.6 }}>
+                Paiements transparents et instantanés par Wave, MTN MoMo, Orange Money et cartes bancaires pour la diaspora.
               </p>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* Pricing Section (Farata-Inspired Clean FCFA Cards) */}
-      <section id="tarifs" style={{ padding: "5rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <span className="glass-pill" style={{ marginBottom: "1rem" }}>
+      {/* Grille de Tarifs FCFA Transparente & Aérée */}
+      <section id="tarifs" className="section-container" style={{ padding: "4.5rem clamp(1rem, 4vw, 2rem)", maxWidth: "1140px", margin: "0 auto", width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <span className="glass-pill" style={{ marginBottom: "0.75rem" }}>
             <Crown size={15} color="#f4c07c" /> FORMULES &amp; ENGAGEMENT
           </span>
-          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.7rem)", fontWeight: 900, color: "#fbfbfb" }}>
-            Tarifs Transparents en FCFA
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 900, marginBottom: "0.5rem" }}>
+            Tarifs Clairs en <span className="gradient-text-gold">Francs CFA</span>
           </h2>
-          <p style={{ color: "#c7cfcb", fontSize: "1.05rem", maxWidth: "620px", margin: "10px auto 0" }}>
-            Une modeste contribution pour garantir un sanctuaire sérieux et décourager toute dérive superficielle.
+          <p style={{ fontSize: "1rem", color: "#c7cfcb", maxWidth: "580px", margin: "0 auto" }}>
+            Un filtre d&apos;engagement modique qui garantit que chaque personne rencontrée est véritablement résolue à fonder un foyer.
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", alignItems: "stretch" }}>
+          
           {/* Plan 1: Pass Découverte */}
-          <div
-            className="glass-panel"
-            style={{
-              padding: "2.25rem 1.75rem",
-              borderRadius: "24px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
+          <div className="glass-panel" style={{ padding: "2rem 1.5rem", borderRadius: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#94a39b", fontWeight: 800 }}>
-                Découverte 7 Jours
+              <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "1px", color: "#8a968f", fontWeight: 800 }}>
+                Accès Découverte
               </span>
-              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
-                Pass Sérénité Express
+              <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+                Pass 7 Jours
               </h3>
               <div style={{ margin: "1.25rem 0" }}>
-                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#fbfbfb" }}>3 000</span>
-                <span style={{ fontSize: "1rem", color: "#f4c07c", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
-                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>Pour 7 jours d&apos;accès</span>
+                <span style={{ fontSize: "2.2rem", fontWeight: 900, color: "#fbfbfb" }}>3 000</span>
+                <span style={{ fontSize: "1rem", color: "#d4a373", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
+                <span style={{ fontSize: "0.82rem", color: "#94a39b", display: "block" }}>Paiement unique • Valable 7 jours</span>
               </div>
 
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> 10 demandes de contact par jour</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Déblocage du Mode Discrétion</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Écoute des présentations vocales</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> 10 consultations par jour</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Messagerie avec vos coups de cœur</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Écoute des notes vocales</li>
               </ul>
             </div>
 
             <Link
               href="/subscription"
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
                 color: "#fbfbfb",
                 textAlign: "center",
                 padding: "12px",
-                borderRadius: "12px",
+                borderRadius: "10px",
                 fontWeight: 700,
                 textDecoration: "none",
-                fontSize: "0.92rem",
+                fontSize: "0.9rem",
                 border: "1px solid rgba(255, 255, 255, 0.15)",
                 transition: "all 0.2s",
               }}
             >
-              Choisir le Pass 3 000 FCFA
+              Choisir le Pass (3 000 FCFA)
             </Link>
           </div>
 
-          {/* Plan 2: Sérénité (Le Plus Populaire) */}
+          {/* Plan 2: Sérénité (Recommandé) */}
           <div
             className="glass-panel"
             style={{
-              padding: "2.25rem 1.75rem",
-              borderRadius: "24px",
+              padding: "2.25rem 1.5rem",
+              borderRadius: "20px",
               border: "2px solid #f4c07c",
-              position: "relative",
+              backgroundColor: "rgba(16, 32, 23, 0.95)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              boxShadow: "0 15px 40px rgba(212, 163, 115, 0.25)",
+              boxShadow: "0 10px 40px rgba(244, 192, 124, 0.2)",
+              position: "relative",
             }}
           >
-            <span
-              style={{
-                position: "absolute",
-                top: "-12px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#f4c07c",
-                color: "#070d09",
-                fontSize: "0.75rem",
-                fontWeight: 900,
-                padding: "4px 14px",
-                borderRadius: "999px",
-                letterSpacing: "1px",
-              }}
-            >
+            <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "linear-gradient(135deg, #f4c07c, #d4a373)", color: "#070d09", fontSize: "0.72rem", fontWeight: 900, padding: "3px 14px", borderRadius: "999px", letterSpacing: "1px" }}>
               LE PLUS POPULAIRE
-            </span>
+            </div>
 
             <div>
-              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f4c07c", fontWeight: 800 }}>
-                1 Mois Complet
+              <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f4c07c", fontWeight: 800 }}>
+                Engagement Mensuel
               </span>
-              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+              <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#f4c07c", marginTop: "4px" }}>
                 Formule Sérénité
               </h3>
               <div style={{ margin: "1.25rem 0" }}>
-                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#f4c07c" }}>7 500</span>
+                <span style={{ fontSize: "2.3rem", fontWeight: 900, color: "#f4c07c" }}>7 500</span>
                 <span style={{ fontSize: "1rem", color: "#f4c07c", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
-                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>Par mois • Wave, MTN, Orange</span>
+                <span style={{ fontSize: "0.82rem", color: "#94a39b", display: "block" }}>Par mois • Wave, MTN, Orange</span>
               </div>
 
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
                 <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Demandes de contact illimitées</li>
                 <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Accès prioritaire aux profils certifiés</li>
                 <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Présentation vocale personnalisée</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Conseils du Conseiller IA 24h/24</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Conciergerie matrimoniale d&apos;honneur</li>
               </ul>
             </div>
 
@@ -618,46 +584,37 @@ export default function HomePage() {
                 color: "#070d09",
                 textAlign: "center",
                 padding: "13px",
-                borderRadius: "12px",
+                borderRadius: "10px",
                 fontWeight: 800,
                 textDecoration: "none",
                 fontSize: "0.95rem",
                 boxShadow: "0 4px 15px rgba(212, 163, 115, 0.4)",
               }}
             >
-              Rejoindre en Sérénité (7 500 FCFA)
+              Rejoindre en Sérénité
             </Link>
           </div>
 
           {/* Plan 3: Alliance Annuelle */}
-          <div
-            className="glass-panel"
-            style={{
-              padding: "2.25rem 1.75rem",
-              borderRadius: "24px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
+          <div className="glass-panel" style={{ padding: "2rem 1.5rem", borderRadius: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <span style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "1px", color: "#52b788", fontWeight: 800 }}>
+              <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "1px", color: "#52b788", fontWeight: 800 }}>
                 Engagement 12 Mois
               </span>
-              <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
+              <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#fbfbfb", marginTop: "4px" }}>
                 Cercle Alliance
               </h3>
               <div style={{ margin: "1.25rem 0" }}>
-                <span style={{ fontSize: "2.4rem", fontWeight: 900, color: "#52b788" }}>24 000</span>
+                <span style={{ fontSize: "2.3rem", fontWeight: 900, color: "#52b788" }}>24 000</span>
                 <span style={{ fontSize: "1rem", color: "#52b788", fontWeight: 700, marginLeft: "4px" }}>FCFA</span>
-                <span style={{ fontSize: "0.85rem", color: "#94a39b", display: "block" }}>2 000 FCFA/mois (Économie de 73%)</span>
+                <span style={{ fontSize: "0.82rem", color: "#94a39b", display: "block" }}>Soit 2 000 FCFA/mois (Économie 73%)</span>
               </div>
 
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", margin: "1.5rem 0", fontSize: "0.88rem", color: "#c7cfcb" }}>
                 <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Tous les privilèges Sérénité</li>
                 <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Badge d&apos;Honneur Prestige sur le profil</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Mise en avant dans le radar hebdomadaire</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Assistance directe par conciergerie</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Mise en avant prioritaire continue</li>
+                <li style={{ display: "flex", alignItems: "center", gap: "8px" }}><Check size={16} color="#52b788" /> Conciergerie d&apos;honneur dédiée</li>
               </ul>
             </div>
 
@@ -668,10 +625,10 @@ export default function HomePage() {
                 color: "#52b788",
                 textAlign: "center",
                 padding: "12px",
-                borderRadius: "12px",
+                borderRadius: "10px",
                 fontWeight: 700,
                 textDecoration: "none",
-                fontSize: "0.92rem",
+                fontSize: "0.9rem",
                 border: "1px solid rgba(82, 183, 136, 0.3)",
                 transition: "all 0.2s",
               }}
@@ -682,58 +639,58 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section style={{ padding: "4.5rem 2rem", maxWidth: "1140px", margin: "0 auto", width: "100%", textAlign: "center" }}>
-        <span className="glass-pill" style={{ marginBottom: "1rem" }}>
+      {/* Témoignages Authentiques d'Unions (Avec Avatars de Prestige Générés) */}
+      <section className="section-container" style={{ padding: "4rem clamp(1rem, 4vw, 2rem)", maxWidth: "1140px", margin: "0 auto", width: "100%", textAlign: "center" }}>
+        <span className="glass-pill" style={{ marginBottom: "0.75rem" }}>
           <Heart size={14} color="#e07a5f" /> TÉMOIGNAGES OFFICIELS
         </span>
 
-        <h2 style={{ fontSize: "2.3rem", fontWeight: "900", marginBottom: "3rem" }}>
+        <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.3rem)", fontWeight: 900, marginBottom: "2.5rem" }}>
           Ils Se Sont Aimés, Ils Se Sont <span className="gradient-text-gold">Mariés</span>
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem", textAlign: "left" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", textAlign: "left" }}>
           {[
             {
               names: "Sandrine & Paul",
               location: "Abidjan, Côte d'Ivoire 🇨🇮",
               date: "Mariés en Décembre 2025",
-              story: "Nous avions tous les deux 32 ans et étions déçus des applications classiques. Ici, la vérification d'identité nous a immédiatement rassurés.",
-              photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80"
+              story: "Nous avions tous les deux 32 ans et étions lassés des applications superficielles. Ici, la vérification d'identité nous a immédiatement mis en confiance.",
+              photo: "/images/avatar-woman.jpg",
             },
             {
               names: "Marc & Diane",
               location: "Douala & Paris 🇨🇲 🇫🇷",
               date: "Fiançailles en Février 2026",
-              story: "Diane vit en France et moi au Cameroun. L'algorithme a détecté notre vision commune du retour au pays pour investir ensemble.",
-              photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+              story: "Diane vit en France et moi au Cameroun. Les critères de valeurs ont révélé notre projet commun de retour au pays pour entreprendre ensemble.",
+              photo: "/images/avatar-man.jpg",
             },
             {
               names: "Eric & Michelle",
               location: "Cotonou, Bénin 🇧🇯",
               date: "Mariés en Janvier 2026",
-              story: "Le respect mutuel et l'absence totale de faux profils nous ont permis de vivre une rencontre authentique dès le premier message.",
-              photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
-            }
+              story: "Le respect mutuel et l'absence totale de faux profils nous ont permis de vivre une démarche honorable dès le premier message.",
+              photo: "/images/hero-couple.jpg",
+            },
           ].map((item, idx) => (
-            <div key={idx} className="glass-panel" style={{ padding: "1.75rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <div key={idx} className="glass-panel" style={{ padding: "1.75rem", borderRadius: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1rem" }}>
                   <img
                     src={item.photo}
                     alt={item.names}
-                    style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover", border: "2px solid #d4a373" }}
+                    style={{ width: "48px", height: "48px", borderRadius: "50%", objectFit: "cover", border: "2px solid #d4a373" }}
                   />
                   <div>
-                    <div style={{ fontWeight: "800", color: "#fbfbfb", fontSize: "1rem" }}>{item.names}</div>
-                    <div style={{ fontSize: "0.75rem", color: "#52b788", fontWeight: "700" }}>{item.location}</div>
+                    <div style={{ fontWeight: 800, color: "#fbfbfb", fontSize: "0.98rem" }}>{item.names}</div>
+                    <div style={{ fontSize: "0.75rem", color: "#52b788", fontWeight: 700 }}>{item.location}</div>
                   </div>
                 </div>
-                <p style={{ fontSize: "0.85rem", color: "#c7cfcb", fontStyle: "italic", lineHeight: "1.5", marginBottom: "1rem" }}>
+                <p style={{ fontSize: "0.85rem", color: "#c7cfcb", fontStyle: "italic", lineHeight: 1.5, marginBottom: "1rem" }}>
                   « {item.story} »
                 </p>
               </div>
-              <div style={{ fontSize: "0.75rem", color: "#f4a261", fontWeight: "800", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "0.75rem" }}>
+              <div style={{ fontSize: "0.75rem", color: "#f4a261", fontWeight: 800, borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "0.75rem" }}>
                 💍 {item.date}
               </div>
             </div>
@@ -741,41 +698,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Interactive FAQ Accordion (Farata Inspired) */}
+      {/* Accordéon FAQ Épuré */}
       <FaqSection />
 
-      {/* Final High-Converting CTA Banner */}
-      <section style={{ padding: "4rem 2rem", maxWidth: "980px", margin: "0 auto 4rem", width: "100%" }}>
+      {/* Bannière Finale Haute Joaillerie */}
+      <section style={{ padding: "3rem clamp(1rem, 4vw, 2rem)", maxWidth: "940px", margin: "0 auto 3rem", width: "100%" }}>
         <div
           className="glass-panel glow-halo"
           style={{
-            padding: "3.5rem 2rem",
+            padding: "clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2rem)",
             textAlign: "center",
             background: "linear-gradient(135deg, rgba(16, 32, 23, 0.95), rgba(31, 90, 58, 0.4))",
             border: "2px solid rgba(244, 192, 124, 0.4)",
-            borderRadius: "36px",
+            borderRadius: "28px",
           }}
         >
-          <h2 style={{ fontSize: "2.5rem", fontWeight: "900", marginBottom: "1rem" }}>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.3rem)", fontWeight: 900, marginBottom: "0.75rem" }}>
             Prêt(e) Pour Le Dernier Premier Rendez-Vous de Votre Vie ?
           </h2>
-          <p style={{ fontSize: "1.05rem", color: "#c7cfcb", maxWidth: "580px", margin: "0 auto 2rem", lineHeight: "1.6" }}>
-            Rejoignez plus de 9 000 célibataires certifiés en Afrique et dans la diaspora. L&apos;accès gratuit inclut 10 découvertes quotidiennes et l&apos;assistance modérateur prioritaire.
+          <p style={{ fontSize: "0.98rem", color: "#c7cfcb", maxWidth: "560px", margin: "0 auto 1.75rem", lineHeight: 1.6 }}>
+            Rejoignez plus de 9 400 célibataires certifiés en Afrique et en diaspora. L&apos;accès gratuit vous permet de créer votre profil vérifié dès aujourd&apos;hui.
           </p>
           <Link
             href="/register"
             className="btn-primary"
-            style={{ padding: "18px 44px", fontSize: "1.1rem" }}
+            style={{ padding: "16px 38px", fontSize: "1.05rem", borderRadius: "999px" }}
           >
-            Créer Mon Compte Sincère Maintenant <ArrowRight size={20} />
+            Créer Mon Profil Vérifié <ArrowRight size={18} />
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Pied de Page Épuré */}
       <footer
         style={{
-          padding: "2rem",
+          padding: "2rem clamp(1rem, 4vw, 2rem)",
           borderTop: "1px solid rgba(212, 163, 115, 0.15)",
           backgroundColor: "#0b1510",
           display: "flex",
@@ -788,12 +745,10 @@ export default function HomePage() {
         }}
       >
         <BrandLogo size="sm" showText={false} useImage={true} />
-        <div>© 2026 À Chacun Une Belle Âme. Tous droits réservés.</div>
-        <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
-          <Link href="/settings/privacy" style={{ color: "#d4a373", textDecoration: "none" }}>Portail RGPD</Link>
-          <Link href="/terms" style={{ color: "#d4a373", textDecoration: "none" }}>CGU &amp; Mentions Légales</Link>
-          <Link href="/faq" style={{ color: "#d4a373", textDecoration: "none" }}>FAQ</Link>
-          <Link href="/notifications" style={{ color: "#d4a373", textDecoration: "none" }}>Notifications</Link>
+        <div>© 2026 À Chacun Une Belle Âme. Sanctuaire Matrimonial Africain.</div>
+        <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap" }}>
+          <Link href="/settings/privacy" style={{ color: "#d4a373", textDecoration: "none" }}>Confidentialité</Link>
+          <Link href="/terms" style={{ color: "#d4a373", textDecoration: "none" }}>Conditions Générales</Link>
           <Link href="/subscription" style={{ color: "#d4a373", textDecoration: "none" }}>Formules FCFA</Link>
         </div>
       </footer>

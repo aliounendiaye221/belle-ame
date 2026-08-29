@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   ShieldCheck,
   Heart,
-  Sparkles,
   Eye,
   EyeOff,
   Volume2,
@@ -13,8 +12,6 @@ import {
   MapPin,
   Briefcase,
   GraduationCap,
-  Award,
-  CheckCircle2,
 } from "lucide-react";
 
 interface ProfileItem {
@@ -31,7 +28,7 @@ interface ProfileItem {
   voiceDuration: string;
   voiceText: string;
   bioSnippet: string;
-  avatarColor: string;
+  avatarUrl: string;
 }
 
 const SAMPLE_PROFILES: ProfileItem[] = [
@@ -47,9 +44,9 @@ const SAMPLE_PROFILES: ProfileItem[] = [
     values: ["Foi & Spiritualité", "Respect des Familles", "Ambition Saine", "Bienveillance"],
     compatibilityScore: 97,
     voiceDuration: "0:18",
-    voiceText: "« Bonjour, je cherche quelqu'un qui craint Dieu, qui aime entreprendre et avec qui bâtir un foyer solide fondé sur le respect mutuel. »",
-    bioSnippet: "Femme de principes, croyante et posée. Je valorise la franchise, l'honnêteté et la complicité durable. Pas là pour perdre du temps.",
-    avatarColor: "linear-gradient(135deg, #1b4332, #2d6a4f)",
+    voiceText: "« Bonjour, je cherche un homme qui craint Dieu, qui aime bâtir et avec qui fonder un foyer d'honneur fondé sur le respect mutuel. »",
+    bioSnippet: "Femme de principes, posée et sincère. Je valorise la franchise, l'honnêteté et la complicité durable. Pas là pour perdre du temps.",
+    avatarUrl: "/images/avatar-woman.jpg",
   },
   {
     id: "p2",
@@ -63,9 +60,9 @@ const SAMPLE_PROFILES: ProfileItem[] = [
     values: ["Honneur & Droiture", "Culture Africaine", "Éducation", "Projets d'Avenir"],
     compatibilityScore: 94,
     voiceDuration: "0:14",
-    voiceText: "« Salut à toi. Pour moi la vie de couple c'est un travail d'équipe. Si tu partages les mêmes valeurs de droiture et de famille, faisons connaissance. »",
+    voiceText: "« Pour moi, la vie de couple est une alliance sacrée. Si vous partagez la même recherche de loyauté et de paix, faisons connaissance. »",
     bioSnippet: "Homme déterminé, respectueux de nos traditions et tourné vers l'avenir. Je recherche une femme mûre d'esprit pour une alliance sincère.",
-    avatarColor: "linear-gradient(135deg, #2b2d42, #4a4e69)",
+    avatarUrl: "/images/avatar-man.jpg",
   },
   {
     id: "p3",
@@ -79,9 +76,9 @@ const SAMPLE_PROFILES: ProfileItem[] = [
     values: ["Pudeur & Respect", "Harmonie du Foyer", "Art & Culture", "Générosité"],
     compatibilityScore: 98,
     voiceDuration: "0:21",
-    voiceText: "« As-salamu alaykum. Je cherche mon alter ego pour cheminer ensemble avec sérénité, entourés de la bénédiction de nos parents. »",
+    voiceText: "« Je cherche mon alter ego pour cheminer ensemble avec dignité et sérénité, entourés de la bénédiction de nos parents. »",
     bioSnippet: "Douce et cultivée, j'accorde une place centrale à la spiritualité, à la famille et au raffinement. Fuyons le virtuel pour le concret.",
-    avatarColor: "linear-gradient(135deg, #403d39, #664e4c)",
+    avatarUrl: "/images/avatar-woman.jpg",
   },
 ];
 
@@ -103,14 +100,14 @@ export default function InteractiveProfileShowcase() {
       style={{
         background: "linear-gradient(145deg, rgba(16, 32, 23, 0.9), rgba(7, 13, 9, 0.95))",
         border: "1px solid rgba(212, 163, 115, 0.25)",
-        borderRadius: "28px",
-        padding: "2rem",
+        borderRadius: "24px",
+        padding: "clamp(1.25rem, 3vw, 2rem)",
         boxShadow: "0 25px 60px rgba(0, 0, 0, 0.6)",
         position: "relative",
       }}
     >
       {/* Top selector pills */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.75rem", flexWrap: "wrap", gap: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "12px" }}>
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           {SAMPLE_PROFILES.map((p, idx) => (
             <button
@@ -139,35 +136,37 @@ export default function InteractiveProfileShowcase() {
 
         <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#52b788", fontSize: "0.82rem", fontWeight: 700 }}>
           <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#52b788", display: "inline-block", boxShadow: "0 0 8px #52b788" }} />
-          En ligne • Actif(ve) récemment
+          Profil Actif • En Ligne
         </div>
       </div>
 
       {/* Main Showcase Layout */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem", alignItems: "center" }}>
         
-        {/* Left: Profile Visual with Privacy Blur Feature (Inspired by Farata) */}
+        {/* Left: Profile Visual with Privacy Blur Feature */}
         <div>
           <div
             style={{
               position: "relative",
-              aspectRatio: "3/4",
-              borderRadius: "20px",
-              background: profile.avatarColor,
+              width: "100%",
+              maxWidth: "360px",
+              margin: "0 auto",
+              aspectRatio: "1/1",
+              borderRadius: "24px",
               overflow: "hidden",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
+              border: "2px solid rgba(212, 163, 115, 0.35)",
+              boxShadow: "0 15px 35px rgba(0, 0, 0, 0.6)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              padding: "1.5rem",
-              boxShadow: "0 15px 35px rgba(0, 0, 0, 0.5)",
+              padding: "1rem",
             }}
           >
-            {/* Top badges */}
+            {/* Top Badges */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 5 }}>
               <span
                 style={{
-                  backgroundColor: "rgba(7, 13, 9, 0.75)",
+                  backgroundColor: "rgba(7, 13, 9, 0.85)",
                   backdropFilter: "blur(8px)",
                   padding: "4px 10px",
                   borderRadius: "999px",
@@ -180,7 +179,7 @@ export default function InteractiveProfileShowcase() {
                   border: "1px solid rgba(82, 183, 136, 0.4)",
                 }}
               >
-                <ShieldCheck size={14} /> Pièce d'Identité Certifiée
+                <ShieldCheck size={14} /> Pièce Certifiée
               </span>
 
               <span
@@ -199,42 +198,36 @@ export default function InteractiveProfileShowcase() {
               </span>
             </div>
 
-            {/* Silhouette Illustration or Blurred Avatar */}
+            {/* Avatar Image with Modesty Blur Toggle */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                gap: "12px",
-                filter: isPhotoRevealed ? "none" : "blur(18px)",
-                transition: "filter 0.4s ease",
-                userSelect: "none",
+                filter: isPhotoRevealed ? "none" : "blur(16px)",
+                transform: isPhotoRevealed ? "scale(1)" : "scale(1.08)",
+                transition: "filter 0.4s ease, transform 0.4s ease",
               }}
             >
-              <div
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
                 style={{
-                  width: "120px",
-                  height: "120px",
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #f4c07c, #e07a5f)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "3.5rem",
-                  fontWeight: 900,
-                  color: "#070d09",
-                  boxShadow: "0 0 40px rgba(244, 192, 124, 0.4)",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
                 }}
-              >
-                {profile.name[0]}
-              </div>
-              <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fbfbfb", letterSpacing: "1px" }}>
-                {profile.name}
-              </span>
+              />
             </div>
+
+            {/* Vignette Overlay */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to top, rgba(7, 13, 9, 0.9) 15%, transparent 60%)",
+                pointerEvents: "none",
+              }}
+            />
 
             {/* Blur Overlay Shield Button */}
             <div style={{ position: "relative", zIndex: 10, textAlign: "center" }}>
@@ -242,9 +235,9 @@ export default function InteractiveProfileShowcase() {
                 type="button"
                 onClick={() => setIsPhotoRevealed(!isPhotoRevealed)}
                 style={{
-                  backgroundColor: "rgba(7, 13, 9, 0.85)",
+                  backgroundColor: "rgba(7, 13, 9, 0.88)",
                   backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(212, 163, 115, 0.35)",
+                  border: "1px solid rgba(212, 163, 115, 0.4)",
                   color: "#f4c07c",
                   padding: "8px 16px",
                   borderRadius: "999px",
@@ -254,17 +247,17 @@ export default function InteractiveProfileShowcase() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)",
+                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.5)",
                   transition: "all 0.2s",
                 }}
               >
                 {isPhotoRevealed ? (
                   <>
-                    <EyeOff size={15} /> Activer le Mode Pudeur (Flouter)
+                    <EyeOff size={15} /> Activer le Mode Discrétion (Flouter)
                   </>
                 ) : (
                   <>
-                    <Eye size={15} /> Déflouter la photo (Mode Discrétion)
+                    <Eye size={15} /> Déflouter l&apos;avatar (Mode Pudeur)
                   </>
                 )}
               </button>
@@ -275,10 +268,10 @@ export default function InteractiveProfileShowcase() {
         {/* Right: Detailed Verified Attributes & Voice Intro */}
         <div>
           <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "6px" }}>
-            <h3 style={{ fontSize: "1.7rem", fontWeight: 800, color: "#fbfbfb", letterSpacing: "-0.5px" }}>
+            <h3 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#fbfbfb", letterSpacing: "-0.5px" }}>
               {profile.name}
             </h3>
-            <span style={{ fontSize: "1.2rem", color: "#f4c07c", fontWeight: 700 }}>
+            <span style={{ fontSize: "1.15rem", color: "#f4c07c", fontWeight: 700 }}>
               {profile.age} ans
             </span>
           </div>
@@ -301,7 +294,7 @@ export default function InteractiveProfileShowcase() {
             </span>
           </div>
 
-          {/* Voice note teaser (Farata Inspiration) */}
+          {/* Voice note teaser */}
           <div
             style={{
               backgroundColor: "rgba(7, 13, 9, 0.75)",
@@ -342,14 +335,14 @@ export default function InteractiveProfileShowcase() {
                 {isPlayingVoice ? <Pause size={16} /> : <Play size={16} style={{ marginLeft: "2px" }} />}
               </button>
 
-              {/* Animated audio wave bars */}
+              {/* Oscillating audio wave bars */}
               <div style={{ display: "flex", alignItems: "center", gap: "3px", flex: 1, height: "24px" }}>
                 {[30, 60, 90, 45, 75, 100, 40, 80, 50, 95, 65, 35, 70, 85, 40, 60, 90, 50, 75].map((height, i) => (
                   <div
                     key={i}
                     style={{
                       width: "3px",
-                      height: isPlayingVoice ? `${Math.max(15, (height * (Math.sin(Date.now() / 200 + i) + 1.2)) / 2)}%` : `${height * 0.4}%`,
+                      height: isPlayingVoice ? `${Math.max(20, (height * (Math.sin(Date.now() / 200 + i) + 1.2)) / 2)}%` : `${height * 0.4}%`,
                       backgroundColor: isPlayingVoice ? "#f4c07c" : "rgba(212, 163, 115, 0.3)",
                       borderRadius: "999px",
                       transition: "all 0.15s ease",
@@ -378,33 +371,31 @@ export default function InteractiveProfileShowcase() {
             </div>
           </div>
 
-          {/* Action Row */}
-          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
-            <button
-              type="button"
-              onClick={handleLike}
-              style={{
-                flex: 1,
-                background: isLiked ? "linear-gradient(135deg, #e07a5f, #d4a373)" : "linear-gradient(135deg, #f4c07c, #d4a373)",
-                color: "#070d09",
-                border: "none",
-                fontWeight: 800,
-                fontSize: "0.95rem",
-                padding: "12px 20px",
-                borderRadius: "12px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                boxShadow: "0 6px 20px rgba(212, 163, 115, 0.35)",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <Heart size={18} fill={isLiked ? "#070d09" : "none"} />
-              {isLiked ? "Coup de Cœur d'Honneur Transmis !" : "Exprimer un Coup de Cœur Respectueux"}
-            </button>
-          </div>
+          {/* Action Button */}
+          <button
+            type="button"
+            onClick={handleLike}
+            style={{
+              width: "100%",
+              background: isLiked ? "linear-gradient(135deg, #e07a5f, #d4a373)" : "linear-gradient(135deg, #f4c07c, #d4a373)",
+              color: "#070d09",
+              border: "none",
+              fontWeight: 800,
+              fontSize: "0.95rem",
+              padding: "12px 20px",
+              borderRadius: "12px",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              boxShadow: "0 6px 20px rgba(212, 163, 115, 0.35)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <Heart size={18} fill={isLiked ? "#070d09" : "none"} />
+            {isLiked ? "Coup de Cœur d'Honneur Transmis !" : "Exprimer un Coup de Cœur Respectueux"}
+          </button>
         </div>
       </div>
     </div>

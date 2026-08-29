@@ -56,8 +56,8 @@ export default function FaqSection() {
   };
 
   return (
-    <section style={{ padding: "5rem 2rem", maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+    <section className="section-container" style={{ padding: "4.5rem 1.5rem", maxWidth: "900px", margin: "0 auto", width: "100%" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
         <span
           style={{
             display: "inline-flex",
