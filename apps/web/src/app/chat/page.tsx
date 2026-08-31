@@ -282,17 +282,17 @@ export default function ChatInboxPage() {
             >
               <MessageCircle size={48} color="#8a968f" style={{ margin: "0 auto 1rem", opacity: 0.5 }} />
               <h3 style={{ fontSize: "1.2rem", fontWeight: "800", color: "#fbfbfb", marginBottom: "0.5rem" }}>
-                Aucune conversation trouvée
+                Zéro faux message • Aucune discussion simulée
               </h3>
-              <p style={{ color: "#8a968f", fontSize: "0.9rem", maxWidth: "420px", margin: "0 auto 1.5rem" }}>
-                Explorez de nouvelles affinités certifiées pour débloquer des échanges mutuels enrichissants.
+              <p style={{ color: "#8a968f", fontSize: "0.9rem", maxWidth: "440px", margin: "0 auto 1.5rem", lineHeight: "1.5" }}>
+                Vos échanges seront 100% réels avec des membres certifiés ayant mutuellement liké votre profil.
               </p>
               <Link
                 href="/discover"
                 className="btn-primary"
                 style={{ display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
               >
-                <Sparkles size={16} /> Explorer la Découverte
+                <Sparkles size={16} /> Explorer la Découverte Réelle
               </Link>
             </div>
           ) : (

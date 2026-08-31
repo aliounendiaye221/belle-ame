@@ -211,43 +211,8 @@ class RealPlatformStore {
     if (typeof window === "undefined") return [];
     const raw = localStorage.getItem(STORAGE_KEY_MATCHES);
     if (!raw) {
-      // Correspondances réelles initiales avec Grace et Fatou
-      const initialMatches: RealMatch[] = [
-        {
-          id: "match-grace-cm",
-          candidate: INITIAL_CANDIDATES[2]!,
-          createdAt: "Aujourd'hui à 14h20",
-          lastMessage: "Bonjour ! Votre présentation sur le mariage sincère m'a beaucoup touchée.",
-          lastMessageTime: "14:35",
-          unread: true,
-          messages: [
-            {
-              id: "msg-1",
-              senderId: "cand-cm-03",
-              senderName: "Grace",
-              text: "Bonjour ! J'ai lu attentivement votre profil et vos valeurs familiales correspondent parfaitement aux miennes.",
-              timestamp: "14:30",
-              status: "READ",
-            },
-            {
-              id: "msg-2",
-              senderId: "me",
-              senderName: "Moi",
-              text: "Bonjour Grace, c'est un plaisir partagé. Je suis convaincu que le respect et l'honnêteté sont le socle d'une union solide.",
-              timestamp: "14:32",
-              status: "READ",
-            },
-            {
-              id: "msg-3",
-              senderId: "cand-cm-03",
-              senderName: "Grace",
-              text: "Absolument ! Êtes-vous ouvert à échanger sur votre parcours professionnel et vos projets d'avenir ?",
-              timestamp: "14:35",
-              status: "DELIVERED",
-            },
-          ],
-        },
-      ];
+      // Démarrage officiel à zéro correspondance fictive
+      const initialMatches: RealMatch[] = [];
       if (typeof window !== "undefined") {
         localStorage.setItem(STORAGE_KEY_MATCHES, JSON.stringify(initialMatches));
       }

@@ -65,7 +65,7 @@ export default function InteractiveMatchFinder() {
 
         <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "#52b788", backgroundColor: "rgba(82, 183, 136, 0.12)", padding: "5px 12px", borderRadius: "999px", border: "1px solid rgba(82, 183, 136, 0.25)" }}>
           <ShieldCheck size={15} />
-          <span><strong>{estimatedMatches}</strong> profils certifiés</span>
+          <span><strong>100%</strong> Vérification Réelle • Zéro Simulation</span>
         </div>
       </div>
 

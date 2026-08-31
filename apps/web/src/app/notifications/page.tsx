@@ -18,55 +18,13 @@ export default function NotificationsPage() {
   const [filter, setFilter] = useState<string>("ALL");
   const [notifications, setNotifications] = useState<Notification[]>([
     {
-      id: "n-001",
-      type: "MATCH",
-      title: "Nouvelle affinité détectée 💫",
-      body: "Grace (94% de compatibilité) a également exprimé un intérêt. Vous avez un Match !",
-      timestamp: "Il y a 5 min",
-      read: false,
-      actionUrl: "/matches"
-    },
-    {
-      id: "n-002",
-      type: "MESSAGE",
-      title: "Nouveau message de Bertrand",
-      body: "« Bonjour ! J'ai beaucoup aimé votre profil, seriez-vous disponible pour... »",
-      timestamp: "Il y a 22 min",
-      read: false,
-      actionUrl: "/chat/match-002"
-    },
-    {
-      id: "n-003",
-      type: "KYC",
-      title: "Vérification d'identité validée ✅",
-      body: "Votre pièce d'identité a été approuvée par notre équipe de modération. Votre profil affiche désormais le badge 🛡️.",
-      timestamp: "Il y a 1h",
-      read: true
-    },
-    {
-      id: "n-004",
-      type: "SECURITY",
-      title: "⚠️ Alerte de sécurité",
-      body: "Une nouvelle connexion a été détectée depuis Douala, Cameroun (iPhone 15 Pro). Si ce n'est pas vous, changez votre mot de passe immédiatement.",
-      timestamp: "Il y a 3h",
-      read: true
-    },
-    {
-      id: "n-005",
-      type: "PROMO",
-      title: "🎁 Offre Pionnière WhatsApp",
-      body: "En tant que membre de la communauté WhatsApp 9 000+, bénéficiez de votre premier mois Premium OFFERT avec le code WA-COMMUNITY-9000.",
-      timestamp: "Hier",
-      read: true
-    },
-    {
-      id: "n-006",
+      id: "n-init-001",
       type: "SYSTEM",
-      title: "Mise à jour de notre politique de confidentialité",
-      body: "Nous avons actualisé nos CGU conformément au RGPD. Consultez les changements dans Paramètres > Confidentialité.",
-      timestamp: "Il y a 2 jours",
-      read: true,
-      actionUrl: "/settings/privacy"
+      title: "Bienvenue sur « À Chacun Une Belle Âme » 🌟",
+      body: "Votre compte est prêt. La plateforme démarre avec intégrité absolue : 0 faux profil, vérification KYC 100% humaine et discrétion garantie.",
+      timestamp: "À l'instant",
+      read: false,
+      actionUrl: "/verification"
     }
   ]);
 

@@ -113,22 +113,48 @@ export default function MatchesPage() {
 
         {/* Matches List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          {matches.map((match) => (
-            <Link
-              key={match.id}
-              href={`/chat/${match.id}`}
+          {matches.length === 0 ? (
+            <div
               className="glass-panel"
               style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "1.25rem 1.5rem",
+                textAlign: "center",
+                padding: "3.5rem 1.5rem",
                 borderRadius: "24px",
-                textDecoration: "none",
-                gap: "1.25rem",
-                position: "relative",
-                border: match.unread ? "1.5px solid rgba(244, 192, 124, 0.45)" : "1px solid rgba(212, 163, 115, 0.18)",
+                border: "1px dashed rgba(212, 163, 115, 0.3)",
               }}
             >
+              <Sparkles size={44} color="#d4a373" style={{ margin: "0 auto 1rem", opacity: 0.8 }} />
+              <h3 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+                Zéro faux profil. Aucune correspondance simulée.
+              </h3>
+              <p style={{ color: "#c7cfcb", fontSize: "0.9rem", maxWidth: "460px", margin: "0 auto 1.5rem", lineHeight: "1.5" }}>
+                Votre espace est vierge et intègre. Explorez les profils certifiés de la communauté et envoyez vos premiers cœurs réels.
+              </p>
+              <Link
+                href="/discover"
+                className="btn-primary"
+                style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none" }}
+              >
+                <Sparkles size={16} /> Découvrir des Profils Réels
+              </Link>
+            </div>
+          ) : (
+            matches.map((match) => (
+              <Link
+                key={match.id}
+                href={`/chat/${match.id}`}
+                className="glass-panel"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "1.25rem 1.5rem",
+                  borderRadius: "24px",
+                  textDecoration: "none",
+                  gap: "1.25rem",
+                  position: "relative",
+                  border: match.unread ? "1.5px solid rgba(244, 192, 124, 0.45)" : "1px solid rgba(212, 163, 115, 0.18)",
+                }}
+              >
               {/* Candidate Avatar with Status */}
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <img
@@ -206,19 +232,18 @@ export default function MatchesPage() {
                     alignItems: "center",
                     gap: "4px",
                     color: "#f4c07c",
-                    fontSize: "0.82rem",
                     fontWeight: "800",
-                    marginTop: "4px",
                   }}
                 >
                   Ouvrir le Chat <ArrowRight size={14} />
                 </div>
               </div>
             </Link>
-          ))}
+            ))
+          )}
         </div>
 
-        {/* Locked Admirers Banner (Endowed Progress / Curiosity) */}
+        {/* Invitation à la communauté réelle */}
         <div
           className="glass-panel"
           style={{
@@ -230,15 +255,15 @@ export default function MatchesPage() {
             background: "linear-gradient(135deg, rgba(16, 32, 23, 0.6), rgba(11, 21, 16, 0.8))",
           }}
         >
-          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>👀</div>
+          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🛡️</div>
           <h3 style={{ fontSize: "1.25rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.4rem" }}>
-            3 Personnes Compatibles Ont Aimé Votre Profil
+            Plateforme Certifiée & Zéro Simulation
           </h3>
           <p style={{ fontSize: "0.85rem", color: "#c7cfcb", maxWidth: "480px", margin: "0 auto 1.5rem" }}>
-            Elles attendent un signe de votre part à Douala et Abidjan. Débloquez la liste intégrale avec le Pass Privilège.
+            Toutes les correspondances générées sur « À Chacun Une Belle Âme » proviennent exclusivement de profils réels vérifiés par pièce d&apos;identité officielle.
           </p>
-          <Link href="/subscription" className="btn-primary" style={{ fontSize: "0.9rem", padding: "12px 28px" }}>
-            <Lock size={15} /> Voir Mes Admirateurs Secrets
+          <Link href="/discover" className="btn-primary" style={{ fontSize: "0.9rem", padding: "12px 28px", display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
+            <Sparkles size={15} /> Explorer le Radar d&apos;Affinités
           </Link>
         </div>
 

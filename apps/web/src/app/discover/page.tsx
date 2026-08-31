@@ -88,12 +88,14 @@ export default function DiscoverPage() {
     },
   ];
 
-  const candidate = candidates[currentIdx % candidates.length]!;
+  const hasExhausted = currentIdx >= candidates.length;
+  const candidate = !hasExhausted ? candidates[currentIdx]! : null;
 
   const handleLike = () => {
+    if (!candidate) return;
     if (quotaRemaining > 0) {
       setQuotaRemaining((prev) => prev - 1);
-      // Persister l'interaction dans le store réel de la plateforme
+      // Persister l'interaction réelle
       const result = realPlatformStore.likeCandidate(candidate.id);
       
       if (result.isMatch || candidate.compatibilityScore >= 90) {
@@ -105,6 +107,7 @@ export default function DiscoverPage() {
   };
 
   const handlePass = () => {
+    if (!candidate) return;
     realPlatformStore.dismissCandidate(candidate.id);
     setCurrentIdx((prev) => prev + 1);
   };
@@ -193,23 +196,59 @@ export default function DiscoverPage() {
           {/* Left Column: Candidate Main Swipe Card */}
           <div style={{ maxWidth: "520px", width: "100%", margin: "0 auto" }}>
             
-            <div
-              className="glass-panel"
-              style={{
-                position: "relative",
-                borderRadius: "32px",
-                overflow: "hidden",
-                border: "2px solid rgba(244, 192, 124, 0.35)",
-                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 163, 115, 0.2)",
-              }}
-            >
-              {/* Photo Area */}
-              <div style={{ position: "relative", height: "460px" }}>
-                <img
-                  src={candidate.photoUrl}
-                  alt={candidate.firstName}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+            {!candidate ? (
+              <div
+                className="glass-panel"
+                style={{
+                  padding: "3.5rem 2rem",
+                  borderRadius: "32px",
+                  border: "1.5px dashed rgba(212, 163, 115, 0.3)",
+                  textAlign: "center",
+                  boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8)",
+                }}
+              >
+                <Sparkles size={52} color="#f4c07c" style={{ margin: "0 auto 1.25rem" }} />
+                <h2 style={{ fontSize: "1.5rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+                  Vous êtes à jour ! 🌟
+                </h2>
+                <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.6", marginBottom: "2rem" }}>
+                  Vous avez parcouru toutes les affinités disponibles. De nouveaux profils certifiés KYC rejoignent la communauté en continu.
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: "280px", margin: "0 auto" }}>
+                  <button
+                    onClick={() => setCurrentIdx(0)}
+                    className="btn-primary"
+                    style={{ padding: "12px 20px", fontSize: "0.88rem" }}
+                  >
+                    Revoir les profils
+                  </button>
+                  <Link
+                    href="/matches"
+                    className="btn-secondary"
+                    style={{ padding: "12px 20px", fontSize: "0.88rem", textDecoration: "none", textAlign: "center" }}
+                  >
+                    Consulter mes correspondances
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="glass-panel"
+                style={{
+                  position: "relative",
+                  borderRadius: "32px",
+                  overflow: "hidden",
+                  border: "2px solid rgba(244, 192, 124, 0.35)",
+                  boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 163, 115, 0.2)",
+                }}
+              >
+                {/* Photo Area */}
+                <div style={{ position: "relative", height: "460px" }}>
+                  <img
+                    src={candidate.photoUrl}
+                    alt={candidate.firstName}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
 
                 {/* Top Floating Badges */}
                 <div style={{ position: "absolute", top: "16px", left: "16px", right: "16px", display: "flex", justifyContent: "space-between", zIndex: 2 }}>
@@ -389,13 +428,14 @@ export default function DiscoverPage() {
               </div>
 
             </div>
+            )}
 
           </div>
 
           {/* Right Column: Psychological Engagement Sidebar */}
           <div>
             {/* Variable Reward: Secret Admirer Hook */}
-            <SecretAdmirerTeaser location="Douala, Cameroun 🇨🇲" compatibilityScore={94} timeAgo="14 minutes" />
+            <SecretAdmirerTeaser />
 
             {/* Privilege Perks Banner */}
             <div
