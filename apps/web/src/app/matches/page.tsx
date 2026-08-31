@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { ShieldCheck, MessageCircle, Crown, Sparkles, Clock, CheckCircle, Flame, ArrowRight, Lock } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
+import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import { realPlatformStore, RealMatch } from "@/lib/real-platform-store";
 
 export default function MatchesPage() {
