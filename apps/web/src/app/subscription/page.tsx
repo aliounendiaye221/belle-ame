@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Crown, CheckCircle2, ShieldCheck, CreditCard, ArrowRight, Zap, ArrowLeft, Sparkles, Flame, Eye, Heart } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import { realPlatformStore } from "@/lib/real-platform-store";
 
 export default function SubscriptionPage() {
-  const [selectedPlan, setSelectedPlan] = useState("PREMIUM");
-  const [paymentMethod, setPaymentMethod] = useState("MTN_MOMO");
+  const [selectedPlan, setSelectedPlan] = useState("SERENITE");
+  const [paymentMethod, setPaymentMethod] = useState("ORANGE_MONEY");
   const [phone, setPhone] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -18,6 +19,11 @@ export default function SubscriptionPage() {
     if (!phone) return;
     setIsProcessing(true);
     setTimeout(() => {
+      // Activer l'abonnement réel
+      const plan = selectedPlan === "ALLIANCE" ? "ALLIANCE" : selectedPlan === "PASS" ? "PASS" : "SERENITE";
+      const days = plan === "ALLIANCE" ? 365 : plan === "PASS" ? 7 : 30;
+      realPlatformStore.activateSubscription(plan, days);
+
       setIsProcessing(false);
       setSuccess(true);
     }, 1200);

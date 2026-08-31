@@ -23,6 +23,7 @@ import CompatibilityRadar from "@/components/CompatibilityRadar";
 import MatchCelebrationModal from "@/components/MatchCelebrationModal";
 import SecretAdmirerTeaser from "@/components/SecretAdmirerTeaser";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import { realPlatformStore } from "@/lib/real-platform-store";
 
 interface Candidate {
   id: string;
@@ -92,8 +93,10 @@ export default function DiscoverPage() {
   const handleLike = () => {
     if (quotaRemaining > 0) {
       setQuotaRemaining((prev) => prev - 1);
-      // Trigger dopamine mutual match celebration modal for high score candidates!
-      if (candidate.compatibilityScore >= 90) {
+      // Persister l'interaction dans le store réel de la plateforme
+      const result = realPlatformStore.likeCandidate(candidate.id);
+      
+      if (result.isMatch || candidate.compatibilityScore >= 90) {
         setMatchedCandidate(candidate);
         setShowMatchModal(true);
       }
@@ -102,6 +105,7 @@ export default function DiscoverPage() {
   };
 
   const handlePass = () => {
+    realPlatformStore.dismissCandidate(candidate.id);
     setCurrentIdx((prev) => prev + 1);
   };
 

@@ -4,37 +4,14 @@ import React from "react";
 import Link from "next/link";
 import { ShieldCheck, MessageCircle, Crown, Sparkles, Clock, CheckCircle, Flame, ArrowRight, Lock } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
-import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import { realPlatformStore, RealMatch } from "@/lib/real-platform-store";
 
 export default function MatchesPage() {
-  const matches = [
-    {
-      id: "match-101",
-      firstName: "Grace",
-      age: 26,
-      location: "Douala, Cameroun 🇨🇲",
-      score: 96,
-      photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
-      lastMessage: "Bonjour ! J'ai lu ta présentation sur tes valeurs spirituelles...",
-      timeAgo: "Il y a 10 min",
-      verified: true,
-      unread: true,
-      expiresIn: "18h 24m",
-    },
-    {
-      id: "match-102",
-      firstName: "Marie-Joséphine",
-      age: 28,
-      location: "Abidjan, Côte d'Ivoire 🇨🇮",
-      score: 92,
-      photoUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80",
-      lastMessage: "Accord mutuel validé ! Vous pouvez échanger en toute sérénité.",
-      timeAgo: "Hier",
-      verified: true,
-      unread: false,
-      expiresIn: "Actif permanent",
-    },
-  ];
+  const [matches, setMatches] = React.useState<RealMatch[]>([]);
+
+  React.useEffect(() => {
+    setMatches(realPlatformStore.getMatches());
+  }, []);
 
   return (
     <div
@@ -154,8 +131,8 @@ export default function MatchesPage() {
               {/* Candidate Avatar with Status */}
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <img
-                  src={match.photoUrl}
-                  alt={match.firstName}
+                  src={match.candidate?.photoUrl || "/images/avatar-woman.jpg"}
+                  alt={match.candidate?.firstName || "Membre"}
                   style={{
                     width: "72px",
                     height: "72px",
@@ -185,12 +162,12 @@ export default function MatchesPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                   <span style={{ fontSize: "1.15rem", fontWeight: "900", color: "#fbfbfb" }}>
-                    {match.firstName}, {match.age}
+                    {match.candidate?.firstName}, {match.candidate?.age} ans
                   </span>
                   <span className="badge-gold" style={{ fontSize: "0.72rem" }}>
-                    <Sparkles size={11} /> {match.score}% Compatibilité
+                    <Sparkles size={11} /> {match.candidate?.compatibilityScore}% Compatibilité
                   </span>
-                  {match.verified && (
+                  {match.candidate?.verifiedKyc && (
                     <span className="badge-emerald" style={{ fontSize: "0.72rem" }}>
                       <ShieldCheck size={11} /> Certifié
                     </span>
@@ -198,7 +175,7 @@ export default function MatchesPage() {
                 </div>
 
                 <div style={{ fontSize: "0.8rem", color: "#d4a373", fontWeight: "600", marginTop: "2px" }}>
-                  {match.location}
+                  {match.candidate?.location}
                 </div>
 
                 <p
@@ -212,13 +189,13 @@ export default function MatchesPage() {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {match.lastMessage}
+                  {match.lastMessage || "Correspondance active. Écrivez le premier message."}
                 </p>
               </div>
 
               {/* Expiration Timer & CTA */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px", flexShrink: 0 }}>
-                <span style={{ fontSize: "0.75rem", color: "#8a968f" }}>{match.timeAgo}</span>
+                <span style={{ fontSize: "0.75rem", color: "#8a968f" }}>{match.lastMessageTime || "Aujourd'hui"}</span>
                 {match.expiresIn.includes("h") ? (
                   <span
                     style={{

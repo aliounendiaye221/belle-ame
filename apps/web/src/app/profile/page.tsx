@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import { realPlatformStore } from "@/lib/real-platform-store";
 
 export default function ProfilePage() {
   const [completion, setCompletion] = useState(85);
@@ -27,18 +28,43 @@ export default function ProfilePage() {
   const [incognitoMode, setIncognitoMode] = useState(false);
 
   const [formData, setFormData] = useState({
-    firstName: "Aminata",
-    age: 27,
-    city: "Douala",
-    country: "Cameroun 🇨🇲",
-    profession: "Chef de Projet Digital",
-    bio: "Femme respectueuse, attachée aux valeurs traditionnelles chrétiennes et engagée dans un projet de mariage sincère et durable.",
-    religion: "Chrétienne Pratiquante",
-    education: "Master 2 Sup de Co",
+    firstName: "Aliou",
+    age: 29,
+    city: "Dakar",
+    country: "Sénégal 🇸🇳",
+    profession: "Ingénieur Télécoms & Entrepreneur",
+    bio: "Homme croyant, respectueux des traditions et déterminé à bâtir une famille bénie et harmonieuse.",
+    religion: "Musulman Pratiquant",
+    education: "Master École Supérieure Polytechnique",
   });
+
+  React.useEffect(() => {
+    const prof = realPlatformStore.getProfile();
+    if (prof) {
+      setFormData({
+        firstName: prof.firstName || "Aliou",
+        age: prof.age || 29,
+        city: prof.city || "Dakar",
+        country: "Sénégal 🇸🇳",
+        profession: prof.profession || "Ingénieur",
+        bio: prof.bio || "",
+        religion: prof.religion || "Croyant",
+        education: prof.education || "Enseignement Supérieur",
+      });
+    }
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    realPlatformStore.saveProfile({
+      firstName: formData.firstName,
+      age: formData.age,
+      city: formData.city,
+      profession: formData.profession,
+      bio: formData.bio,
+      religion: formData.religion,
+      education: formData.education,
+    });
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2500);
   };

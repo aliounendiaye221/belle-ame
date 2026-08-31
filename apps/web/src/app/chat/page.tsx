@@ -33,36 +33,32 @@ interface ConversationItem {
   activeAgreement: boolean;
 }
 
+import { realPlatformStore, RealMatch } from "@/lib/real-platform-store";
+
 export default function ChatInboxPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<"ALL" | "UNREAD" | "VERIFIED">("ALL");
+  const [matches, setMatches] = useState<RealMatch[]>([]);
 
-  const conversations: ConversationItem[] = [
-    {
-      id: "conv-101",
-      matchId: "match-101",
-      partnerName: "Grace",
-      age: 26,
-      location: "Douala, Cameroun 🇨🇲",
-      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
-      lastMessage: "Absolument ! Êtes-vous ouvert à échanger sur votre parcours professionnel et vos projets d'avenir ?",
-      lastMessageTime: "14:35",
-      unreadCount: 1,
-      compatibilityScore: 96,
-      isVerified: true,
-      isOnline: true,
-      activeAgreement: true,
-    },
-    {
-      id: "conv-102",
-      matchId: "match-102",
-      partnerName: "Marie-Joséphine",
-      age: 28,
-      location: "Abidjan, Côte d'Ivoire 🇨🇮",
-      avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80",
-      lastMessage: "Accord mutuel validé ! Vous pouvez échanger en toute sérénité.",
-      lastMessageTime: "Hier",
-      unreadCount: 0,
+  React.useEffect(() => {
+    setMatches(realPlatformStore.getMatches());
+  }, []);
+
+  const conversations: ConversationItem[] = matches.map((m) => ({
+    id: m.id,
+    matchId: m.id,
+    partnerName: m.candidate?.firstName || "Membre",
+    age: m.candidate?.age || 26,
+    location: m.candidate?.location || "Afrique",
+    avatarUrl: m.candidate?.photoUrl || "/images/avatar-woman.jpg",
+    lastMessage: m.lastMessage || "Conversation active.",
+    lastMessageTime: m.lastMessageTime || "Aujourd'hui",
+    unreadCount: m.unread ? 1 : 0,
+    compatibilityScore: m.candidate?.compatibilityScore || 95,
+    isVerified: m.candidate?.verifiedKyc || true,
+    isOnline: true,
+    activeAgreement: true,
+  }));
       compatibilityScore: 92,
       isVerified: true,
       isOnline: false,

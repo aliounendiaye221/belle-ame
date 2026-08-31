@@ -4,55 +4,38 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Send, AlertTriangle, ArrowLeft, MoreVertical, CheckCheck, Lock, PhoneCall } from "lucide-react";
 
+import { realPlatformStore, RealMatch } from "@/lib/real-platform-store";
+
 export default function ChatPage({ params }: { params: { matchId: string } }) {
   const [inputText, setInputText] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      id: "m-1",
-      sender: "OTHER",
-      text: "Bonjour ! J'ai beaucoup apprécié votre présentation et vos valeurs sur la famille.",
-      timestamp: "14:30",
-      status: "READ"
-    },
-    {
-      id: "m-2",
-      sender: "ME",
-      text: "Bonjour Grace, c'est un plaisir partagé. Je suis convaincu que le respect et l'honnêteté sont le socle d'une union solide.",
-      timestamp: "14:32",
-      status: "READ"
-    },
-    {
-      id: "m-3",
-      sender: "OTHER",
-      text: "Absolument ! Êtes-vous ouvert à échanger sur votre parcours professionnel et vos projets d'avenir ?",
-      timestamp: "14:35",
-      status: "READ"
-    }
-  ]);
-
+  const [match, setMatch] = useState<RealMatch | null>(null);
   const [showAntiFraudAlert, setShowAntiFraudAlert] = useState(false);
+
+  React.useEffect(() => {
+    const matches = realPlatformStore.getMatches();
+    const found = matches.find((m) => m.id === params.matchId) || matches[0] || null;
+    setMatch(found);
+  }, [params.matchId]);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !match) return;
 
-    // Check for suspicious financial / off-platform keywords
-    const suspiciousKeywords = ["argent", "western union", "momo", "virement", "compte bancaire", "urgence"];
+    // Détection en temps réel des tentatives d'escroquerie ou de broutage
+    const suspiciousKeywords = ["argent", "western union", "momo", "virement", "compte bancaire", "urgence", "prêter"];
     const hasSuspiciousWord = suspiciousKeywords.some(kw => inputText.toLowerCase().includes(kw));
 
     if (hasSuspiciousWord) {
       setShowAntiFraudAlert(true);
     }
 
-    const newMessage = {
-      id: `m-${Date.now()}`,
-      sender: "ME",
-      text: inputText,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      status: "SENT"
-    };
-
-    setMessages([...messages, newMessage]);
+    const sent = realPlatformStore.sendMessage(match.id, inputText);
+    setMatch({
+      ...match,
+      messages: [...match.messages, sent],
+      lastMessage: inputText,
+      lastMessageTime: sent.timestamp,
+    });
     setInputText("");
   };
 
@@ -67,16 +50,16 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
             <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"
-              alt="Grace"
+              src={match?.candidate?.photoUrl || "/images/avatar-woman.jpg"}
+              alt={match?.candidate?.firstName || "Correspondance"}
               style={{ width: "42px", height: "42px", borderRadius: "50%", objectFit: "cover", border: "2px solid #d4a373" }}
             />
             <div>
               <div style={{ fontWeight: "700", fontSize: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                Grace <ShieldCheck size={16} color="#52b788" />
+                {match?.candidate?.firstName || "Membre Certifié"} <ShieldCheck size={16} color="#52b788" />
               </div>
               <div style={{ fontSize: "0.75rem", color: "#52b788", display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                ● En ligne | Score 94%
+                ● En ligne | Score {match?.candidate?.compatibilityScore || 95}%
               </div>
             </div>
           </div>
@@ -110,8 +93,8 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
           </span>
         </div>
 
-        {messages.map((msg) => {
-          const isMe = msg.sender === "ME";
+        {(match?.messages || []).map((msg) => {
+          const isMe = msg.senderId === "me" || msg.senderName === "Moi";
           return (
             <div
               key={msg.id}
