@@ -59,27 +59,6 @@ export default function ChatInboxPage() {
     isOnline: true,
     activeAgreement: true,
   }));
-      compatibilityScore: 92,
-      isVerified: true,
-      isOnline: false,
-      activeAgreement: true,
-    },
-    {
-      id: "conv-103",
-      matchId: "match-103",
-      partnerName: "Bertrand",
-      age: 31,
-      location: "Cotonou, Bénin 🇧🇯",
-      avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
-      lastMessage: "Merci pour votre réponse. Je partage tout à fait votre vision du mariage chrétien.",
-      lastMessageTime: "26 Août",
-      unreadCount: 0,
-      compatibilityScore: 89,
-      isVerified: true,
-      isOnline: false,
-      activeAgreement: true,
-    },
-  ];
 
   const filteredConversations = conversations.filter((c) => {
     const matchesSearch =
