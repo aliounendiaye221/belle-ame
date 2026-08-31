@@ -197,27 +197,9 @@ export default function MatchesPage() {
               {/* Expiration Timer & CTA */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px", flexShrink: 0 }}>
                 <span style={{ fontSize: "0.75rem", color: "#8a968f" }}>{match.lastMessageTime || "Aujourd'hui"}</span>
-                {match.expiresIn.includes("h") ? (
-                  <span
-                    style={{
-                      fontSize: "0.72rem",
-                      padding: "3px 8px",
-                      borderRadius: "999px",
-                      backgroundColor: "rgba(224, 122, 95, 0.2)",
-                      color: "#f4a261",
-                      fontWeight: "700",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                    }}
-                  >
-                    <Clock size={11} /> Expire: {match.expiresIn}
-                  </span>
-                ) : (
-                  <span style={{ fontSize: "0.72rem", color: "#52b788", fontWeight: "700" }}>
-                    ✓ Discussion active
-                  </span>
-                )}
+                <span style={{ fontSize: "0.72rem", color: "#52b788", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
+                  <Clock size={11} /> Accord Mutuel Actif
+                </span>
                 <div
                   style={{
                     display: "flex",
