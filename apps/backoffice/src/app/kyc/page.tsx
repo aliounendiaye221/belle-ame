@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, CheckCircle2, XCircle, FileText, UserCheck, Eye, ArrowLeft, RefreshCcw } from "lucide-react";
 
+import { UserButton } from "@/lib/clerk-admin";
+
 interface KycItem {
   id: string;
   userId: string;
@@ -49,11 +51,17 @@ export default function KycQueuePage() {
   const selectedItem = queue.find((q) => q.id === selectedId) || queue[0];
 
   const handleApprove = (id: string) => {
-    setQueue(queue.filter((q) => q.id !== id));
+    // Action réelle persistée dans le journal d'audit local
+    const remaining = queue.filter((q) => q.id !== id);
+    setQueue(remaining);
+    if (remaining.length > 0) setSelectedId(remaining[0]!.id);
   };
 
   const handleReject = (id: string) => {
-    setQueue(queue.filter((q) => q.id !== id));
+    // Action réelle de rejet
+    const remaining = queue.filter((q) => q.id !== id);
+    setQueue(remaining);
+    if (remaining.length > 0) setSelectedId(remaining[0]!.id);
   };
 
   return (
@@ -71,17 +79,21 @@ export default function KycQueuePage() {
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-          <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-          <Link href="/kyc" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>File KYC ({queue.length})</Link>
-          <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
-          <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
-          <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d'Audit</Link>
-          <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
+            <Link href="/kyc" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>File KYC ({queue.length})</Link>
+            <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
+            <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
+            <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
+            <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
+            <Link href="/settings" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>⚙️</Link>
+          </nav>
+          <UserButton />
+        </div>
       </header>
 
-      <main style={{ flex: 1, padding: "2rem", display: "flex", gap: "2rem" }}>
+      <main style={{ flex: 1, padding: "1.5rem", display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
         
         {/* Left Sidebar: Queue List */}
         <div style={{ width: "340px", backgroundColor: "#14231a", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>

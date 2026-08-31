@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldAlert, AlertTriangle, Clock, CheckCircle2, Ban, EyeOff, Bell, Flag, MessageSquare } from "lucide-react";
 
+import { UserButton } from "@/lib/clerk-admin";
+
 interface ReportItem {
   id: string;
   reportedUser: string;
@@ -41,7 +43,9 @@ export default function ModerationPage() {
 
   const handleApplySanction = (sanctionType: string) => {
     alert(`Sanction [${sanctionType}] appliquée avec succès. L'action est enregistrée de manière immuable dans le journal d'audit.`);
-    setReports(reports.filter((r) => r.id !== selectedReportId));
+    const remaining = reports.filter((r) => r.id !== selectedReportId);
+    setReports(remaining);
+    if (remaining.length > 0) setSelectedReportId(remaining[0]!.id);
   };
 
   return (
@@ -59,17 +63,21 @@ export default function ModerationPage() {
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-          <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-          <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
-          <Link href="/moderation" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Modération SLA ({reports.length})</Link>
-          <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
-          <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d'Audit</Link>
-          <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
+            <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
+            <Link href="/moderation" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Modération SLA ({reports.length})</Link>
+            <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
+            <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
+            <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
+            <Link href="/settings" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>⚙️</Link>
+          </nav>
+          <UserButton />
+        </div>
       </header>
 
-      <main style={{ flex: 1, padding: "2rem", display: "flex", gap: "2rem" }}>
+      <main style={{ flex: 1, padding: "1.5rem", display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
         
         {/* Queue List */}
         <div style={{ width: "340px", backgroundColor: "#14231a", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>

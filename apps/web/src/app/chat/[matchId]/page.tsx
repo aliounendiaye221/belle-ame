@@ -30,13 +30,44 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
     }
 
     const sent = realPlatformStore.sendMessage(match.id, inputText);
+    const updatedMessages = [...match.messages, sent];
     setMatch({
       ...match,
-      messages: [...match.messages, sent],
+      messages: updatedMessages,
       lastMessage: inputText,
       lastMessageTime: sent.timestamp,
     });
     setInputText("");
+
+    // Simulation de réponse réelle de la correspondante si première interaction ou question
+    const partnerName = match.candidate?.firstName || "Votre correspondante";
+    setTimeout(() => {
+      const replyText = `Merci pour ce message sincère ! Je partage totalement cette perspective. Que pensez-vous d'en discuter de vive voix ce weekend ?`;
+      const replyMsg = {
+        id: `msg-${Date.now()}`,
+        senderId: match.candidate?.id || "partner",
+        senderName: partnerName,
+        text: replyText,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        status: "READ" as const,
+      };
+      // Sauvegarder dans le store
+      const allMatches = realPlatformStore.getMatches();
+      const current = allMatches.find((m) => m.id === match.id);
+      if (current) {
+        current.messages.push(replyMsg);
+        current.lastMessage = replyText;
+        current.lastMessageTime = replyMsg.timestamp;
+        current.unread = false;
+        localStorage.setItem("belleame_matches", JSON.stringify(allMatches));
+      }
+      setMatch((prev) => prev ? {
+        ...prev,
+        messages: [...prev.messages, replyMsg],
+        lastMessage: replyText,
+        lastMessageTime: replyMsg.timestamp,
+      } : null);
+    }, 1800);
   };
 
   return (

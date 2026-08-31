@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Search, Eye, EyeOff, Lock, RefreshCw, Crown, LogOut, User } from "lucide-react";
+import { UserButton } from "@/lib/clerk-admin";
 
 interface UserItem {
   id: string;
@@ -96,6 +97,12 @@ export default function UsersManagementPage() {
     }
   ];
 
+  const filteredUsers = users.filter((u) => 
+    u.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const handleRevokeSessions = (userId: string) => {
     alert(`Toutes les sessions de l'utilisateur [${userId}] ont été révoquées avec succès.`);
   };
@@ -110,19 +117,23 @@ export default function UsersManagementPage() {
             Â
           </div>
           <div>
-            <div style={{ fontWeight: "800", fontSize: "1.1rem" }}>Gestion des Utilisateurs & Support Client</div>
-            <div style={{ fontSize: "0.7rem", color: "#d4a373", fontWeight: "600" }}>🛡️ Vue Support & Masque PII Sécurisé</div>
+            <div style={{ fontWeight: "800", fontSize: "1.1rem" }}>Gestion & Surveillance des Membres</div>
+            <div style={{ fontSize: "0.7rem", color: "#d4a373", fontWeight: "600" }}>Conformité RGPD & Protection Données Sensibles</div>
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-          <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-          <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
-          <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
-          <Link href="/users" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Utilisateurs</Link>
-          <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d'Audit</Link>
-          <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
+            <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
+            <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
+            <Link href="/users" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Utilisateurs</Link>
+            <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
+            <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
+            <Link href="/settings" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>⚙️</Link>
+          </nav>
+          <UserButton />
+        </div>
       </header>
 
       <main style={{ flex: 1, padding: "2.5rem", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
