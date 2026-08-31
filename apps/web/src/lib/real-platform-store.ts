@@ -215,7 +215,7 @@ class RealPlatformStore {
       const initialMatches: RealMatch[] = [
         {
           id: "match-grace-cm",
-          candidate: INITIAL_CANDIDATES[2],
+          candidate: INITIAL_CANDIDATES[2]!,
           createdAt: "Aujourd'hui à 14h20",
           lastMessage: "Bonjour ! Votre présentation sur le mariage sincère m'a beaucoup touchée.",
           lastMessageTime: "14:35",
