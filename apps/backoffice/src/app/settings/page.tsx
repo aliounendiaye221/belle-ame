@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Settings, Shield, Bell, Database, Globe, Lock, Mail, Save, ToggleLeft, ToggleRight, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { UserButton } from "@/lib/clerk-admin";
 
 interface SettingToggle {
   id: string;
@@ -63,25 +64,28 @@ export default function AdminSettingsPage() {
             <div style={{ fontSize: "0.7rem", color: "#52b788", fontWeight: "600" }}>⚙️ Configuration Plateforme</div>
           </div>
         </div>
-        <button
-          onClick={handleSave}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "8px 20px",
-            borderRadius: "999px",
-            background: saved ? "rgba(82, 183, 136, 0.2)" : "linear-gradient(135deg, #d4a373, #e07a5f)",
-            border: saved ? "1px solid rgba(82, 183, 136, 0.4)" : "none",
-            color: saved ? "#52b788" : "#0b130e",
-            fontWeight: "700",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            transition: "all 0.3s ease"
-          }}
-        >
-          {saved ? <><CheckCircle2 size={16} /> Sauvegardé !</> : <><Save size={16} /> Sauvegarder</>}
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <button
+            onClick={handleSave}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 20px",
+              borderRadius: "999px",
+              background: saved ? "rgba(82, 183, 136, 0.2)" : "linear-gradient(135deg, #d4a373, #e07a5f)",
+              border: saved ? "1px solid rgba(82, 183, 136, 0.4)" : "none",
+              color: saved ? "#52b788" : "#0b130e",
+              fontWeight: "700",
+              fontSize: "0.85rem",
+              cursor: "pointer",
+              transition: "all 0.3s ease"
+            }}
+          >
+            {saved ? <><CheckCircle2 size={16} /> Sauvegardé !</> : <><Save size={16} /> Sauvegarder</>}
+          </button>
+          <UserButton />
+        </div>
       </header>
 
       <div style={{ padding: "1.5rem 2rem", maxWidth: "900px", margin: "0 auto" }}>

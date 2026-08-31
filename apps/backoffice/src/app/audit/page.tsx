@@ -4,34 +4,18 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, FileText, Lock, Clock, Search, Filter } from "lucide-react";
 
+import { UserButton } from "@/lib/clerk-admin";
+
 export default function AuditLogPage() {
   const auditLogs = [
     {
-      id: "log-9001",
-      timestamp: "2026-08-28T14:32:00Z",
-      adminId: "adm-super-01 (Super Admin)",
-      action: "KYC_APPROVE",
-      targetUser: "usr-cam-991",
-      ipAddress: "197.234.221.12",
-      details: "Validation du document CNI Cameroun et attribution du badge KYC 🛡️"
-    },
-    {
-      id: "log-9002",
-      timestamp: "2026-08-28T13:15:00Z",
-      adminId: "adm-mod-04 (Modérateur SLA)",
-      action: "SANCTION_SHADOWBAN",
-      targetUser: "usr-ci-440",
-      ipAddress: "41.202.190.5",
-      details: "Application de la sanction 4 (Shadowban) suite au signalement rep-801"
-    },
-    {
-      id: "log-9003",
-      timestamp: "2026-08-28T11:00:00Z",
-      adminId: "SYSTEM_WEBHOOK",
-      action: "PAYMENT_CREDIT_FCFA",
-      targetUser: "usr-ben-304",
-      ipAddress: "54.172.10.22",
-      details: "Abonnement Privilège 5 000 FCFA activé via MTN MoMo webhook externalEventId: momo-txn-8812"
+      id: "log-init-001",
+      timestamp: "2026-08-31T01:45:00Z",
+      adminId: "adm-super-01 (Aliou Ndiaye)",
+      action: "PLATFORM_SYSTEM_INIT",
+      targetUser: "SYSTEM_ROOT",
+      ipAddress: "127.0.0.1",
+      details: "Initialisation propre du système — Remise à zéro officielle des compteurs de production et lancement sécurisé."
     }
   ];
 
@@ -50,14 +34,18 @@ export default function AuditLogPage() {
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-          <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-          <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
-          <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
-          <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
-          <Link href="/audit" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Piste d'Audit</Link>
-          <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
+            <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
+            <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
+            <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
+            <Link href="/audit" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
+            <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
+            <Link href="/settings" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>⚙️</Link>
+          </nav>
+          <UserButton />
+        </div>
       </header>
 
       <main style={{ flex: 1, padding: "2.5rem", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>

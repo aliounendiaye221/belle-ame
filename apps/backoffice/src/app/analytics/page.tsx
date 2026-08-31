@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BarChart3, Users, Heart, Shield, CreditCard, TrendingUp, TrendingDown, Activity, Globe, Calendar, ArrowUpRight, ArrowDownRight } from "lucide-react";
 
+import { UserButton } from "@/lib/clerk-admin";
+
 interface MetricCard {
   label: string;
   value: string;
@@ -17,39 +19,28 @@ export default function AnalyticsPage() {
   const [period, setPeriod] = useState("30j");
 
   const metrics: MetricCard[] = [
-    { label: "Utilisateurs Actifs", value: "8 742", change: "+12.3%", trend: "up", icon: <Users size={20} />, color: "#52b788" },
-    { label: "Matchs Mutuels", value: "1 284", change: "+8.7%", trend: "up", icon: <Heart size={20} />, color: "#e07a5f" },
-    { label: "Taux de Conversion Premium", value: "14.2%", change: "+2.1%", trend: "up", icon: <CreditCard size={20} />, color: "#d4a373" },
-    { label: "Signalements Actifs", value: "23", change: "-18%", trend: "down", icon: <Shield size={20} />, color: "#f4a261" },
-    { label: "Revenus MRR (FCFA)", value: "6 180 000", change: "+22.4%", trend: "up", icon: <TrendingUp size={20} />, color: "#52b788" },
-    { label: "Temps Modération Moyen", value: "4.2h", change: "-32%", trend: "down", icon: <Activity size={20} />, color: "#52b788" }
+    { label: "Utilisateurs Actifs Réels", value: "0", change: "Ouverture officielle", trend: "up", icon: <Users size={20} />, color: "#52b788" },
+    { label: "Matchs Mutuels", value: "0", change: "En attente des premiers matchs", trend: "up", icon: <Heart size={20} />, color: "#e07a5f" },
+    { label: "Taux de Conversion Premium", value: "0%", change: "Passerelles prêtes", trend: "up", icon: <CreditCard size={20} />, color: "#d4a373" },
+    { label: "Signalements Actifs", value: "0", change: "Zéro incident", trend: "down", icon: <Shield size={20} />, color: "#f4a261" },
+    { label: "Revenus MRR (FCFA)", value: "0 FCFA", change: "Wave & MoMo actifs", trend: "up", icon: <TrendingUp size={20} />, color: "#52b788" },
+    { label: "Temps Modération Moyen", value: "< 1h", change: "SLA garanti", trend: "down", icon: <Activity size={20} />, color: "#52b788" }
   ];
 
   const countryBreakdown = [
-    { country: "Cameroun 🇨🇲", users: 4120, percentage: 47, color: "#52b788" },
-    { country: "Côte d'Ivoire 🇨🇮", users: 2180, percentage: 25, color: "#d4a373" },
-    { country: "Bénin 🇧🇯", users: 1350, percentage: 15, color: "#e07a5f" },
-    { country: "Diaspora 🇫🇷", users: 1092, percentage: 13, color: "#f4a261" }
+    { country: "Afrique & Diaspora (54 Pays)", users: 0, percentage: 100, color: "#52b788" },
   ];
 
   const conversionFunnel = [
-    { step: "Inscription SMS", count: 12400, percentage: 100 },
-    { step: "OTP Vérifié", count: 11160, percentage: 90 },
-    { step: "Onboarding Complété", count: 9300, percentage: 75 },
-    { step: "KYC Soumis", count: 8370, percentage: 67 },
-    { step: "KYC Approuvé", count: 7905, percentage: 64 },
-    { step: "Premier Match", count: 5580, percentage: 45 },
-    { step: "Premier Message", count: 4464, percentage: 36 },
-    { step: "Abonné Premium", count: 1736, percentage: 14 }
+    { step: "Visite Plateforme", count: 0, percentage: 100 },
+    { step: "OTP Vérifié", count: 0, percentage: 0 },
+    { step: "Onboarding Complété", count: 0, percentage: 0 },
+    { step: "KYC Soumis", count: 0, percentage: 0 },
+    { step: "Premier Match Réel", count: 0, percentage: 0 },
+    { step: "Abonné MoMo", count: 0, percentage: 0 }
   ];
 
-  const recentActivity = [
-    { action: "Nouveau match mutuel", detail: "Aminata ↔ Bertrand (94%)", time: "Il y a 2 min", color: "#e07a5f" },
-    { action: "KYC approuvé", detail: "Fabrice K. (usr-ci-440)", time: "Il y a 8 min", color: "#52b788" },
-    { action: "Paiement reçu", detail: "5 000 FCFA — MTN MoMo", time: "Il y a 15 min", color: "#d4a373" },
-    { action: "Signalement traité", detail: "rep-801 — Sanction Niveau 3", time: "Il y a 22 min", color: "#f4a261" },
-    { action: "Nouveau membre", detail: "+237 6XX XXX 890 (Douala)", time: "Il y a 31 min", color: "#52b788" }
-  ];
+  const recentActivity: { action: string; detail: string; time: string; color: string }[] = [];
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#0b130e", color: "#f8f9fa", fontFamily: "system-ui, sans-serif" }}>
@@ -65,25 +56,28 @@ export default function AnalyticsPage() {
             <div style={{ fontSize: "0.7rem", color: "#52b788", fontWeight: "600" }}>📊 Vue d&apos;Ensemble Business</div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          {["7j", "30j", "90j", "1an"].map((p: string) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              style={{
-                padding: "6px 14px",
-                borderRadius: "999px",
-                border: period === p ? "1px solid #d4a373" : "1px solid rgba(255,255,255,0.1)",
-                background: period === p ? "rgba(212, 163, 115, 0.2)" : "transparent",
-                color: period === p ? "#d4a373" : "#8a968f",
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                cursor: "pointer"
-              }}
-            >
-              {p}
-            </button>
-          ))}
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {["7j", "30j", "90j", "1an"].map((p: string) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                style={{
+                  padding: "6px 14px",
+                  borderRadius: "999px",
+                  border: period === p ? "1px solid #d4a373" : "1px solid rgba(255,255,255,0.1)",
+                  background: period === p ? "rgba(212, 163, 115, 0.2)" : "transparent",
+                  color: period === p ? "#d4a373" : "#8a968f",
+                  fontSize: "0.75rem",
+                  fontWeight: "600",
+                  cursor: "pointer"
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+          <UserButton />
         </div>
       </header>
 

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { MessageSquare, Users, TrendingUp, Gift, CheckCircle2, ArrowRight } from "lucide-react";
 
+import { UserButton } from "@/lib/clerk-admin";
+
 interface PromoCode {
   code: string;
   discount: string;
@@ -14,8 +16,7 @@ interface PromoCode {
 
 export default function GrowthAnalyticsPage() {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([
-    { code: "WA-COMMUNITY-9000", discount: "1 Mois Offert", redemptions: 1420, maxRedemptions: 9000, status: "ACTIVE" },
-    { code: "DIASPORA-PARIS-2026", discount: "50% sur 3 Mois", redemptions: 340, maxRedemptions: 1000, status: "ACTIVE" }
+    { code: "BIENVENUE-2026", discount: "Premier mois offert", redemptions: 0, maxRedemptions: 1000, status: "ACTIVE" }
   ]);
 
   return (
@@ -28,19 +29,23 @@ export default function GrowthAnalyticsPage() {
             Â
           </div>
           <div>
-            <div style={{ fontWeight: "800", fontSize: "1.1rem" }}>Analyse d'Acquisition & Migration WhatsApp</div>
-            <div style={{ fontSize: "0.7rem", color: "#52b788", fontWeight: "600" }}>📈 Communauté Pionnière (9 000+ Membres)</div>
+            <div style={{ fontWeight: "800", fontSize: "1.1rem" }}>Analyse d'Acquisition & Croissance</div>
+            <div style={{ fontSize: "0.7rem", color: "#52b788", fontWeight: "600" }}>📈 Suivi de Campagnes & Codes Partenaires</div>
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-          <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-          <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
-          <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
-          <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
-          <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d'Audit</Link>
-          <Link href="/growth" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
+            <Link href="/kyc" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>File KYC</Link>
+            <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
+            <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
+            <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
+            <Link href="/growth" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>Croissance</Link>
+            <Link href="/settings" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>⚙️</Link>
+          </nav>
+          <UserButton />
+        </div>
       </header>
 
       <main style={{ flex: 1, padding: "2.5rem", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
@@ -49,27 +54,27 @@ export default function GrowthAnalyticsPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem", marginBottom: "2.5rem" }}>
           
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Clics Cibles WhatsApp</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>6 840</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>+18% cette semaine</div>
+            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Clics Campagnes Acquisition</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Prêt pour tracking UTM</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Inscriptions OTP Validées</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#fff" }}>4 120</div>
-            <div style={{ fontSize: "0.75rem", color: "#d4a373", marginTop: "0.35rem" }}>60.2% de taux de conversion</div>
+            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Inscriptions Réelles</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#fff" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#d4a373", marginTop: "0.35rem" }}>Taux de conversion prêt</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(82, 183, 136, 0.2)" }}>
             <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Profils Vérifiés KYC 🛡️</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>2 890</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>70.1% des inscrits</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>100% de rigueur</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Abonnés Privilège FCFA</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>1 420</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>34.4% de taux de souscription</div>
+            <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Abonnés MoMo Réels</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Wave / Orange / MTN actifs</div>
           </div>
 
         </div>
