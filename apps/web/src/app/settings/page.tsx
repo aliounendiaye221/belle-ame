@@ -450,6 +450,29 @@ export default function SettingsPage() {
                 <div style={{ fontSize: "0.78rem", color: "#8a968f" }}>Statut d&apos;honneur & pièces</div>
               </div>
             </Link>
+
+            <a
+              href="https://belle-ame-backoffice.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "1.25rem",
+                borderRadius: "20px",
+                backgroundColor: "rgba(20, 35, 26, 0.9)",
+                border: "1px solid rgba(82, 183, 136, 0.4)",
+                color: "#52b788",
+                textDecoration: "none",
+              }}
+            >
+              <Sliders size={20} color="#52b788" />
+              <div>
+                <div style={{ fontSize: "0.95rem", fontWeight: "800" }}>Portail Back-Office Super Admin 🛡️</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f" }}>Modération SLA, File KYC & Pilotage</div>
+              </div>
+            </a>
           </div>
 
           {/* Save Button Bar */}
