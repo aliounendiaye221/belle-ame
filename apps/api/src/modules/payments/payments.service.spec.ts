@@ -2,6 +2,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { PaymentsService } from "./payments.service";
 import { PrismaService } from "../database/prisma.service";
 import { MockPaymentProvider } from "./providers/mock-payment.provider";
+import { CinetPayPaymentProvider } from "./providers/cinetpay.provider";
+import { WavePaymentProvider } from "./providers/wave.provider";
 import {
   PaymentProviderType,
   PaymentStatus,
@@ -53,6 +55,18 @@ describe("PaymentsService", () => {
       providers: [
         PaymentsService,
         MockPaymentProvider,
+        CinetPayPaymentProvider,
+        WavePaymentProvider,
+        {
+          provide: "ConfigService",
+          useValue: {
+            get: (key: string) => {
+              if (key === "NEXT_PUBLIC_APP_URL") return "http://localhost:3000";
+              if (key === "API_URL") return "http://localhost:4000";
+              return null;
+            },
+          },
+        },
         { provide: PrismaService, useValue: mockPrismaService },
       ],
     }).compile();

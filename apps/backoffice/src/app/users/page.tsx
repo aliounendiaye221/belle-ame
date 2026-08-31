@@ -35,6 +35,18 @@ export default function UsersManagementPage() {
       activeSessionsCount: 2
     },
     {
+      id: "usr-sen-102",
+      firstName: "Cheikh",
+      lastName: "Diallo",
+      phone: "+221770000000",
+      country: "Sénégal 🇸🇳",
+      role: "MEMBER",
+      tier: "PREMIUM",
+      verifiedKyc: true,
+      createdAt: "2026-08-03",
+      activeSessionsCount: 1
+    },
+    {
       id: "usr-ben-304",
       firstName: "Koffi",
       lastName: "Mensah",
@@ -57,6 +69,30 @@ export default function UsersManagementPage() {
       verifiedKyc: false,
       createdAt: "2026-08-10",
       activeSessionsCount: 1
+    },
+    {
+      id: "usr-rdc-705",
+      firstName: "Merveille",
+      lastName: "Ilunga",
+      phone: "+243810000000",
+      country: "RD Congo 🇨🇩",
+      role: "MEMBER",
+      tier: "PREMIUM",
+      verifiedKyc: true,
+      createdAt: "2026-08-12",
+      activeSessionsCount: 2
+    },
+    {
+      id: "usr-fr-880",
+      firstName: "Mamadou",
+      lastName: "Traoré",
+      phone: "+33612345678",
+      country: "France (Diaspora) 🇫🇷",
+      role: "MEMBER",
+      tier: "ALLIANCE",
+      verifiedKyc: true,
+      createdAt: "2026-08-15",
+      activeSessionsCount: 3
     }
   ];
 

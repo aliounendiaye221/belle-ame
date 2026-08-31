@@ -7,6 +7,9 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../database/prisma.service";
 import { MockPaymentProvider } from "./providers/mock-payment.provider";
+import { CinetPayPaymentProvider } from "./providers/cinetpay.provider";
+import { WavePaymentProvider } from "./providers/wave.provider";
+import { IPaymentProvider } from "./interfaces/payment-provider.interface";
 import {
   PaymentProviderType,
   PaymentStatus,
@@ -27,8 +30,25 @@ export class PaymentsService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly paymentProvider: MockPaymentProvider,
+    private readonly mockPaymentProvider: MockPaymentProvider,
+    private readonly cinetPayProvider: CinetPayPaymentProvider,
+    private readonly waveProvider: WavePaymentProvider,
   ) {}
+
+  private resolveProvider(providerType: PaymentProviderType): IPaymentProvider {
+    switch (providerType) {
+      case PaymentProviderType.CINETPAY:
+      case PaymentProviderType.MTN_MOMO:
+      case PaymentProviderType.ORANGE_MONEY:
+      case PaymentProviderType.MOOV_MONEY:
+        return this.cinetPayProvider;
+      case PaymentProviderType.WAVE:
+        return this.waveProvider;
+      case PaymentProviderType.MOCK_TEST:
+      default:
+        return this.mockPaymentProvider;
+    }
+  }
 
   /**
    * Consultation de la grille tarifaire officielle
@@ -69,15 +89,16 @@ export class PaymentsService {
       data: {
         userId,
         subscriptionId: subscription.id,
-        provider: dto.provider,
+        provider: dto.provider as any,
         amountInCents: plan.priceInCents,
         currency: plan.currency,
         status: PaymentStatus.PENDING,
       },
     });
 
-    // 3. Appel du fournisseur de paiement (Mode Test sécurisé)
-    const initResult = await this.paymentProvider.initiatePayment({
+    // 3. Appel du fournisseur de paiement résolu (Mode Test ou Passerelle Réelle CinetPay/Wave)
+    const activeProvider = this.resolveProvider(dto.provider);
+    const initResult = await activeProvider.initiatePayment({
       paymentId: payment.id,
       amountInCents: payment.amountInCents,
       currency: payment.currency,
@@ -107,14 +128,16 @@ export class PaymentsService {
     const payment = await this.prisma.payment.create({
       data: {
         userId,
-        provider: dto.provider,
+        provider: dto.provider as any,
         amountInCents: this.BOOST_PRICE_IN_CENTS,
         currency: "XOF",
         status: PaymentStatus.PENDING,
       },
     });
 
-    const initResult = await this.paymentProvider.initiatePayment({
+    // 3. Appel du fournisseur de paiement
+    const activeProvider = this.resolveProvider(dto.provider);
+    const initResult = await activeProvider.initiatePayment({
       paymentId: payment.id,
       amountInCents: payment.amountInCents,
       currency: payment.currency,
@@ -136,10 +159,11 @@ export class PaymentsService {
   }
 
   /**
-   * Traitement idempotent des webhooks de paiement (Mobile Money & Cartes)
+   * Traitement d'un Webhook entrant avec vérification d'idempotence
    */
-  async handleWebhook(providerType: PaymentProviderType, payload: any) {
-    const parsed = await this.paymentProvider.parseWebhook(payload);
+  async handleWebhook(providerType: PaymentProviderType, rawPayload: any, signature?: string) {
+    const activeProvider = this.resolveProvider(providerType);
+    const parsed = await activeProvider.parseWebhook(rawPayload, signature);
 
     // 1. CONTRÔLE STRICT D'IDEMPOTENCE
     // Si l'événement a déjà été traité avec succès, on ne le rejoue pas !
@@ -157,7 +181,7 @@ export class PaymentsService {
       where: {
         OR: [
           { providerTxId: parsed.providerTxId },
-          { id: payload.paymentId || "" },
+          { id: rawPayload?.paymentId || "" },
         ],
       },
       include: { subscription: { include: { plan: true } } },
@@ -171,12 +195,12 @@ export class PaymentsService {
     // 3. Enregistrement de l'événement dans le journal des webhooks
     const webhookRecord = await this.prisma.paymentWebhookEvent.upsert({
       where: { externalEventId: parsed.externalEventId },
-      update: { payload },
+      update: { payload: rawPayload },
       create: {
         paymentId: payment.id,
-        provider: providerType,
+        provider: providerType as any,
         externalEventId: parsed.externalEventId,
-        payload,
+        payload: rawPayload,
       },
     });
 

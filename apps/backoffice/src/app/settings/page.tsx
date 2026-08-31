@@ -15,6 +15,7 @@ interface SettingToggle {
 export default function AdminSettingsPage() {
   const [saved, setSaved] = useState(false);
   const [settings, setSettings] = useState<SettingToggle[]>([
+    { id: "panafrican-all-countries", label: "Ouverture 54 Pays Panafricains", description: "Autoriser l'inscription et la vérification des célibataires de l'ensemble des 54 nations d'Afrique et de la diaspora.", enabled: true, category: "Croissance" },
     { id: "kyc-auto-reject", label: "Rejet KYC Automatique", description: "Rejeter automatiquement les soumissions KYC avec un score de similarité faciale inférieur à 60%.", enabled: true, category: "Modération" },
     { id: "anti-broutage", label: "Détection Anti-Broutage", description: "Activer la détection automatique de mots-clés financiers suspects dans les conversations.", enabled: true, category: "Sécurité" },
     { id: "sla-alert", label: "Alertes SLA Modération", description: "Envoyer une alerte à l'équipe si un signalement dépasse 18 heures sans traitement.", enabled: true, category: "Modération" },

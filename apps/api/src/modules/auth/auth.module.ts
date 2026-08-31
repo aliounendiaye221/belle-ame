@@ -7,6 +7,7 @@ import { AuthService } from "./auth.service";
 import { TokenService } from "./services/token.service";
 import { AuthRateLimitService } from "./services/rate-limit.service";
 import { MockSmsProvider } from "./providers/mock-sms.provider";
+import { TwilioSmsProvider } from "./providers/twilio-sms.provider";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { DatabaseModule } from "../database/database.module";
@@ -34,9 +35,10 @@ import { DatabaseModule } from "../database/database.module";
     TokenService,
     AuthRateLimitService,
     MockSmsProvider,
+    TwilioSmsProvider,
     JwtStrategy,
     JwtAuthGuard,
   ],
-  exports: [AuthService, TokenService, JwtAuthGuard, PassportModule, MockSmsProvider],
+  exports: [AuthService, TokenService, JwtAuthGuard, PassportModule, MockSmsProvider, TwilioSmsProvider],
 })
 export class AuthModule {}

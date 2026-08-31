@@ -606,6 +606,7 @@ model Subscription {
 
 enum PaymentProviderType {
   MOCK_TEST
+  CINETPAY
   WAVE
   ORANGE_MONEY
   MTN_MOMO

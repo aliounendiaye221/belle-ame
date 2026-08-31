@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, ArrowRight, ArrowLeft, Upload, CheckCircle2, UserCheck, Heart, FileText, Camera } from "lucide-react";
+import { AFRICAN_COUNTRIES } from "@belle-ame/shared-types";
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
@@ -150,11 +151,11 @@ export default function OnboardingPage() {
                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                     style={{ width: "100%", backgroundColor: "#081c15", border: "1px solid rgba(212, 163, 115, 0.3)", color: "#fff", padding: "0.8rem 1rem", borderRadius: "12px", outline: "none" }}
                   >
-                    <option value="CAMEROON">🇨🇲 Cameroun</option>
-                    <option value="BENIN">🇧🇯 Bénin</option>
-                    <option value="COTE_D_IVOIRE">🇨🇮 Côte d'Ivoire</option>
-                    <option value="DIASPORA_FR">🇫🇷 France (Diaspora)</option>
-                    <option value="DIASPORA_CA">🇨🇦 Canada (Diaspora)</option>
+                    {AFRICAN_COUNTRIES.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.flag} {c.name} ({c.dialCode})
+                      </option>
+                    ))}
                   </select>
                 </div>
 

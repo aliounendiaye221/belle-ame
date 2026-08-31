@@ -14,6 +14,7 @@ import {
   Award,
   Check,
 } from "lucide-react";
+import { SignInButton, SignUpButton, Show, UserButton } from "@/lib/clerk-client";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import InteractiveMatchFinder from "@/components/InteractiveMatchFinder";
@@ -68,23 +69,80 @@ export default function HomePage() {
           </Link>
         </nav>
 
-        <Link
-          href="/auth/login"
-          style={{
-            background: "linear-gradient(135deg, #f4c07c, #d4a373)",
-            color: "#070d09",
-            fontWeight: 800,
-            padding: "0.6rem 1.4rem",
-            borderRadius: "999px",
-            textDecoration: "none",
-            fontSize: "0.9rem",
-            boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
-            transition: "transform 0.2s ease",
-            flexShrink: 0,
-          }}
-        >
-          Se Connecter
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                style={{
+                  background: "transparent",
+                  border: "1px solid rgba(212, 163, 115, 0.4)",
+                  color: "#f4c07c",
+                  fontWeight: 700,
+                  padding: "0.55rem 1.15rem",
+                  borderRadius: "999px",
+                  fontSize: "0.88rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                Connexion
+              </button>
+            </SignInButton>
+
+            <SignUpButton mode="modal">
+              <button
+                type="button"
+                style={{
+                  background: "linear-gradient(135deg, #f4c07c, #d4a373)",
+                  color: "#070d09",
+                  fontWeight: 800,
+                  padding: "0.6rem 1.35rem",
+                  borderRadius: "999px",
+                  border: "none",
+                  fontSize: "0.88rem",
+                  boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
+                  cursor: "pointer",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                Rejoindre
+              </button>
+            </SignUpButton>
+          </Show>
+
+          <Show when="signed-in">
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <Link
+                href="/discover"
+                style={{
+                  background: "rgba(244, 192, 124, 0.15)",
+                  border: "1px solid #f4c07c",
+                  color: "#f4c07c",
+                  fontWeight: 700,
+                  padding: "0.5rem 1.1rem",
+                  borderRadius: "999px",
+                  fontSize: "0.85rem",
+                  textDecoration: "none",
+                }}
+              >
+                Mon Espace
+              </Link>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: {
+                      width: "40px",
+                      height: "40px",
+                      border: "2px solid #f4c07c",
+                    },
+                  },
+                }}
+              />
+            </div>
+          </Show>
+        </div>
       </header>
 
       {/* Hero Section Épuré & Aéré (Haute Couture) */}
@@ -125,13 +183,13 @@ export default function HomePage() {
             </h1>
 
             <p style={{ fontSize: "clamp(1rem, 1.6vw, 1.15rem)", color: "#c7cfcb", lineHeight: 1.65, marginBottom: "2rem", maxWidth: "560px" }}>
-              Le sanctuaire matrimonial d&apos;Afrique subsaharienne (Cameroun, Côte d&apos;Ivoire, Bénin, Sénégal, Diaspora) dédié aux célibataires prêts pour le mariage d&apos;honneur, dans le respect de la foi et des familles.
+              Le sanctuaire matrimonial panafricain d&apos;excellence, ouvert aux 54 nations d&apos;Afrique et à la diaspora. Un cadre sanctifié dédié aux célibataires majeurs prêts pour le mariage d&apos;honneur, dans le respect de la foi, des valeurs et des familles.
             </p>
 
             {/* Boutons d'Action */}
             <div className="hero-cta-group" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
               <Link
-                href="/register"
+                href="/auth/login"
                 className="btn-primary"
                 style={{ padding: "15px 32px", fontSize: "1rem", borderRadius: "999px" }}
               >

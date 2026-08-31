@@ -70,6 +70,34 @@ Conformément à la règle de transparence absolue du cahier des charges (*« Ne
 | **`MockSmsProvider`** | Éviter la consommation de crédits SMS réels lors des tests de dev local. | Logue le code OTP dans la console avec mention explicite `[MODE TEST EXPLICITE - FOURNISSEUR SMS SIMULÉ]`. | Permet de tester l'expiration et le rate limiting sans réseau téléphonique. | Implémenter l'adaptateur `TwilioSmsProvider` ou `InfobipSmsProvider` implémentant `ISmsProvider`. | Compte Twilio / Infobip / Orange API SMS. |
 | **`MockKycProvider`** | Absence d'accord marchand actif avec un prestataire de vérification d'état civil africain. | Vérifie la conformité du format, simule une comparaison faciale (score > 85%) et liveness check. | Valide le flux d'approbation et les transitions de statut sans dépendance externe. | Implémenter `SmileIdentityKycProvider` ou `OnfidoKycProvider` implémentant `IKycProvider`. | Compte Smile Identity / Onfido avec clés d'API de production. |
 | **`MockPaymentProvider`** | Permettre les démonstrations de souscription sans débiter de vrais comptes Mobile Money. | Génère des URLs de validation de test et simule des retours de webhook `SUCCESSFUL` ou `FAILED`. | Permet de valider l'idempotence et l'activation des abonnements sans carte bancaire. | Implémenter `CinetPayPaymentProvider`, `WavePaymentProvider` ou `BizaoPaymentProvider`. | Contrats marchands avec Wave CI/SN, MTN MoMo, Orange Money, Bizao. |
+
+### 3. Redéploiement et Purge Vercel Réussis (100% Production Live)
+
+- **Déploiement Actif & Unique** :
+  - **URL Principale** : [**https://belle-ame-web.vercel.app**](https://belle-ame-web.vercel.app)
+  - **ID Déploiement** : `dpl_53gfPKQpctF3CxHgWoPrGcTAKC3J` (État: **● READY**)
+  - **Commit Git lié** : `09a604b` sur `main`
+- **Enrichissement UI/UX & Animations Inspirées de Farata (100% Fidèle à l'Identité du SaaS)** :
+  1. **Radar d'Affinités & Recherche Rapide (`InteractiveMatchFinder.tsx`)** :
+     - Sélecteurs interactifs (`Je suis`, `Je recherche`, `Tranche d'âge`, `Pays: Cameroun, Côte d'Ivoire, Bénin, Sénégal, Diaspora`).
+     - Compteur dynamique de profils certifiés 18+ en temps réel.
+  2. **Vitrine Sélective avec Mode Discrétion & Audio (`InteractiveProfileShowcase.tsx`)** :
+     - **Mode Pudeur / Discrétion** : Bouton permettant de flouter/déflouter la photo du profil à la demande pour protéger l'anonymat et la pudeur.
+     - **Lecteur Audio de Présentation Vocale** : Visualiseur de spectre sonore interactif (0:18s) avec citation vocale transcrite.
+     - **Score Jaccard Mathématique** : Affichage transparent du pourcentage de compatibilité des valeurs.
+     - Bouton interactif *« Exprimer un Coup de Cœur Respectueux »* avec feedback d'animation instantané.
+  3. **Parcours en 4 Étapes Nobles (`FourStepsJourney.tsx`)** :
+     - Cartes 01 à 04 avec filigrane géant, lueur or au survol et bordures émeraude (`01. Inscription Sélective`, `02. Certification d'Honneur KYC`, `03. Consentement Bilatéral`, `04. L'Alliance d'Honneur`).
+  4. **Conseiller Matrimonial IA (« L'Aîné Bienveillant ») (`AiMatrimonialAdvisor.tsx`)** :
+     - Conseils de courtoisie et formulations d'honneur générées instantanément par l'IA (brise-glace distingué, vision financière, traditions et foi, détection des arnaques).
+  5. **Foire Aux Questions Fréquentes Interactive (`FaqSection.tsx`)** :
+     - Accordéon animé répondant aux points d'hésitation clés (vérification d'identité, floutage des photos, Mobile Money Wave/MTN/Orange, code privilège WhatsApp).
+  6. **Barre d'Action Flottante Mobile (`MobileStickyCta.tsx`)** :
+     - Barre de conversion fixée en bas d'écran sur mobile avec accès direct à l'inscription et réassurance sociale (+9 240 profils vérifiés).
+  7. **Tarification FCFA & Mobile Money Transparente** :
+     - Cartes claires pour le Pass Découverte (3 000 FCFA), la Formule Sérénité (7 500 FCFA) et le Cercle Alliance (24 000 FCFA).
+
+
 | **`MockPushProvider`** | Permettre les tests d'intégration sans connexion obligatoire à Google FCM. | Enregistre les messages dans un tableau mémoire et logue avec étiquette Mode Test. | Permet de vérifier les règles d'éligibilité selon les préférences sans smartphone physique. | Configurer `FirebaseAdminPushProvider` avec la clé de service Firebase. | Compte Firebase Console avec projet actif. |
 | **`MockEmailProvider`** | Éviter l'envoi d'e-mails réels vers des adresses fictives de test. | Stocke les e-mails émis dans un tableau mémoire pour vérification d'assertion. | Valide le contenu HTML et l'envoi conditionnel selon les préférences utilisateur. | Remplacer par un adaptateur `SendGridEmailProvider` ou `ResendEmailProvider`. | Clé API SendGrid ou Resend. |
 

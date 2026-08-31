@@ -83,6 +83,9 @@ export default function MatchesPage() {
           >
             Correspondances ({matches.length})
           </Link>
+          <Link href="/chat" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+            Messages
+          </Link>
           <Link
             href="/subscription"
             style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}

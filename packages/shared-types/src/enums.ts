@@ -91,6 +91,7 @@ export enum ModActionType {
 
 export enum PaymentProviderType {
   MOCK_TEST = "MOCK_TEST",
+  CINETPAY = "CINETPAY",
   WAVE = "WAVE",
   ORANGE_MONEY = "ORANGE_MONEY",
   MTN_MOMO = "MTN_MOMO",

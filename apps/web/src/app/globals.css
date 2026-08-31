@@ -1,16 +1,16 @@
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Palette Haute Joaillerie — Obsidian, Or Pur & Émeraude Royale */
+  /* Palette Haute Joaillerie & Romance Royale — Or Pur, Rose Poudré & Émeraude Sacrée */
   --color-bg: #070d09;
-  --color-bg-alt: #0b1510;
-  --color-bg-surface: #102017;
-  --color-bg-card: rgba(16, 32, 23, 0.75);
-  --color-bg-card-hover: rgba(22, 44, 32, 0.85);
+  --color-bg-alt: #0e1711;
+  --color-bg-surface: #122219;
+  --color-bg-card: rgba(18, 34, 25, 0.82);
+  --color-bg-card-hover: rgba(26, 48, 36, 0.9);
   
-  --color-border: rgba(212, 163, 115, 0.22);
-  --color-border-bright: rgba(244, 192, 124, 0.45);
-  --color-border-glow: rgba(212, 163, 115, 0.6);
+  --color-border: rgba(212, 163, 115, 0.25);
+  --color-border-bright: rgba(244, 192, 124, 0.55);
+  --color-border-glow: rgba(230, 57, 70, 0.45);
   
   --color-emerald-deep: #05140d;
   --color-emerald-forest: #0d281a;
@@ -23,13 +23,17 @@
   --color-gold-bright: #f4c07c;
   --color-gold-champagne: #faedcd;
   
+  /* Nuances Romantiques Panafricaines */
+  --color-rose-gold: #e29578;
+  --color-rose-powder: #fcd5ce;
   --color-terracotta: #e07a5f;
   --color-coral: #f4a261;
   --color-ruby: #e63946;
+  --color-ruby-deep: #a81c2a;
   
   --color-text-main: #fbfbfb;
-  --color-text-muted: #c7cfcb;
-  --color-text-subtle: #8a968f;
+  --color-text-muted: #d8dfdb;
+  --color-text-subtle: #96a39c;
   
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -37,10 +41,10 @@
   --radius-xl: 32px;
   --radius-full: 9999px;
   
-  --shadow-card: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 30px rgba(82, 183, 136, 0.08);
-  --shadow-glow-gold: 0 0 30px rgba(212, 163, 115, 0.35);
+  --shadow-card: 0 15px 35px -5px rgba(0, 0, 0, 0.65), 0 0 30px rgba(226, 149, 120, 0.1);
+  --shadow-glow-gold: 0 0 30px rgba(212, 163, 115, 0.4);
+  --shadow-glow-love: 0 0 35px rgba(230, 57, 70, 0.35);
   --shadow-glow-emerald: 0 0 30px rgba(82, 183, 136, 0.3);
-  --shadow-glow-terracotta: 0 0 30px rgba(224, 122, 95, 0.4);
   
   --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);

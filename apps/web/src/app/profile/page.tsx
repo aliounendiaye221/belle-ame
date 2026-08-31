@@ -86,11 +86,14 @@ export default function ProfilePage() {
           <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Correspondances
           </Link>
+          <Link href="/chat" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+            Messages
+          </Link>
           <Link
-            href="/settings/privacy"
+            href="/settings"
             style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}
           >
-            <Lock size={15} /> RGPD
+            <Settings size={15} /> Paramètres
           </Link>
           <Link
             href="/profile"
