@@ -321,15 +321,30 @@ h1, h2 {
   }
 }
 
-/* Utilitaires Responsive Mobile-First */
+/* Utilitaires Responsive Mobile-First Globaux */
 @media (max-width: 768px) {
+  /* Navigation & En-tête */
   .desktop-nav-links {
     display: none !important;
   }
+  header {
+    padding: 0.75rem 1rem !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+  }
+  header nav {
+    gap: 0.75rem !important;
+    font-size: 0.82rem !important;
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    padding-bottom: 2px !important;
+  }
+
+  /* Landing Page */
   .hero-grid {
     grid-template-columns: 1fr !important;
-    gap: 2.5rem !important;
-    padding: 2.5rem 1.25rem 2rem !important;
+    gap: 2rem !important;
+    padding: 1.75rem 1rem !important;
     text-align: center !important;
   }
   .hero-counters {
@@ -339,15 +354,78 @@ h1, h2 {
   }
   .hero-cta-group {
     justify-content: center !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .hero-cta-group a,
+  .hero-cta-group button {
+    width: 100% !important;
+    justify-content: center !important;
   }
   .section-container {
-    padding: 3.5rem 1.25rem !important;
+    padding: 2.5rem 1rem !important;
   }
   .feature-couple-grid {
     grid-template-columns: 1fr !important;
   }
   .feature-couple-img {
-    min-height: 260px !important;
+    min-height: 240px !important;
+  }
+
+  /* Page Découverte & Swipes */
+  main {
+    padding: 1rem 0.75rem !important;
+  }
+  main > div[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  .glass-panel {
+    border-radius: 20px !important;
+    padding: 1.25rem !important;
+  }
+
+  /* Formulaires et Boutons d'action */
+  .btn-primary, .btn-secondary {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    font-size: 0.92rem !important;
+  }
+
+  /* Grilles génériques */
+  div[style*="gridTemplateColumns: 1fr 340px"],
+  div[style*="gridTemplateColumns: 1fr 1fr"],
+  div[style*="gridTemplateColumns: 1fr 1.15fr"],
+  div[style*="grid-template-columns: 1fr 340px"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tableaux & Listes */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  /* Modales et Cartes */
+  div[style*="maxWidth: 420px"],
+  div[style*="maxWidth: 440px"],
+  div[style*="maxWidth: 520px"],
+  div[style*="maxWidth: 860px"],
+  div[style*="maxWidth: 920px"],
+  div[style*="maxWidth: 1080px"] {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Typographie adaptative */
+  h1 {
+    font-size: clamp(1.75rem, 6vw, 2.4rem) !important;
+    line-height: 1.2 !important;
+  }
+  h2 {
+    font-size: clamp(1.4rem, 5vw, 1.9rem) !important;
   }
 }
 
