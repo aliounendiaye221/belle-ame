@@ -43,27 +43,27 @@ export default function BackofficeDashboard() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem", marginBottom: "2.5rem" }}>
           
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Membres Actifs Total</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#ffffff" }}>9 420</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>+12.4% ce mois</div>
+            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Membres Inscrits Réels</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#ffffff" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Lancement officiel ouvert</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(82, 183, 136, 0.2)" }}>
             <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Taux de Vérification KYC 🛡️</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>84.2%</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>7 930 profils certifiés</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>100%</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>0 faux profil toléré</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(230, 57, 70, 0.2)" }}>
-            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Temps Moyen Modération SLA</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#e63946" }}>1.4h</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Objectif &lt; 24h respecté à 99.8%</div>
+            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Signalements Modération SLA</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>0</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>File vierge &lt; 24h</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Revenu Mensuel MoMo FCFA</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>7.1 M FCFA</div>
-            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>1 420 abonnés Privilège</div>
+            <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Revenu MoMo FCFA Réel</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>0 FCFA</div>
+            <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Passerelles Wave & MoMo prêtes</div>
           </div>
 
         </div>
@@ -105,7 +105,7 @@ export default function BackofficeDashboard() {
             <div style={{ backgroundColor: "#14231a", padding: "1.75rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.3)", height: "100%", boxSizing: "border-box" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <Users size={28} color="#d4a373" />
-                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(212, 163, 115, 0.15)", color: "#d4a373", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>9 420 inscrits</span>
+                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(212, 163, 115, 0.15)", color: "#d4a373", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>0 inscrit (Lancement)</span>
               </div>
               <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.5rem" }}>Annuaire Utilisateurs & Support</h3>
               <p style={{ fontSize: "0.85rem", color: "#a0aba4", margin: 0, lineHeight: "1.5" }}>

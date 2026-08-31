@@ -205,19 +205,19 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Compteurs Clairs */}
+            {/* Compteurs Officiels de Lancement Réel */}
             <div className="hero-counters" style={{ display: "flex", gap: "2.5rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", paddingTop: "1.5rem" }}>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#fbfbfb" }}>9 420+</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Membres Vérifiés</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#fbfbfb" }}>54 / 54</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Nations Couvertes</div>
               </div>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#52b788" }}>842</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Unions Célébrées</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#52b788" }}>100%</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Vérification KYC Réelle</div>
               </div>
               <div>
-                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#f4a261" }}>96.4%</div>
-                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Taux d&apos;Affinité</div>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "#f4a261" }}>0 Faux Profil</div>
+                <div style={{ fontSize: "0.78rem", color: "#8a968f", fontWeight: 600 }}>Zéro Simulation</div>
               </div>
             </div>
           </div>

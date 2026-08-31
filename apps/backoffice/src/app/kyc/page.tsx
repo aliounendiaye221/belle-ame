@@ -20,34 +20,10 @@ interface KycItem {
 }
 
 export default function KycQueuePage() {
-  const [queue, setQueue] = useState<KycItem[]>([
-    {
-      id: "kyc-001",
-      userId: "usr-cam-991",
-      fullName: "Aminata Ndiaye",
-      country: "Cameroun 🇨🇲",
-      birthDate: "1997-04-12",
-      documentType: "Carte Nationale d'Identité",
-      documentUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80",
-      selfieUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
-      similarityScore: 96.4,
-      submittedAt: "Il y a 15 min"
-    },
-    {
-      id: "kyc-002",
-      userId: "usr-ben-304",
-      fullName: "Koffi Mensah",
-      country: "Bénin 🇧🇯",
-      birthDate: "1992-09-24",
-      documentType: "Passeport Officiel",
-      documentUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80",
-      selfieUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
-      similarityScore: 92.1,
-      submittedAt: "Il y a 32 min"
-    }
-  ]);
+  // File KYC démarrant à 0 pour la mise en ligne officielle
+  const [queue, setQueue] = useState<KycItem[]>([]);
 
-  const [selectedId, setSelectedId] = useState("kyc-001");
+  const [selectedId, setSelectedId] = useState("");
   const selectedItem = queue.find((q) => q.id === selectedId) || queue[0];
 
   const handleApprove = (id: string) => {

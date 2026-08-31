@@ -14,31 +14,24 @@ interface SocialPulse {
 const LIVE_EVENTS: SocialPulse[] = [
   {
     id: "e1",
-    avatarUrl: "/images/avatar-woman.jpg",
-    title: "Nouveau Match Validé (96%)",
-    subtitle: "Grace & Bertrand viennent de se connecter à Douala 🇨🇲",
-    badge: "Match Récent"
+    avatarUrl: "/images/brand-logo.jpg",
+    title: "Lancement Officiel Panafricain 🌍",
+    subtitle: "Inscriptions ouvertes pour les 54 nations d'Afrique et la diaspora",
+    badge: "Ouverture 2026"
   },
   {
     id: "e2",
-    avatarUrl: "/images/avatar-man.jpg",
-    title: "Vérification KYC Approuvée 🛡️",
-    subtitle: "Fabrice K. (Abidjan 🇨🇮) a obtenu son badge certifié",
-    badge: "100% Vérifié"
+    avatarUrl: "/images/brand-logo.jpg",
+    title: "Vérification d'Identité Obligatoire 🛡️",
+    subtitle: "Chaque membre est authentifié par pièce officielle et selfie live",
+    badge: "100% Réel"
   },
   {
     id: "e3",
-    avatarUrl: "/images/hero-couple.jpg",
-    title: "Témoignage Mariage 💍",
-    subtitle: "Mireille & Serge (Diaspora Paris 🇫🇷) : « Mariés grâce à la plateforme »",
-    badge: "Union Célébrée"
-  },
-  {
-    id: "e4",
-    avatarUrl: "/images/avatar-woman.jpg",
-    title: "Forte Activité Communautaire",
-    subtitle: "84 membres compatibles sont en ligne actuellement",
-    badge: "En Ligne"
+    avatarUrl: "/images/brand-logo.jpg",
+    title: "Protection Anti-Broutage Active 🔒",
+    subtitle: "Messagerie chiffrée & filtrage des sollicitations financières",
+    badge: "Zéro Faux Profil"
   }
 ];
 

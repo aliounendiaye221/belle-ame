@@ -22,80 +22,8 @@ export default function UsersManagementPage() {
   const [showPii, setShowPii] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const users: UserItem[] = [
-    {
-      id: "usr-cam-991",
-      firstName: "Aminata",
-      lastName: "Ndiaye",
-      phone: "+237699000000",
-      country: "Cameroun 🇨🇲",
-      role: "MEMBER",
-      tier: "PREMIUM",
-      verifiedKyc: true,
-      createdAt: "2026-08-01",
-      activeSessionsCount: 2
-    },
-    {
-      id: "usr-sen-102",
-      firstName: "Cheikh",
-      lastName: "Diallo",
-      phone: "+221770000000",
-      country: "Sénégal 🇸🇳",
-      role: "MEMBER",
-      tier: "PREMIUM",
-      verifiedKyc: true,
-      createdAt: "2026-08-03",
-      activeSessionsCount: 1
-    },
-    {
-      id: "usr-ben-304",
-      firstName: "Koffi",
-      lastName: "Mensah",
-      phone: "+22997000000",
-      country: "Bénin 🇧🇯",
-      role: "MEMBER",
-      tier: "FREE",
-      verifiedKyc: true,
-      createdAt: "2026-08-05",
-      activeSessionsCount: 1
-    },
-    {
-      id: "usr-ci-440",
-      firstName: "Fabrice",
-      lastName: "Kouassi",
-      phone: "+22507000000",
-      country: "Côte d'Ivoire 🇨🇮",
-      role: "MEMBER",
-      tier: "FREE",
-      verifiedKyc: false,
-      createdAt: "2026-08-10",
-      activeSessionsCount: 1
-    },
-    {
-      id: "usr-rdc-705",
-      firstName: "Merveille",
-      lastName: "Ilunga",
-      phone: "+243810000000",
-      country: "RD Congo 🇨🇩",
-      role: "MEMBER",
-      tier: "PREMIUM",
-      verifiedKyc: true,
-      createdAt: "2026-08-12",
-      activeSessionsCount: 2
-    },
-    {
-      id: "usr-fr-880",
-      firstName: "Mamadou",
-      lastName: "Traoré",
-      phone: "+33612345678",
-      country: "France (Diaspora) 🇫🇷",
-      role: "MEMBER",
-      tier: "ALLIANCE",
-      verifiedKyc: true,
-      createdAt: "2026-08-15",
-      activeSessionsCount: 3
-    }
-  ];
+  // Démarrage à zéro compte fictif pour la mise en ligne officielle
+  const [users, setUsers] = useState<UserItem[]>([]);
 
   const filteredUsers = users.filter((u) => 
     u.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -191,52 +119,60 @@ export default function UsersManagementPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
-                <tr key={u.id} style={{ borderBottom: "1px solid rgba(212, 163, 115, 0.1)" }}>
-                  <td style={{ padding: "1.25rem 1.5rem", fontFamily: "monospace", fontSize: "0.85rem", color: "#a0aba4" }}>{u.id}</td>
-                  <td style={{ padding: "1.25rem 1.5rem", fontWeight: "700" }}>
-                    {showPii ? `${u.firstName} ${u.lastName}` : `${u.firstName} ${u.lastName[0]}. ***`}
-                  </td>
-                  <td style={{ padding: "1.25rem 1.5rem", color: "#c2c9c4" }}>
-                    {showPii ? u.phone : `${u.phone.substring(0, 6)}*****`}
-                  </td>
-                  <td style={{ padding: "1.25rem 1.5rem" }}>{u.country}</td>
-                  <td style={{ padding: "1.25rem 1.5rem" }}>
-                    <span style={{ backgroundColor: u.tier === "PREMIUM" ? "rgba(212, 163, 115, 0.2)" : "#081c15", border: u.tier === "PREMIUM" ? "1px solid #d4a373" : "1px solid #5a6660", color: u.tier === "PREMIUM" ? "#d4a373" : "#a0aba4", padding: "0.3rem 0.75rem", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "700" }}>
-                      {u.tier === "PREMIUM" ? "👑 Privilège FCFA" : "Gratuit"}
-                    </span>
-                  </td>
-                  <td style={{ padding: "1.25rem 1.5rem" }}>
-                    {u.verifiedKyc ? (
-                      <span style={{ color: "#52b788", fontWeight: "700", fontSize: "0.8rem", display: "flex", alignItems: "center", gap: "0.3rem" }}>
-                        <ShieldCheck size={16} /> Vérifié 🛡️
-                      </span>
-                    ) : (
-                      <span style={{ color: "#a0aba4", fontSize: "0.8rem" }}>En attente</span>
-                    )}
-                  </td>
-                  <td style={{ padding: "1.25rem 1.5rem" }}>
-                    <button
-                      onClick={() => handleRevokeSessions(u.id)}
-                      style={{
-                        backgroundColor: "#081c15",
-                        border: "1px solid rgba(212, 163, 115, 0.3)",
-                        color: "#d4a373",
-                        padding: "0.4rem 0.8rem",
-                        borderRadius: "10px",
-                        fontSize: "0.75rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.3rem"
-                      }}
-                    >
-                      <LogOut size={14} /> Révoquer Sessions ({u.activeSessionsCount})
-                    </button>
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ padding: "3rem 1.5rem", textAlign: "center", color: "#8a968f", fontSize: "0.95rem" }}>
+                    🌱 <strong>Zéro compte fictif enregistré.</strong> La base d'utilisateurs est vierge et prête pour les vraies inscriptions en production.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredUsers.map((u) => (
+                  <tr key={u.id} style={{ borderBottom: "1px solid rgba(212, 163, 115, 0.1)" }}>
+                    <td style={{ padding: "1.25rem 1.5rem", fontFamily: "monospace", fontSize: "0.85rem", color: "#a0aba4" }}>{u.id}</td>
+                    <td style={{ padding: "1.25rem 1.5rem", fontWeight: "700" }}>
+                      {showPii ? `${u.firstName} ${u.lastName}` : `${u.firstName} ${u.lastName[0]}. ***`}
+                    </td>
+                    <td style={{ padding: "1.25rem 1.5rem", color: "#c2c9c4" }}>
+                      {showPii ? u.phone : `${u.phone.substring(0, 6)}*****`}
+                    </td>
+                    <td style={{ padding: "1.25rem 1.5rem" }}>{u.country}</td>
+                    <td style={{ padding: "1.25rem 1.5rem" }}>
+                      <span style={{ backgroundColor: u.tier === "PREMIUM" ? "rgba(212, 163, 115, 0.2)" : "#081c15", border: u.tier === "PREMIUM" ? "1px solid #d4a373" : "1px solid #5a6660", color: u.tier === "PREMIUM" ? "#d4a373" : "#a0aba4", padding: "0.3rem 0.75rem", borderRadius: "12px", fontSize: "0.75rem", fontWeight: "700" }}>
+                        {u.tier === "PREMIUM" ? "👑 Privilège FCFA" : "Gratuit"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "1.25rem 1.5rem" }}>
+                      {u.verifiedKyc ? (
+                        <span style={{ color: "#52b788", fontWeight: "700", fontSize: "0.8rem", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                          <ShieldCheck size={16} /> Vérifié 🛡️
+                        </span>
+                      ) : (
+                        <span style={{ color: "#a0aba4", fontSize: "0.8rem" }}>En attente</span>
+                      )}
+                    </td>
+                    <td style={{ padding: "1.25rem 1.5rem" }}>
+                      <button
+                        onClick={() => handleRevokeSessions(u.id)}
+                        style={{
+                          backgroundColor: "#081c15",
+                          border: "1px solid rgba(212, 163, 115, 0.3)",
+                          color: "#d4a373",
+                          padding: "0.4rem 0.8rem",
+                          borderRadius: "10px",
+                          fontSize: "0.75rem",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.3rem"
+                        }}
+                      >
+                        <LogOut size={14} /> Révoquer Sessions ({u.activeSessionsCount})
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

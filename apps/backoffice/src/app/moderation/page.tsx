@@ -17,28 +17,10 @@ interface ReportItem {
 }
 
 export default function ModerationPage() {
-  const [reports, setReports] = useState<ReportItem[]>([
-    {
-      id: "rep-801",
-      reportedUser: "Désiré M. (usr-cam-102)",
-      reporterUser: "Aminata N. (usr-cam-991)",
-      reason: "SUSPICION_BROUTAGE_FINANCIER",
-      flaggedContent: "Peux-tu m'envoyer 25 000 FCFA par Orange Money d'urgence ?",
-      slaRemainingHours: 4,
-      severity: "CRITICAL"
-    },
-    {
-      id: "rep-802",
-      reportedUser: "Fabrice K. (usr-ci-440)",
-      reporterUser: "Marie-Joséphine (usr-ci-881)",
-      reason: "PROPOS_INAPPROPRIES",
-      flaggedContent: "Comportement irrespectueux et insistances téléphoniques.",
-      slaRemainingHours: 14,
-      severity: "MEDIUM"
-    }
-  ]);
+  // File de modération démarrant à zéro signalement fictif
+  const [reports, setReports] = useState<ReportItem[]>([]);
 
-  const [selectedReportId, setSelectedReportId] = useState("rep-801");
+  const [selectedReportId, setSelectedReportId] = useState("");
   const selectedReport = reports.find((r) => r.id === selectedReportId) || reports[0];
 
   const handleApplySanction = (sanctionType: string) => {
@@ -85,27 +67,34 @@ export default function ModerationPage() {
             <Flag size={18} /> Signalements SLA &lt; 24h ({reports.length})
           </h3>
 
-          {reports.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedReportId(item.id)}
-              style={{
-                backgroundColor: selectedReportId === item.id ? "rgba(230, 57, 70, 0.15)" : "#081c15",
-                border: selectedReportId === item.id ? "1px solid #e63946" : "1px solid rgba(212, 163, 115, 0.15)",
-                borderRadius: "14px",
-                padding: "1rem",
-                cursor: "pointer"
-              }}
-            >
-              <div style={{ fontWeight: "700", fontSize: "0.9rem", color: "#fff", marginBottom: "0.25rem" }}>{item.reportedUser}</div>
-              <div style={{ fontSize: "0.8rem", color: "#e63946", fontWeight: "600", marginBottom: "0.5rem" }}>Motif: {item.reason}</div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.75rem" }}>
-                <span style={{ backgroundColor: "rgba(230, 57, 70, 0.2)", color: "#ffb703", padding: "0.2rem 0.5rem", borderRadius: "10px", fontWeight: "700", display: "flex", alignItems: "center", gap: "0.2rem" }}>
-                  <Clock size={12} /> Expiration SLA: {item.slaRemainingHours}h restant
-                </span>
-              </div>
+          {reports.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2rem", color: "#a0aba4", fontSize: "0.9rem" }}>
+              🛡️ Aucun signalement en attente. La communauté est saine et sereine.
             </div>
-          ))}
+          ) : (
+            reports.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedReportId(item.id)}
+                style={{
+                  backgroundColor: selectedReportId === item.id ? "rgba(230, 57, 70, 0.15)" : "#081c15",
+                  border: selectedReportId === item.id ? "1px solid #e63946" : "1px solid rgba(212, 163, 115, 0.15)",
+                  borderRadius: "14px",
+                  padding: "1rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <div style={{ fontWeight: "700", fontSize: "0.9rem", color: "#fff", marginBottom: "0.25rem" }}>{item.reportedUser}</div>
+                <div style={{ fontSize: "0.8rem", color: "#e63946", fontWeight: "600", marginBottom: "0.5rem" }}>Motif: {item.reason}</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.75rem" }}>
+                  <span style={{ backgroundColor: "rgba(230, 57, 70, 0.2)", color: "#ffb703", padding: "0.2rem 0.5rem", borderRadius: "10px", fontWeight: "700", display: "flex", alignItems: "center", gap: "0.2rem" }}>
+                    <Clock size={12} /> Expiration SLA: {item.slaRemainingHours}h restant
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Action Inspection & 9 Graduated Sanctions */}
