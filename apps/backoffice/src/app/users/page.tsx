@@ -27,9 +27,17 @@ export default function UsersManagementPage() {
   const [tierFilter, setTierFilter] = useState("ALL");
   const [selectedUser, setSelectedUser] = useState<BackofficeUser | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
-  const loadData = () => {
+  const loadData = async () => {
     setUsers(backofficeStore.getUsers());
+    setIsSyncing(true);
+    try {
+      const synced = await backofficeStore.syncWithClerk();
+      setUsers(synced);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   useEffect(() => {
@@ -329,6 +337,28 @@ export default function UsersManagementPage() {
               <option value="PASS">Pass 7j</option>
               <option value="FREE">Gratuit</option>
             </select>
+
+            <button
+              type="button"
+              onClick={loadData}
+              disabled={isSyncing}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 14px",
+                borderRadius: "14px",
+                backgroundColor: "rgba(244, 192, 124, 0.15)",
+                border: "1px solid #f4c07c",
+                color: "#f4c07c",
+                fontSize: "0.85rem",
+                fontWeight: "700",
+                cursor: isSyncing ? "not-allowed" : "pointer",
+              }}
+            >
+              <RefreshCw size={15} style={{ animation: isSyncing ? "spin 1s linear infinite" : "none" }} />
+              {isSyncing ? "Sync Clerk..." : "Actualiser Clerk"}
+            </button>
           </div>
         </div>
 
@@ -348,7 +378,7 @@ export default function UsersManagementPage() {
                 <tr style={{ borderBottom: "1px solid rgba(212, 163, 115, 0.18)", backgroundColor: "rgba(0,0,0,0.2)" }}>
                   <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Membre</th>
                   <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Localisation</th>
-                  <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Téléphone</th>
+                  <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Téléphone / Email</th>
                   <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Formule</th>
                   <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Statut KYC</th>
                   <th style={{ padding: "14px 16px", fontSize: "0.78rem", color: "#f4c07c", fontWeight: "800" }}>Compte</th>
@@ -375,7 +405,12 @@ export default function UsersManagementPage() {
                           <div style={{ fontWeight: "800", fontSize: "0.92rem", color: "#ffffff" }}>
                             {u.firstName} {u.lastName}
                           </div>
-                          <div style={{ fontSize: "0.75rem", color: "#a0aba4" }}>
+                          {u.email && (
+                            <div style={{ fontSize: "0.75rem", color: "#52b788", fontWeight: "600" }}>
+                              {u.email}
+                            </div>
+                          )}
+                          <div style={{ fontSize: "0.72rem", color: "#a0aba4" }}>
                             {u.profession} • {u.age} ans
                           </div>
                         </div>
@@ -384,8 +419,9 @@ export default function UsersManagementPage() {
                     <td style={{ padding: "14px 16px", fontSize: "0.85rem", color: "#c7cfcb" }}>
                       {u.city}, {u.country}
                     </td>
-                    <td style={{ padding: "14px 16px", fontSize: "0.85rem", color: "#a0aba4", fontFamily: "monospace" }}>
-                      {u.phone}
+                    <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: "#a0aba4" }}>
+                      <div style={{ fontFamily: "monospace" }}>{u.phone}</div>
+                      {u.email && <div style={{ fontSize: "0.72rem", color: "#f4c07c" }}>{u.email}</div>}
                     </td>
                     <td style={{ padding: "14px 16px" }}>
                       <span

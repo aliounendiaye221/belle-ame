@@ -116,6 +116,7 @@ export default function BrandLogo({
             À Chacun Une Belle Âme
           </span>
           <span
+            className="brand-logo-sub"
             style={{
               fontSize: dimensions.sub,
               color: "#52b788",

@@ -337,7 +337,7 @@ export default function DiscoverPage() {
             </div>
           ) : (
             <div
-              className="glass-panel"
+              className="glass-panel candidate-card"
               style={{
                 position: "relative",
                 borderRadius: "32px",
@@ -542,7 +542,14 @@ export default function DiscoverPage() {
                   }}
                 >
                   <Heart size={18} fill={quotaRemaining > 0 ? "#070d09" : "transparent"} />
-                  {quotaRemaining > 0 ? "Coup de Cœur d'Honneur" : "Quota atteint aujourd'hui"}
+                  {quotaRemaining > 0 ? (
+                    <>
+                      <span className="desktop-like-text">Coup de Cœur d&apos;Honneur</span>
+                      <span className="mobile-like-text">Coup de Cœur</span>
+                    </>
+                  ) : (
+                    "Quota atteint"
+                  )}
                 </button>
               </div>
             </div>

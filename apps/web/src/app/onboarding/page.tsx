@@ -229,6 +229,27 @@ export default function OnboardingPage() {
       });
     }
 
+    // 3. Synchroniser avec le serveur et Clerk pour le Back-Office
+    try {
+      fetch("/api/sync-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          gender: formData.gender,
+          age: currentAge || 26,
+          country: countryName,
+          countryCode: formData.countryCode,
+          city: formData.city,
+          profession: formData.profession,
+          bio: formData.bio,
+          kycStatus: formData.kycDocumentUrl && formData.kycSelfieUrl ? "PENDING" : "UNVERIFIED",
+        }),
+      }).catch(() => {});
+    } catch {
+      // ignore
+    }
+
     // Redirection vers la découverte
     window.location.href = "/discover";
   };

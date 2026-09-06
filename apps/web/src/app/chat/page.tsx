@@ -306,6 +306,7 @@ export default function ChatInboxPage() {
               <Link
                 key={conv.id}
                 href={`/chat/${conv.matchId}`}
+                className="chat-conv-item"
                 style={{
                   display: "flex",
                   alignItems: "center",

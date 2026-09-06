@@ -149,7 +149,7 @@ export default function MatchesPage() {
               <Link
                 key={match.id}
                 href={`/chat/${match.id}`}
-                className="glass-panel"
+                className="glass-panel match-card-item"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -158,7 +158,6 @@ export default function MatchesPage() {
                   textDecoration: "none",
                   gap: "1.25rem",
                   position: "relative",
-                  flexWrap: "wrap",
                   border: match.unread ? "1.5px solid rgba(244, 192, 124, 0.45)" : "1px solid rgba(212, 163, 115, 0.18)",
                 }}
               >

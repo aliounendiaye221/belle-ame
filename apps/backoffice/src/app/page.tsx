@@ -33,10 +33,18 @@ export default function BackofficeDashboard() {
 
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
 
-  const loadData = () => {
+  const loadData = async () => {
     const s = backofficeStore.getDashboardStats();
     setStats(s);
     setRecentLogs(backofficeStore.getAuditLogs().slice(0, 6));
+
+    try {
+      await backofficeStore.syncWithClerk();
+      setStats(backofficeStore.getDashboardStats());
+      setRecentLogs(backofficeStore.getAuditLogs().slice(0, 6));
+    } catch {
+      // ignore
+    }
   };
 
   useEffect(() => {

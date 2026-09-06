@@ -7,6 +7,7 @@ export interface BackofficeUser {
   gender: "MALE" | "FEMALE";
   age: number;
   phone: string;
+  email?: string;
   country: string;
   countryCode: string;
   city: string;
@@ -157,6 +158,29 @@ class BackofficeStore {
   // --- USERS ---
   getUsers(): BackofficeUser[] {
     return this.getStorage<BackofficeUser[]>("users", INITIAL_USERS);
+  }
+
+  async syncWithClerk(): Promise<BackofficeUser[]> {
+    if (!this.isBrowser) return this.getUsers();
+    try {
+      const res = await fetch("/api/members");
+      if (!res.ok) return this.getUsers();
+      const data = await res.json();
+      if (data && Array.isArray(data.users)) {
+        const currentList = this.getUsers();
+        const map = new Map<string, BackofficeUser>();
+        data.users.forEach((u: BackofficeUser) => map.set(u.id, u));
+        currentList.forEach((u: BackofficeUser) => {
+          if (!map.has(u.id)) map.set(u.id, u);
+        });
+        const merged = Array.from(map.values());
+        this.setStorage("users", merged);
+        return merged;
+      }
+    } catch {
+      // ignore
+    }
+    return this.getUsers();
   }
 
   getUserById(id: string): BackofficeUser | undefined {
