@@ -20,6 +20,15 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("mode") === "email") {
+        setAuthMode("email");
+      }
+    }
+  }, []);
+
   const fallbackCountry = AFRICAN_COUNTRIES[0] || {
     code: "SN",
     name: "Sénégal",
@@ -411,6 +420,21 @@ export default function LoginPage() {
                 </div>
               )}
 
+              <div
+                style={{
+                  backgroundColor: "rgba(244, 192, 124, 0.07)",
+                  border: "1px dashed rgba(244, 192, 124, 0.35)",
+                  borderRadius: "14px",
+                  padding: "0.65rem 0.85rem",
+                  fontSize: "0.8rem",
+                  color: "#d4a373",
+                  textAlign: "center",
+                  lineHeight: "1.4",
+                }}
+              >
+                💡 <strong>Mode Test &amp; Évaluation</strong> : Le code temporaire <strong>123456</strong> est actif à l&apos;étape suivante, ou connectez-vous par <strong>Email</strong> sans SMS.
+              </div>
+
               <button
                 type="submit"
                 disabled={!phoneNumber || !acceptTerms || isSubmitting}
@@ -462,6 +486,28 @@ export default function LoginPage() {
                   required
                   style={inputStyle}
                 />
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "-0.5rem" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("aliou@belleame.africa");
+                    setPassword("BelleAme2026!");
+                    setAcceptTerms(true);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#f4c07c",
+                    fontSize: "0.8rem",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    fontWeight: "700",
+                  }}
+                >
+                  ⚡ Pré-remplir compte de test (Aliou Ndiaye)
+                </button>
               </div>
 
               {/* Terms Checkbox */}

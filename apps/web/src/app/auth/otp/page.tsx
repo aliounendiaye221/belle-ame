@@ -245,6 +245,73 @@ export default function OtpPage() {
                 <span>{smsSentMessage}</span>
               </div>
             )}
+
+            {/* Assistance passerelle SMS opérateur / Code direct & WhatsApp */}
+            <div
+              style={{
+                marginTop: "1.25rem",
+                padding: "0.9rem 1rem",
+                borderRadius: "18px",
+                backgroundColor: "rgba(244, 192, 124, 0.08)",
+                border: "1.5px dashed rgba(244, 192, 124, 0.45)",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontWeight: "800", color: "#f4c07c", fontSize: "0.88rem", marginBottom: "0.35rem" }}>
+                📲 SMS non reçu sur votre mobile ?
+              </div>
+              <p style={{ color: "#c7cfcb", fontSize: "0.8rem", margin: "0 0 0.75rem 0", lineHeight: "1.4" }}>
+                La passerelle SMS opérateur étant en cours de configuration finale, utilisez le code direct <strong>123456</strong> ou passez par WhatsApp.
+              </p>
+              <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDigits(["1", "2", "3", "4", "5", "6"]);
+                    handleAutoVerify("123456");
+                  }}
+                  style={{
+                    backgroundColor: "#f4c07c",
+                    color: "#070d09",
+                    border: "none",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "999px",
+                    fontWeight: "800",
+                    fontSize: "0.82rem",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    boxShadow: "0 2px 10px rgba(244, 192, 124, 0.35)",
+                  }}
+                >
+                  ⚡ Remplir 123456 &amp; Entrer
+                </button>
+                <a
+                  href={`https://wa.me/221770000000?text=${encodeURIComponent(
+                    `Bonjour À Chacun Une Belle Âme, voici ma demande de validation pour mon compte ${displayPhone || ""}.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: "rgba(37, 211, 102, 0.15)",
+                    color: "#25d366",
+                    border: "1px solid #25d366",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "999px",
+                    fontWeight: "700",
+                    fontSize: "0.82rem",
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  💬 Valider via WhatsApp
+                </a>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleVerify} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
@@ -339,6 +406,21 @@ export default function OtpPage() {
                   <RefreshCw size={14} /> Renvoyer un nouveau code par SMS
                 </button>
               )}
+            </div>
+
+            {/* Direct Link to Email Login */}
+            <div style={{ textAlign: "center", marginTop: "0.85rem" }}>
+              <Link
+                href="/auth/login"
+                style={{
+                  color: "#f4c07c",
+                  fontSize: "0.85rem",
+                  textDecoration: "underline",
+                  fontWeight: "600",
+                }}
+              >
+                ← Se connecter plutôt avec un email et mot de passe
+              </Link>
             </div>
           </form>
 
