@@ -7,6 +7,18 @@ const nextConfig = {
   experimental: {
     outputFileTracingRoot: path.resolve(__dirname, "../../"),
   },
+  env: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+      "pk_test_d2FudGVkLXNlYXNuYWlsLTY5NzcuY2xlcmsuYWNjb3VudHMuZGV2JA",
+    CLERK_SECRET_KEY:
+      process.env.CLERK_SECRET_KEY ||
+      "sk_test_nBjOjz7I7dx4SDoTq2Lqr8LctVwDp2k1m4JvgEzzfw",
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: "/sign-in",
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: "/sign-up",
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: "/discover",
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: "/onboarding",
+  },
   images: {
     remotePatterns: [
       {
