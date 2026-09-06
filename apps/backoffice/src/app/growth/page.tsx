@@ -26,9 +26,9 @@ interface PromoCode {
 
 export default function GrowthAnalyticsPage() {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([
-    { code: "BIENVENUE-2026", discount: "50% sur le 1er mois Sérénité", redemptions: 48, maxRedemptions: 200, status: "ACTIVE" },
-    { code: "ALLIANCE-PRESTIGE", discount: "2 mois offerts sur Formule Annuelle", redemptions: 19, maxRedemptions: 50, status: "ACTIVE" },
-    { code: "PARRAIN-NOBLE", discount: "1 semaine Pass Découverte offert", redemptions: 84, maxRedemptions: 500, status: "ACTIVE" },
+    { code: "BIENVENUE-2026", discount: "50% sur le 1er mois Sérénité", redemptions: 0, maxRedemptions: 200, status: "ACTIVE" },
+    { code: "ALLIANCE-PRESTIGE", discount: "2 mois offerts sur Formule Annuelle", redemptions: 0, maxRedemptions: 50, status: "ACTIVE" },
+    { code: "PARRAIN-NOBLE", discount: "1 semaine Pass Découverte offert", redemptions: 0, maxRedemptions: 500, status: "ACTIVE" },
   ]);
 
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
