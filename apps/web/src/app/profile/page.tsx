@@ -25,6 +25,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { UserButton } from "@clerk/nextjs";
 import { realPlatformStore, RealUserProfile } from "@/lib/real-platform-store";
 import { storageService } from "@/lib/storage-service";
 
@@ -156,36 +157,40 @@ export default function ProfilePage() {
       >
         <BrandLogo size="md" />
 
-        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Découverte
-          </Link>
-          <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Correspondances
-          </Link>
-          <Link
-            href="/subscription"
-            style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}
-          >
-            <Crown size={16} color="#f4c07c" /> Offres
-          </Link>
-          <Link href="/settings/privacy" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Confidentialité &amp; RGPD
-          </Link>
-          <Link
-            href="/profile"
-            style={{
-              color: "#f4c07c",
-              fontWeight: "700",
-              textDecoration: "none",
-              borderBottom: "2px solid #f4c07c",
-              paddingBottom: "0.25rem",
-              fontSize: "0.92rem",
-            }}
-          >
-            Mon Profil
-          </Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+            <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Découverte
+            </Link>
+            <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Correspondances
+            </Link>
+            <Link
+              href="/subscription"
+              style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}
+            >
+              <Crown size={16} color="#f4c07c" /> Offres
+            </Link>
+            <Link href="/settings/privacy" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Confidentialité &amp; RGPD
+            </Link>
+            <Link
+              href="/profile"
+              style={{
+                color: "#f4c07c",
+                fontWeight: "700",
+                textDecoration: "none",
+                borderBottom: "2px solid #f4c07c",
+                paddingBottom: "0.25rem",
+                fontSize: "0.92rem",
+              }}
+            >
+              Mon Profil
+            </Link>
+          </nav>
+
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </header>
 
       <main style={{ flex: 1, maxWidth: "800px", width: "100%", margin: "0 auto", padding: "2.5rem 1.5rem" }}>

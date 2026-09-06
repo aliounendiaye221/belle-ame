@@ -21,8 +21,10 @@ import { AFRICAN_COUNTRIES } from "@belle-ame/shared-types";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { useClerk, UserButton } from "@clerk/nextjs";
 
 export default function SettingsPage() {
+  const { signOut } = useClerk();
   const [isSaved, setIsSaved] = useState(false);
 
   // Préférences de Notifications
@@ -78,7 +80,7 @@ export default function SettingsPage() {
       >
         <BrandLogo size="md" />
 
-        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
           <Link
             href="/profile"
             style={{
@@ -93,6 +95,7 @@ export default function SettingsPage() {
           >
             <ArrowLeft size={16} /> Mon Profil
           </Link>
+          <UserButton afterSignOutUrl="/" />
         </div>
       </header>
 
@@ -476,8 +479,28 @@ export default function SettingsPage() {
             </a>
           </div>
 
-          {/* Save Button Bar */}
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1rem" }}>
+          {/* Action Bar */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
+            <button
+              type="button"
+              onClick={() => signOut(() => { window.location.href = "/"; })}
+              style={{
+                backgroundColor: "rgba(230, 57, 70, 0.12)",
+                border: "1px solid rgba(230, 57, 70, 0.4)",
+                color: "#ff858d",
+                padding: "12px 24px",
+                borderRadius: "999px",
+                fontSize: "0.9rem",
+                fontWeight: "700",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+              }}
+            >
+              <LogOut size={16} /> Se Déconnecter
+            </button>
+
             <button
               type="submit"
               className="btn-primary"

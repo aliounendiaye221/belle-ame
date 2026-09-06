@@ -21,6 +21,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { UserButton } from "@clerk/nextjs";
 import { realPlatformStore, PaymentReceipt } from "@/lib/real-platform-store";
 
 export default function SubscriptionPage() {
@@ -83,20 +84,23 @@ export default function SubscriptionPage() {
       >
         <BrandLogo size="md" />
 
-        <Link
-          href="/discover"
-          style={{
-            color: "#f4c07c",
-            textDecoration: "none",
-            fontSize: "0.9rem",
-            fontWeight: "700",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.35rem",
-          }}
-        >
-          <ArrowLeft size={16} /> Retour à la découverte
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <Link
+            href="/discover"
+            style={{
+              color: "#f4c07c",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              fontWeight: "700",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
+          >
+            <ArrowLeft size={16} /> Retour à la découverte
+          </Link>
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </header>
 
       <main style={{ flex: 1, maxWidth: "980px", width: "100%", margin: "0 auto", padding: "3rem 1.5rem" }}>

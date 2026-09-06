@@ -17,6 +17,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { UserButton } from "@clerk/nextjs";
 
 interface ConversationItem {
   id: string;
@@ -105,33 +106,37 @@ export default function ChatInboxPage() {
       >
         <BrandLogo size="md" />
 
-        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Découverte
-          </Link>
-          <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Correspondances
-          </Link>
-          <Link
-            href="/chat"
-            style={{
-              color: "#f4c07c",
-              fontWeight: "700",
-              textDecoration: "none",
-              borderBottom: "2px solid #f4c07c",
-              paddingBottom: "0.25rem",
-              fontSize: "0.92rem",
-            }}
-          >
-            Messages {totalUnread > 0 && `(${totalUnread})`}
-          </Link>
-          <Link href="/subscription" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Offres
-          </Link>
-          <Link href="/profile" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Profil
-          </Link>
-        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+            <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Découverte
+            </Link>
+            <Link href="/matches" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Correspondances
+            </Link>
+            <Link
+              href="/chat"
+              style={{
+                color: "#f4c07c",
+                fontWeight: "700",
+                textDecoration: "none",
+                borderBottom: "2px solid #f4c07c",
+                paddingBottom: "0.25rem",
+                fontSize: "0.92rem",
+              }}
+            >
+              Messages {totalUnread > 0 && `(${totalUnread})`}
+            </Link>
+            <Link href="/subscription" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Offres
+            </Link>
+            <Link href="/profile" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
+              Profil
+            </Link>
+          </nav>
+
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </header>
 
       {/* Main Inbox Container */}

@@ -71,44 +71,45 @@ export default function HomePage() {
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <Show when="signed-out">
-            <SignInButton mode="modal">
-              <button
-                type="button"
-                style={{
-                  background: "transparent",
-                  border: "1px solid rgba(212, 163, 115, 0.4)",
-                  color: "#f4c07c",
-                  fontWeight: 700,
-                  padding: "0.55rem 1.15rem",
-                  borderRadius: "999px",
-                  fontSize: "0.88rem",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                Connexion
-              </button>
-            </SignInButton>
+            <Link
+              href="/sign-in"
+              style={{
+                background: "transparent",
+                border: "1px solid rgba(212, 163, 115, 0.4)",
+                color: "#f4c07c",
+                fontWeight: 700,
+                padding: "0.55rem 1.15rem",
+                borderRadius: "999px",
+                fontSize: "0.88rem",
+                textDecoration: "none",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              Connexion
+            </Link>
 
-            <SignUpButton mode="modal">
-              <button
-                type="button"
-                style={{
-                  background: "linear-gradient(135deg, #f4c07c, #d4a373)",
-                  color: "#070d09",
-                  fontWeight: 800,
-                  padding: "0.6rem 1.35rem",
-                  borderRadius: "999px",
-                  border: "none",
-                  fontSize: "0.88rem",
-                  boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
-                  cursor: "pointer",
-                  transition: "transform 0.2s ease",
-                }}
-              >
-                Rejoindre
-              </button>
-            </SignUpButton>
+            <Link
+              href="/sign-up"
+              style={{
+                background: "linear-gradient(135deg, #f4c07c, #d4a373)",
+                color: "#070d09",
+                fontWeight: 800,
+                padding: "0.6rem 1.35rem",
+                borderRadius: "999px",
+                textDecoration: "none",
+                fontSize: "0.88rem",
+                boxShadow: "0 4px 15px rgba(212, 163, 115, 0.35)",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
+              Rejoindre
+            </Link>
           </Show>
 
           <Show when="signed-in">

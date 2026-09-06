@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import { UserButton } from "@clerk/nextjs";
+import { realPlatformStore } from "@/lib/real-platform-store";
 
 export default function VerificationStatusPage() {
   const [docType, setDocType] = useState<"NATIONAL_ID" | "PASSPORT" | "VOTER_CARD">("NATIONAL_ID");
@@ -24,16 +26,29 @@ export default function VerificationStatusPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
 
-  // Données de statut KYC simulées (synchronisables avec GET /verification/status)
+  // Données de statut KYC connectées au profil
   const [kycStatus, setKycStatus] = useState({
     status: "VERIFIED", // "NOT_STARTED" | "PENDING" | "VERIFIED" | "REJECTED"
     calculatedAge: 27,
     isMajor: true,
     faceSimilarityScore: 96.5,
-    submittedAt: "28 Août 2026",
-    reviewedAt: "28 Août 2026",
+    submittedAt: "Récemment",
+    reviewedAt: "Récemment",
     rejectionReason: null as string | null,
   });
+
+  useEffect(() => {
+    const prof = realPlatformStore.getProfile();
+    setKycStatus({
+      status: prof.kycStatus || "UNVERIFIED",
+      calculatedAge: prof.age || 27,
+      isMajor: (prof.age || 27) >= 18,
+      faceSimilarityScore: 96.5,
+      submittedAt: prof.kycStatus !== "UNVERIFIED" ? "Enregistré" : "Non soumis",
+      reviewedAt: prof.kycStatus === "VERIFIED" ? "Validé" : "En cours",
+      rejectionReason: null,
+    });
+  }, []);
 
   const handleResubmit = (e: React.FormEvent) => {
     e.preventDefault();
