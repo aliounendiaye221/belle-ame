@@ -5,7 +5,9 @@
   "description": "Monorepo pour la plateforme SaaS « À Chacun Une Belle Âme »",
   "packageManager": "pnpm@9.12.0",
   "scripts": {
-    "vercel-build": "pnpm --filter @belle-ame/database db:generate && pnpm --filter @belle-ame/web build",
+    "vercel-build": "pnpm --filter @belle-ame/database db:generate && turbo run build",
+    "vercel-build:web": "pnpm --filter @belle-ame/database db:generate && pnpm --filter @belle-ame/web build",
+    "vercel-build:backoffice": "pnpm --filter @belle-ame/backoffice build",
     "build": "turbo run build",
     "dev": "pnpm -r --parallel run dev",
     "dev:web": "pnpm --filter @belle-ame/web dev",

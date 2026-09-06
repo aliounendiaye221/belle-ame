@@ -339,14 +339,14 @@ export default function SettingsPage() {
                 </button>
               </div>
 
-              {/* SMS Sécurité Verrouillé */}
+              {/* Authentification Sécurisée Clerk */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", opacity: 0.85 }}>
                 <div>
                   <div style={{ fontSize: "0.92rem", fontWeight: "700", color: "#fbfbfb", display: "flex", alignItems: "center", gap: "6px" }}>
-                    SMS de Sécurité & Codes OTP <Lock size={13} color="#f4c07c" />
+                    Authentification Sécurisée Clerk <Lock size={13} color="#f4c07c" />
                   </div>
                   <div style={{ fontSize: "0.78rem", color: "#8a968f" }}>
-                    Verrouillé actif pour garantir la protection de votre compte et du coffre-fort KYC.
+                    Géré avec chiffrement par Clerk (Email, Google, Identifiants) pour une accessibilité mondiale sans restriction d&apos;opérateur téléphonique.
                   </div>
                 </div>
                 <span style={{ fontSize: "0.78rem", color: "#52b788", fontWeight: "800" }}>ACTIF OBLIGATOIRE</span>

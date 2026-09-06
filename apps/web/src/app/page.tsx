@@ -189,7 +189,7 @@ export default function HomePage() {
             {/* Boutons d'Action */}
             <div className="hero-cta-group" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginBottom: "2.5rem" }}>
               <Link
-                href="/auth/login"
+                href="/sign-up"
                 className="btn-primary"
                 style={{ padding: "15px 32px", fontSize: "1rem", borderRadius: "999px" }}
               >
@@ -197,7 +197,7 @@ export default function HomePage() {
               </Link>
 
               <Link
-                href="/auth/login"
+                href="/sign-in"
                 className="btn-secondary"
                 style={{ padding: "15px 26px", fontSize: "1rem", borderRadius: "999px" }}
               >
@@ -778,7 +778,7 @@ export default function HomePage() {
             Rejoignez plus de 9 400 célibataires certifiés en Afrique et en diaspora. L&apos;accès gratuit vous permet de créer votre profil vérifié dès aujourd&apos;hui.
           </p>
           <Link
-            href="/auth/login"
+            href="/sign-up"
             className="btn-primary"
             style={{ padding: "16px 38px", fontSize: "1.05rem", borderRadius: "999px" }}
           >
