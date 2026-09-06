@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { ShieldCheck, ArrowRight, Heart, Sparkles, CheckCircle2, Search, Globe, Lock } from "lucide-react";
 import { AFRICAN_COUNTRIES } from "@belle-ame/shared-types";
-import { apiClient } from "@/lib/api-client";
+import { authService } from "@/lib/auth-service";
 
 export default function LoginPage() {
   const [selectedCountryCode, setSelectedCountryCode] = useState("SN");
@@ -49,25 +49,11 @@ export default function LoginPage() {
     const fullPhoneNumber = `${activeCountry.dialCode}${cleanNumber.startsWith("0") ? cleanNumber.slice(1) : cleanNumber}`;
 
     try {
-      // Tentative d'envoi OTP vers l'API backend
-      const res = await apiClient.post("/auth/send-otp", {
-        phoneNumber: fullPhoneNumber,
-        referralCode: promoCode.trim() || undefined,
-      });
-
-      // Stockage temporaire du numéro pour l'écran OTP
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("belleame_pending_phone", fullPhoneNumber);
-        sessionStorage.setItem("belleame_country_code", activeCountry.code);
-      }
-
+      // Envoi OTP via le service d'authentification
+      await authService.sendOtp(fullPhoneNumber, activeCountry.code);
       window.location.href = `/auth/otp?phone=${encodeURIComponent(fullPhoneNumber)}&promo=${encodeURIComponent(promoCode)}`;
     } catch (err: any) {
-      // Repli gracieux et immédiat
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("belleame_pending_phone", fullPhoneNumber);
-      }
-      window.location.href = `/auth/otp?phone=${encodeURIComponent(fullPhoneNumber)}&promo=${encodeURIComponent(promoCode)}`;
+      setErrorMsg(err.message || "Impossible de contacter le service d'authentification.");
     } finally {
       setIsSubmitting(false);
     }

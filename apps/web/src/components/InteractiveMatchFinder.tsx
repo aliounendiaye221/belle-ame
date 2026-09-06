@@ -222,7 +222,7 @@ export default function InteractiveMatchFinder() {
         </div>
 
         <Link
-          href={`/register?target=${targetGender}&age=${ageRange}&country=${country}`}
+          href={`/auth/login?target=${targetGender}&age=${ageRange}&country=${country}`}
           style={{
             background: "linear-gradient(135deg, #f4c07c 0%, #d4a373 50%, #e07a5f 100%)",
             color: "#070d09",

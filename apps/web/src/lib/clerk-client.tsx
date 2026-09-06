@@ -246,16 +246,7 @@ export function SignIn({ appearance }: { appearance?: any }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "belleame_clerk_user",
-        JSON.stringify({
-          id: "user_" + Date.now(),
-          fullName: "Aminata Ndiaye",
-          firstName: "Aminata",
-          imageUrl: "/icons/icon-192.png",
-        })
-      );
-      window.location.href = "/discover";
+      window.location.href = `/auth/login?phone=${encodeURIComponent(phoneOrEmail)}`;
     }
   };
 
@@ -362,16 +353,7 @@ export function SignUp({ appearance }: { appearance?: any }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "belleame_clerk_user",
-        JSON.stringify({
-          id: "user_" + Date.now(),
-          fullName: firstName,
-          firstName: firstName,
-          imageUrl: "/icons/icon-192.png",
-        })
-      );
-      window.location.href = "/onboarding";
+      window.location.href = `/auth/login?phone=${encodeURIComponent(phone)}`;
     }
   };
 

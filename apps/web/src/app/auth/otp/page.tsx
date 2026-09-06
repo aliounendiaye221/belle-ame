@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, ArrowRight, RefreshCw, KeyRound, CheckCircle2, AlertCircle } from "lucide-react";
-import { apiClient } from "@/lib/api-client";
+import { ShieldCheck, ArrowRight, RefreshCw, KeyRound, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { authService } from "@/lib/auth-service";
 
 export default function OtpPage() {
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
@@ -60,25 +60,19 @@ export default function OtpPage() {
     setError("");
 
     try {
-      // Appel d'authentification direct
-      const res = await apiClient.post("/auth/verify-otp", {
-        phoneNumber: displayPhone.replace(/\s+/g, ""),
-        code,
-        deviceFingerprint: "browser-client-pwa-" + navigator.userAgent.slice(0, 20),
-      });
-
-      if (res.success && res.data?.tokens?.accessToken) {
-        apiClient.setToken(res.data.tokens.accessToken);
-        window.location.href = "/onboarding";
+      const result = await authService.verifyOtp(displayPhone, code);
+      if (result.success) {
+        // Redirection vers l'onboarding pour compléter ou vérifier son profil
+        if (result.profile && result.profile.kycStatus === "VERIFIED") {
+          window.location.href = "/discover";
+        } else {
+          window.location.href = "/onboarding";
+        }
         return;
       }
-
-      // Repli fluide démo/pionniers si test local
-      apiClient.setToken("mock-jwt-token-access-panafrican");
-      window.location.href = "/onboarding";
-    } catch {
-      apiClient.setToken("mock-jwt-token-access-panafrican");
-      window.location.href = "/onboarding";
+      setError("Code OTP incorrect ou expiré. Veuillez réessayer.");
+    } catch (err: any) {
+      setError(err?.message || "Erreur de validation. Veuillez vérifier votre saisie.");
     } finally {
       setIsSubmitting(false);
     }
@@ -88,7 +82,7 @@ export default function OtpPage() {
     setCountdown(60);
     setDigits(["", "", "", "", "", ""]);
     setError("");
-    await apiClient.post("/auth/send-otp", { phoneNumber: displayPhone.replace(/\s+/g, "") });
+    await authService.sendOtp(displayPhone);
   };
 
   return (
@@ -178,6 +172,27 @@ export default function OtpPage() {
             <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.5", margin: 0 }}>
               Saisissez les 6 chiffres envoyés au <strong style={{ color: "#f4c07c" }}>{displayPhone}</strong>.
             </p>
+
+            <div
+              style={{
+                marginTop: "1rem",
+                backgroundColor: "rgba(244, 192, 124, 0.1)",
+                border: "1px dashed rgba(244, 192, 124, 0.4)",
+                borderRadius: "14px",
+                padding: "0.65rem 1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                fontSize: "0.85rem",
+                color: "#f4c07c",
+              }}
+            >
+              <Sparkles size={16} />
+              <span>
+                Code test de validation immédiate : <strong style={{ letterSpacing: "2px" }}>123456</strong>
+              </span>
+            </div>
           </div>
 
           <form onSubmit={handleVerify} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

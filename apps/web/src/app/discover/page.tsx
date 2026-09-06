@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -15,7 +15,10 @@ import {
   Flame,
   MessageCircle,
   Eye,
+  EyeOff,
+  Filter,
   Info,
+  RotateCcw,
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import StreakBanner from "@/components/StreakBanner";
@@ -23,70 +26,29 @@ import CompatibilityRadar from "@/components/CompatibilityRadar";
 import MatchCelebrationModal from "@/components/MatchCelebrationModal";
 import SecretAdmirerTeaser from "@/components/SecretAdmirerTeaser";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
-import { realPlatformStore } from "@/lib/real-platform-store";
-
-interface Candidate {
-  id: string;
-  firstName: string;
-  age: number;
-  location: string;
-  profession: string;
-  education: string;
-  compatibilityScore: number;
-  verifiedKyc: boolean;
-  bio: string;
-  sharedValues: string[];
-  photoUrl: string;
-}
+import { realPlatformStore, RealCandidate } from "@/lib/real-platform-store";
 
 export default function DiscoverPage() {
-  const [quotaRemaining, setQuotaRemaining] = useState(8);
+  const [selectedCountry, setSelectedCountry] = useState("ALL");
+  const [candidates, setCandidates] = useState<RealCandidate[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [quotaRemaining, setQuotaRemaining] = useState(10);
   const [showMatchModal, setShowMatchModal] = useState(false);
-  const [matchedCandidate, setMatchedCandidate] = useState<Candidate | null>(null);
+  const [matchedCandidate, setMatchedCandidate] = useState<RealCandidate | null>(null);
   const [showRadarDetails, setShowRadarDetails] = useState(false);
+  const [isModestyMode, setIsModestyMode] = useState(false);
 
-  const candidates: Candidate[] = [
-    {
-      id: "candidate-1",
-      firstName: "Grace",
-      age: 26,
-      location: "Douala, Cameroun 🇨🇲",
-      profession: "Architecte d'Intérieur",
-      education: "Master Sup de Co",
-      compatibilityScore: 96,
-      verifiedKyc: true,
-      bio: "Passionnée par le design épuré, la spiritualité chrétienne et la cuisine traditionnelle africaine. Cherche un compagnon sincère orienté mariage.",
-      sharedValues: ["Foi Chrétienne", "Désir d'enfants", "Ambition professionnelle", "Non-fumeur"],
-      photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=80",
-    },
-    {
-      id: "candidate-2",
-      firstName: "Bertrand",
-      age: 31,
-      location: "Cotonou, Bénin 🇧🇯",
-      profession: "Ingénieur Logiciel Lead",
-      education: "Doctorat Polytechnique",
-      compatibilityScore: 89,
-      verifiedKyc: true,
-      bio: "Esprit calme, sportif et passionné d'entrepreneuriat. Je souhaite bâtir une famille basée sur le respect mutuel et l'authenticité.",
-      sharedValues: ["Projet Famille", "Diaspora / Retour", "Écoute active", "Sport"],
-      photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&auto=format&fit=crop&q=80",
-    },
-    {
-      id: "candidate-3",
-      firstName: "Marie-Joséphine",
-      age: 28,
-      location: "Abidjan, Côte d'Ivoire 🇨🇮",
-      profession: "Chef de Projet Marketing",
-      education: "Master ESC",
-      compatibilityScore: 92,
-      verifiedKyc: true,
-      bio: "Rieuse, bienveillante et sincère dans mes démarches. J'aime les voyages en Afrique et la lecture.",
-      sharedValues: ["Foi", "Mariage", "Respect des valeurs ancestrales"],
-      photoUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700&auto=format&fit=crop&q=80",
-    },
-  ];
+  // Chargement des données au montage et lors du changement de filtre
+  useEffect(() => {
+    const profile = realPlatformStore.getProfile();
+    setQuotaRemaining(profile.dailyQuotaRemaining);
+
+    const list = realPlatformStore.getCandidates({
+      countryCode: selectedCountry !== "ALL" ? selectedCountry : undefined,
+    });
+    setCandidates(list);
+    setCurrentIdx(0);
+  }, [selectedCountry]);
 
   const hasExhausted = currentIdx >= candidates.length;
   const candidate = !hasExhausted ? candidates[currentIdx]! : null;
@@ -94,11 +56,10 @@ export default function DiscoverPage() {
   const handleLike = () => {
     if (!candidate) return;
     if (quotaRemaining > 0) {
-      setQuotaRemaining((prev) => prev - 1);
-      // Persister l'interaction réelle
       const result = realPlatformStore.likeCandidate(candidate.id);
-      
-      if (result.isMatch || candidate.compatibilityScore >= 90) {
+      setQuotaRemaining(result.remainingQuota);
+
+      if (result.isMatch || candidate.compatibilityScore >= 92) {
         setMatchedCandidate(candidate);
         setShowMatchModal(true);
       }
@@ -110,6 +71,13 @@ export default function DiscoverPage() {
     if (!candidate) return;
     realPlatformStore.dismissCandidate(candidate.id);
     setCurrentIdx((prev) => prev + 1);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedCountry("ALL");
+    const list = realPlatformStore.getCandidates();
+    setCandidates(list);
+    setCurrentIdx(0);
   };
 
   return (
@@ -125,7 +93,7 @@ export default function DiscoverPage() {
     >
       <LiveSocialProofToast />
 
-      {/* Mutual Match Modal */}
+      {/* Modal de célébration de match mutuel */}
       {matchedCandidate && (
         <MatchCelebrationModal
           isOpen={showMatchModal}
@@ -175,89 +143,233 @@ export default function DiscoverPage() {
           </Link>
           <Link
             href="/subscription"
-            style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem", display: "flex", alignItems: "center", gap: "0.35rem" }}
+            style={{
+              color: "#c7cfcb",
+              textDecoration: "none",
+              fontWeight: "500",
+              fontSize: "0.92rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
+            }}
           >
             <Crown size={16} color="#f4c07c" /> Offres
           </Link>
           <Link href="/profile" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
-            Profil
+            Mon Profil
           </Link>
         </nav>
       </header>
 
       {/* Main Discover Layout */}
-      <main style={{ flex: 1, padding: "1.75rem 1rem", maxWidth: "1080px", width: "100%", margin: "0 auto" }}>
-        
-        {/* Habit Loop Streak Banner */}
-        <StreakBanner streakDays={4} quotaRemaining={quotaRemaining} maxQuota={10} />
+      <main
+        style={{
+          flex: 1,
+          maxWidth: "1140px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "2rem 1.5rem",
+          display: "grid",
+          gridTemplateColumns: "1fr 340px",
+          gap: "2.5rem",
+        }}
+      >
+        {/* Left Column: Discovery Card & Controls */}
+        <section style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {/* Top Info Bar with Daily Quota & Modesty Switch */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "1rem",
+              backgroundColor: "#102017",
+              padding: "0.85rem 1.25rem",
+              borderRadius: "16px",
+              border: "1px solid rgba(212, 163, 115, 0.2)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Sparkles size={18} color="#f4c07c" />
+              <span style={{ fontSize: "0.9rem", color: "#c7cfcb" }}>
+                Quota quotidien :{" "}
+                <strong style={{ color: quotaRemaining > 0 ? "#f4c07c" : "#e63946" }}>
+                  {quotaRemaining}
+                </strong>{" "}
+                propositions restantes
+              </span>
+            </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "2rem", alignItems: "start" }}>
-          
-          {/* Left Column: Candidate Main Swipe Card */}
-          <div style={{ maxWidth: "520px", width: "100%", margin: "0 auto" }}>
-            
-            {!candidate ? (
-              <div
-                className="glass-panel"
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              {/* Bouton Mode Pudeur */}
+              <button
+                type="button"
+                onClick={() => setIsModestyMode(!isModestyMode)}
                 style={{
-                  padding: "3.5rem 2rem",
-                  borderRadius: "32px",
-                  border: "1.5px dashed rgba(212, 163, 115, 0.3)",
-                  textAlign: "center",
-                  boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8)",
+                  background: isModestyMode ? "rgba(244, 192, 124, 0.2)" : "rgba(255, 255, 255, 0.05)",
+                  border: isModestyMode ? "1px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.2)",
+                  color: isModestyMode ? "#f4c07c" : "#c7cfcb",
+                  padding: "0.4rem 0.85rem",
+                  borderRadius: "999px",
+                  fontSize: "0.8rem",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
                 }}
               >
-                <Sparkles size={52} color="#f4c07c" style={{ margin: "0 auto 1.25rem" }} />
-                <h2 style={{ fontSize: "1.5rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.5rem" }}>
-                  Vous êtes à jour ! 🌟
-                </h2>
-                <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.6", marginBottom: "2rem" }}>
-                  Vous avez parcouru toutes les affinités disponibles. De nouveaux profils certifiés KYC rejoignent la communauté en continu.
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: "280px", margin: "0 auto" }}>
-                  <button
-                    onClick={() => setCurrentIdx(0)}
-                    className="btn-primary"
-                    style={{ padding: "12px 20px", fontSize: "0.88rem" }}
-                  >
-                    Revoir les profils
-                  </button>
-                  <Link
-                    href="/matches"
-                    className="btn-secondary"
-                    style={{ padding: "12px 20px", fontSize: "0.88rem", textDecoration: "none", textAlign: "center" }}
-                  >
-                    Consulter mes correspondances
-                  </Link>
-                </div>
+                {isModestyMode ? <EyeOff size={14} /> : <Eye size={14} />}
+                Mode Pudeur {isModestyMode ? "Actif" : "Désactivé"}
+              </button>
+
+              <Link
+                href="/subscription"
+                style={{
+                  fontSize: "0.8rem",
+                  color: "#52b788",
+                  fontWeight: "700",
+                  textDecoration: "none",
+                  backgroundColor: "rgba(82, 183, 136, 0.12)",
+                  padding: "0.4rem 0.85rem",
+                  borderRadius: "999px",
+                }}
+              >
+                + Illimité
+              </Link>
+            </div>
+          </div>
+
+          {/* Filtres Rapides par Pays Africains */}
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              overflowX: "auto",
+              paddingBottom: "0.25rem",
+            }}
+          >
+            {[
+              { code: "ALL", label: "Tous les Pays 🌍" },
+              { code: "SN", label: "Sénégal 🇸🇳" },
+              { code: "CI", label: "Côte d'Ivoire 🇨🇮" },
+              { code: "CM", label: "Cameroun 🇨🇲" },
+              { code: "BJ", label: "Bénin 🇧🇯" },
+              { code: "CD", label: "RDC 🇨🇩" },
+              { code: "ML", label: "Mali 🇲🇱" },
+              { code: "GA", label: "Gabon 🇬🇦" },
+              { code: "FR", label: "Diaspora 🇫🇷" },
+            ].map((f) => (
+              <button
+                key={f.code}
+                type="button"
+                onClick={() => setSelectedCountry(f.code)}
+                style={{
+                  padding: "0.45rem 0.95rem",
+                  borderRadius: "999px",
+                  border: selectedCountry === f.code ? "1.5px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.2)",
+                  backgroundColor: selectedCountry === f.code ? "rgba(244, 192, 124, 0.18)" : "#102017",
+                  color: selectedCountry === f.code ? "#f4c07c" : "#c7cfcb",
+                  fontSize: "0.82rem",
+                  fontWeight: selectedCountry === f.code ? "800" : "500",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Candidate Card */}
+          {hasExhausted || !candidate ? (
+            <div
+              className="glass-panel"
+              style={{
+                padding: "3.5rem 2rem",
+                borderRadius: "32px",
+                border: "1.5px dashed rgba(212, 163, 115, 0.3)",
+                textAlign: "center",
+                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8)",
+              }}
+            >
+              <Sparkles size={52} color="#f4c07c" style={{ margin: "0 auto 1.25rem" }} />
+              <h2 style={{ fontSize: "1.6rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+                Vous êtes à jour ! 🌟
+              </h2>
+              <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.6", marginBottom: "2rem" }}>
+                Vous avez consulté tous les profils certifiés actuellement disponibles pour ce filtre. De nouveaux célibataires vérifiés rejoignent l&apos;Alliance quotidiennement.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: "280px", margin: "0 auto" }}>
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="btn-primary"
+                  style={{
+                    padding: "12px 20px",
+                    fontSize: "0.88rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <RotateCcw size={16} /> Élargir à toute l&apos;Afrique
+                </button>
+                <Link
+                  href="/matches"
+                  className="btn-secondary"
+                  style={{ padding: "12px 20px", fontSize: "0.88rem", textDecoration: "none", textAlign: "center" }}
+                >
+                  Consulter mes correspondances
+                </Link>
               </div>
-            ) : (
-              <div
-                className="glass-panel"
-                style={{
-                  position: "relative",
-                  borderRadius: "32px",
-                  overflow: "hidden",
-                  border: "2px solid rgba(244, 192, 124, 0.35)",
-                  boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 163, 115, 0.2)",
-                }}
-              >
-                {/* Photo Area */}
-                <div style={{ position: "relative", height: "460px" }}>
-                  <img
-                    src={candidate.photoUrl}
-                    alt={candidate.firstName}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
+            </div>
+          ) : (
+            <div
+              className="glass-panel"
+              style={{
+                position: "relative",
+                borderRadius: "32px",
+                overflow: "hidden",
+                border: "2px solid rgba(244, 192, 124, 0.35)",
+                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 163, 115, 0.2)",
+              }}
+            >
+              {/* Photo Area with Modesty Mode */}
+              <div style={{ position: "relative", height: "460px", overflow: "hidden" }}>
+                <img
+                  src={candidate.photoUrl}
+                  alt={candidate.firstName}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    filter: isModestyMode ? "blur(24px)" : "none",
+                    transform: isModestyMode ? "scale(1.1)" : "scale(1)",
+                    transition: "all 0.3s ease",
+                  }}
+                />
 
                 {/* Top Floating Badges */}
-                <div style={{ position: "absolute", top: "16px", left: "16px", right: "16px", display: "flex", justifyContent: "space-between", zIndex: 2 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "16px",
+                    left: "16px",
+                    right: "16px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    zIndex: 2,
+                  }}
+                >
                   <span className="badge-gold" style={{ fontSize: "0.85rem", padding: "6px 14px" }}>
                     <Sparkles size={15} color="#f4c07c" /> {candidate.compatibilityScore}% AFFINITÉ SACRÉE
                   </span>
                   {candidate.verifiedKyc && (
                     <span className="badge-emerald" style={{ fontSize: "0.85rem", padding: "6px 14px" }}>
-                      <ShieldCheck size={15} color="#52b788" /> IDENTITÉ CERTIFIÉE
+                      <ShieldCheck size={15} color="#52b788" /> IDENTITÉ CERTIFIÉE 🛡️
                     </span>
                   )}
                 </div>
@@ -281,7 +393,17 @@ export default function DiscoverPage() {
                     </h2>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#d4a373", fontSize: "0.95rem", fontWeight: "700", marginTop: "4px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      color: "#d4a373",
+                      fontSize: "0.95rem",
+                      fontWeight: "700",
+                      marginTop: "4px",
+                    }}
+                  >
                     <MapPin size={16} /> {candidate.location}
                   </div>
 
@@ -298,173 +420,132 @@ export default function DiscoverPage() {
 
               {/* Bio & Values Preview */}
               <div style={{ padding: "1.25rem 1.75rem", backgroundColor: "#102017", borderTop: "1px solid rgba(212, 163, 115, 0.12)" }}>
-                <p style={{ fontSize: "0.88rem", color: "#c7cfcb", lineHeight: "1.5", margin: 0 }}>
-                  « {candidate.bio} »
+                <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.6", margin: "0 0 1rem 0" }}>
+                  &laquo; {candidate.bio} &raquo;
                 </p>
 
                 {/* Values Tags */}
-                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "1rem" }}>
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
                   {candidate.sharedValues.map((val, idx) => (
                     <span
                       key={idx}
                       style={{
-                        padding: "4px 10px",
-                        borderRadius: "999px",
-                        backgroundColor: "rgba(255, 255, 255, 0.04)",
-                        border: "1px solid rgba(212, 163, 115, 0.2)",
-                        fontSize: "0.75rem",
+                        backgroundColor: "rgba(212, 163, 115, 0.12)",
+                        border: "1px solid rgba(212, 163, 115, 0.25)",
                         color: "#f4c07c",
+                        fontSize: "0.78rem",
                         fontWeight: "600",
+                        padding: "0.3rem 0.75rem",
+                        borderRadius: "999px",
                       }}
                     >
-                      ✦ {val}
+                      {val}
                     </span>
                   ))}
                 </div>
 
-                {/* Toggle Radar Breakdown Button */}
+                {/* Toggle Radar */}
                 <button
+                  type="button"
                   onClick={() => setShowRadarDetails(!showRadarDetails)}
                   style={{
                     background: "none",
                     border: "none",
-                    color: "#52b788",
-                    fontSize: "0.8rem",
+                    color: "#f4c07c",
+                    fontSize: "0.85rem",
                     fontWeight: "700",
-                    marginTop: "0.85rem",
                     cursor: "pointer",
+                    padding: 0,
                     display: "flex",
                     alignItems: "center",
                     gap: "4px",
-                    padding: 0,
                   }}
                 >
-                  <Sparkles size={14} /> {showRadarDetails ? "Masquer les détails d'affinité" : "Voir les 4 Piliers d'Affinité Jaccard →"}
+                  <Info size={14} /> {showRadarDetails ? "Masquer les détails mathématiques" : "Voir le radar de compatibilité détaillée"}
                 </button>
 
-                {/* Detailed Radar Breakdown */}
                 {showRadarDetails && (
                   <div style={{ marginTop: "1rem" }}>
-                    <CompatibilityRadar overallScore={candidate.compatibilityScore} />
+                    <CompatibilityRadar
+                      candidateName={candidate.firstName}
+                      score={candidate.compatibilityScore}
+                      valuesOverlap={candidate.sharedValues}
+                      city={candidate.location}
+                    />
                   </div>
                 )}
               </div>
 
-              {/* Action Buttons with Micro-Haptics */}
+              {/* Action Buttons: Pass & Like */}
               <div
                 style={{
-                  padding: "1.25rem",
-                  backgroundColor: "#0d1a13",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "1.5rem",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1.5fr",
+                  gap: "1rem",
+                  padding: "1.25rem 1.75rem",
+                  backgroundColor: "rgba(16, 32, 23, 0.95)",
                   borderTop: "1px solid rgba(212, 163, 115, 0.15)",
                 }}
               >
-                {/* Pass Button */}
                 <button
+                  type="button"
                   onClick={handlePass}
                   style={{
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "50%",
-                    backgroundColor: "rgba(255, 255, 255, 0.04)",
-                    border: "1.5px solid rgba(255, 255, 255, 0.15)",
-                    color: "#8a968f",
+                    backgroundColor: "transparent",
+                    border: "1px solid rgba(230, 57, 70, 0.4)",
+                    color: "#ff858d",
+                    padding: "0.85rem",
+                    borderRadius: "999px",
+                    fontWeight: "700",
+                    fontSize: "0.92rem",
+                    cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor: "pointer",
+                    gap: "0.5rem",
                     transition: "all 0.2s ease",
                   }}
-                  title="Passer ce profil"
                 >
-                  <X size={26} />
+                  <X size={18} /> Passer
                 </button>
 
-                {/* Super-Like Star Button */}
                 <button
+                  type="button"
                   onClick={handleLike}
+                  disabled={quotaRemaining <= 0}
                   style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "50%",
-                    backgroundColor: "rgba(244, 192, 124, 0.15)",
-                    border: "1.5px solid rgba(244, 192, 124, 0.4)",
-                    color: "#f4c07c",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                  title="Super-Like (Priorité d'affichage)"
-                >
-                  <Star size={24} fill="#f4c07c" />
-                </button>
-
-                {/* Like Button (Dopamine Trigger) */}
-                <button
-                  onClick={handleLike}
-                  style={{
-                    width: "72px",
-                    height: "72px",
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, #f4c07c 0%, #d4a373 50%, #e07a5f 100%)",
+                    background: quotaRemaining > 0 ? "linear-gradient(135deg, #f4c07c, #d4a373)" : "#2c3e35",
                     border: "none",
-                    color: "#070d09",
+                    color: quotaRemaining > 0 ? "#070d09" : "#6c7a72",
+                    padding: "0.85rem",
+                    borderRadius: "999px",
+                    fontWeight: "800",
+                    fontSize: "0.95rem",
+                    cursor: quotaRemaining > 0 ? "pointer" : "not-allowed",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor: "pointer",
-                    boxShadow: "0 10px 30px rgba(224, 122, 95, 0.5)",
-                    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                    gap: "0.5rem",
+                    boxShadow: quotaRemaining > 0 ? "0 6px 20px rgba(244, 192, 124, 0.35)" : "none",
+                    transition: "all 0.2s ease",
                   }}
-                  title="Aimer ce profil"
                 >
-                  <Heart size={34} fill="#070d09" />
+                  <Heart size={18} fill={quotaRemaining > 0 ? "#070d09" : "transparent"} />
+                  {quotaRemaining > 0 ? "Coup de Cœur d'Honneur" : "Quota atteint aujourd'hui"}
                 </button>
               </div>
-
             </div>
-            )}
+          )}
+        </section>
 
-          </div>
+        {/* Right Column: Streaks & Secret Admirer */}
+        <aside style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {/* Streak Banner */}
+          <StreakBanner />
 
-          {/* Right Column: Psychological Engagement Sidebar */}
-          <div>
-            {/* Variable Reward: Secret Admirer Hook */}
-            <SecretAdmirerTeaser />
-
-            {/* Privilege Perks Banner */}
-            <div
-              className="glass-panel"
-              style={{
-                padding: "1.5rem",
-                borderRadius: "24px",
-                border: "1px solid rgba(212, 163, 115, 0.25)",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "0.5rem" }}>
-                <Crown size={18} color="#f4c07c" />
-                <span style={{ fontWeight: "800", fontSize: "0.95rem", color: "#fbfbfb" }}>Pass Privilège FCFA</span>
-              </div>
-              <p style={{ fontSize: "0.8rem", color: "#c7cfcb", lineHeight: "1.45", marginBottom: "1rem" }}>
-                Débloquez 50 profils par jour, les retours en arrière illimités et la visibilité prioritaire auprès des profils les plus compatibles.
-              </p>
-              <Link
-                href="/subscription"
-                className="btn-primary"
-                style={{ width: "100%", padding: "10px", fontSize: "0.85rem" }}
-              >
-                Activer pour 2 500 FCFA
-              </Link>
-            </div>
-          </div>
-
-        </div>
-
+          {/* Secret Admirer Teaser */}
+          <SecretAdmirerTeaser count={3} />
+        </aside>
       </main>
     </div>
   );

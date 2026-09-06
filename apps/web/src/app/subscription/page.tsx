@@ -2,30 +2,56 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Crown, CheckCircle2, ShieldCheck, CreditCard, ArrowRight, Zap, ArrowLeft, Sparkles, Flame, Eye, Heart } from "lucide-react";
+import {
+  Crown,
+  CheckCircle2,
+  ShieldCheck,
+  CreditCard,
+  ArrowRight,
+  Zap,
+  ArrowLeft,
+  Sparkles,
+  Flame,
+  Eye,
+  Heart,
+  Check,
+  Download,
+  FileCheck,
+} from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
-import { realPlatformStore } from "@/lib/real-platform-store";
+import { realPlatformStore, PaymentReceipt } from "@/lib/real-platform-store";
 
 export default function SubscriptionPage() {
-  const [selectedPlan, setSelectedPlan] = useState("SERENITE");
-  const [paymentMethod, setPaymentMethod] = useState("ORANGE_MONEY");
-  const [phone, setPhone] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState<"PASS" | "SERENITE" | "ALLIANCE">("SERENITE");
+  const [paymentMethod, setPaymentMethod] = useState("WAVE");
+  const [phone, setPhone] = useState("+221 77 000 00 00");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [receipt, setReceipt] = useState<PaymentReceipt | null>(null);
+
+  const planPrices = {
+    PASS: { amount: 3000, label: "Pass Découverte", duration: "7 Jours", quota: 50 },
+    SERENITE: { amount: 7500, label: "Formule Sérénité", duration: "1 Mois", quota: 50 },
+    ALLIANCE: { amount: 24000, label: "Cercle Alliance Sacrée", duration: "1 An", quota: 50 },
+  };
+
+  const activePlanInfo = planPrices[selectedPlan];
 
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone) return;
-    setIsProcessing(true);
-    setTimeout(() => {
-      // Activer l'abonnement réel
-      const plan = selectedPlan === "ALLIANCE" ? "ALLIANCE" : selectedPlan === "PASS" ? "PASS" : "SERENITE";
-      const days = plan === "ALLIANCE" ? 365 : plan === "PASS" ? 7 : 30;
-      realPlatformStore.activateSubscription(plan, days);
 
+    setIsProcessing(true);
+
+    setTimeout(() => {
+      const newReceipt = realPlatformStore.activateSubscription(selectedPlan, {
+        operator: paymentMethod,
+        phoneNumber: phone,
+        amountFcfa: activePlanInfo.amount,
+      });
+
+      setReceipt(newReceipt);
       setIsProcessing(false);
-      setSuccess(true);
     }, 1200);
   };
 
@@ -72,8 +98,7 @@ export default function SubscriptionPage() {
         </Link>
       </header>
 
-      <main style={{ flex: 1, maxWidth: "960px", width: "100%", margin: "0 auto", padding: "3rem 1.5rem" }}>
-        
+      <main style={{ flex: 1, maxWidth: "980px", width: "100%", margin: "0 auto", padding: "3rem 1.5rem" }}>
         {/* Title */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <span className="badge-gold" style={{ marginBottom: "0.75rem", fontSize: "0.82rem" }}>
@@ -82,218 +107,324 @@ export default function SubscriptionPage() {
           <h1 style={{ fontSize: "2.4rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.6rem" }}>
             Investissez Dans Votre <span className="gradient-text-gold">Futur Foyer</span>
           </h1>
-          <p style={{ color: "#c7cfcb", fontSize: "1rem", maxWidth: "560px", margin: "0 auto" }}>
-            Accédez aux profils les plus convoités, révélez vos admirateurs secrets et bénéficiez de 50 propositions hautement compatibles par jour.
+          <p style={{ color: "#c7cfcb", fontSize: "1rem", maxWidth: "580px", margin: "0 auto", lineHeight: "1.6" }}>
+            Accédez aux profils certifiés 18+, révélez vos admirateurs secrets et bénéficiez de 50 propositions hautement compatibles chaque jour.
           </p>
         </div>
 
         {/* Pricing Tier Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", marginBottom: "3rem" }}>
-          
-          {/* Free Tier */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "3rem" }}>
+          {/* Tier 1 : Pass Découverte */}
           <div
-            onClick={() => setSelectedPlan("FREE")}
+            onClick={() => { setSelectedPlan("PASS"); setReceipt(null); }}
             className="glass-panel"
             style={{
-              padding: "2rem",
-              borderRadius: "28px",
-              border: selectedPlan === "FREE" ? "2px solid #52b788" : "1px solid rgba(212, 163, 115, 0.18)",
+              padding: "1.75rem",
+              borderRadius: "24px",
+              border: selectedPlan === "PASS" ? "2px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.2)",
+              backgroundColor: selectedPlan === "PASS" ? "rgba(244, 192, 124, 0.08)" : "rgba(16, 32, 23, 0.6)",
               cursor: "pointer",
               transition: "all 0.2s ease",
             }}
           >
-            <div style={{ fontSize: "1.25rem", fontWeight: "800", marginBottom: "0.35rem" }}>Pass Découverte</div>
-            <div style={{ fontSize: "0.85rem", color: "#8a968f", marginBottom: "1.25rem" }}>Idéal pour explorer la communauté</div>
-            <div style={{ fontSize: "2.2rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "1.5rem" }}>
-              0 FCFA <span style={{ fontSize: "0.9rem", color: "#8a968f", fontWeight: "400" }}>/ gratuit</span>
+            <div style={{ fontWeight: "800", fontSize: "1.1rem", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+              Pass Découverte
             </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", fontSize: "0.88rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <CheckCircle2 size={17} color="#52b788" /> 10 profils suggérés par jour
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <CheckCircle2 size={17} color="#52b788" /> Vérification KYC certifiée gratuite
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#8a968f" }}>
-                <CheckCircle2 size={17} color="#52b788" /> Messagerie instantanée sécurisée
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#8a968f" }}>
-                ✕ Admirateurs secrets masqués
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#8a968f" }}>
-                ✕ Retour en arrière limité
-              </div>
+            <div style={{ fontSize: "1.8rem", fontWeight: "900", color: "#f4c07c", marginBottom: "0.25rem" }}>
+              3 000 <span style={{ fontSize: "0.9rem", color: "#c7cfcb", fontWeight: "600" }}>FCFA</span>
             </div>
+            <div style={{ fontSize: "0.8rem", color: "#8a968f", marginBottom: "1.25rem" }}>
+              Validité 7 jours
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.6rem", fontSize: "0.85rem", color: "#c7cfcb" }}>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> 50 profils certifiés / jour
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Révélation admirateurs secrets
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Badge Vérifié Prioritaire
+              </li>
+            </ul>
           </div>
 
-          {/* Premium Tier (Privilege Hero Card) */}
+          {/* Tier 2 : Formule Sérénité (Recommandée) */}
           <div
-            onClick={() => setSelectedPlan("PREMIUM")}
-            className="glass-panel glow-halo"
+            onClick={() => { setSelectedPlan("SERENITE"); setReceipt(null); }}
+            className="glass-panel"
             style={{
-              padding: "2rem",
-              borderRadius: "28px",
-              border: selectedPlan === "PREMIUM" ? "2px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.25)",
-              background: "linear-gradient(135deg, rgba(16, 32, 23, 0.95), rgba(31, 90, 58, 0.4))",
-              position: "relative",
+              padding: "1.75rem",
+              borderRadius: "24px",
+              border: selectedPlan === "SERENITE" ? "2.5px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.3)",
+              backgroundColor: selectedPlan === "SERENITE" ? "rgba(244, 192, 124, 0.12)" : "rgba(16, 32, 23, 0.8)",
               cursor: "pointer",
+              position: "relative",
+              boxShadow: selectedPlan === "SERENITE" ? "0 10px 30px rgba(244, 192, 124, 0.2)" : "none",
               transition: "all 0.2s ease",
             }}
           >
-            {/* Pop-out Badge */}
             <div
               style={{
                 position: "absolute",
-                top: "-14px",
-                right: "24px",
-                background: "linear-gradient(135deg, #f4c07c, #e07a5f)",
+                top: "-12px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                backgroundColor: "#f4c07c",
                 color: "#070d09",
+                fontSize: "0.72rem",
                 fontWeight: "900",
-                fontSize: "0.75rem",
-                padding: "4px 14px",
+                padding: "2px 10px",
                 borderRadius: "999px",
-                boxShadow: "0 4px 15px rgba(224, 122, 95, 0.5)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                letterSpacing: "0.5px",
               }}
             >
-              ✦ LE CHOIX DES FUTURS MARIÉS ✦
+              LE PLUS CHOISI ⭐
             </div>
-
-            <div style={{ fontSize: "1.25rem", fontWeight: "800", marginBottom: "0.35rem", color: "#f4c07c" }}>
-              Pass Privilège Sérénité
+            <div style={{ fontWeight: "800", fontSize: "1.1rem", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+              Formule Sérénité
             </div>
-            <div style={{ fontSize: "0.85rem", color: "#c7cfcb", marginBottom: "1.25rem" }}>
-              Multiplie par 4.2x vos chances d&apos;union
+            <div style={{ fontSize: "1.8rem", fontWeight: "900", color: "#f4c07c", marginBottom: "0.25rem" }}>
+              7 500 <span style={{ fontSize: "0.9rem", color: "#c7cfcb", fontWeight: "600" }}>FCFA</span>
             </div>
-            
-            <div style={{ fontSize: "2.2rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "1.5rem" }}>
-              2 500 FCFA <span style={{ fontSize: "0.9rem", color: "#d4a373", fontWeight: "700" }}>/ mois</span>
+            <div style={{ fontSize: "0.8rem", color: "#52b788", fontWeight: "700", marginBottom: "1.25rem" }}>
+              Validité 30 jours (Équivalent 250 FCFA/j)
             </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", fontSize: "0.88rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "700", color: "#fbfbfb" }}>
-                <CheckCircle2 size={17} color="#f4c07c" /> <strong>50 profils ciblés</strong> par jour (+400%)
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "700", color: "#fbfbfb" }}>
-                <Eye size={17} color="#f4c07c" /> <strong>Débloquez qui a aimé votre profil</strong>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <CheckCircle2 size={17} color="#f4c07c" /> Retours en arrière illimités (Rewind)
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Sparkles size={17} color="#f4c07c" /> Badge exclusif « Membre Privilège »
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Heart size={17} color="#f4c07c" /> Accès au cercle des conseillers matrimoniaux
-              </div>
-            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.6rem", fontSize: "0.85rem", color: "#c7cfcb" }}>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> 50 profils compatibles / jour
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Messagerie illimitée &amp; notes vocales
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Révélation immédiate des likes reçus
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Garantie respect &amp; modération SLA &lt;24h
+              </li>
+            </ul>
           </div>
 
+          {/* Tier 3 : Cercle Alliance */}
+          <div
+            onClick={() => { setSelectedPlan("ALLIANCE"); setReceipt(null); }}
+            className="glass-panel"
+            style={{
+              padding: "1.75rem",
+              borderRadius: "24px",
+              border: selectedPlan === "ALLIANCE" ? "2px solid #52b788" : "1px solid rgba(212, 163, 115, 0.2)",
+              backgroundColor: selectedPlan === "ALLIANCE" ? "rgba(82, 183, 136, 0.1)" : "rgba(16, 32, 23, 0.6)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <div style={{ fontWeight: "800", fontSize: "1.1rem", color: "#fbfbfb", marginBottom: "0.5rem" }}>
+              Cercle Alliance
+            </div>
+            <div style={{ fontSize: "1.8rem", fontWeight: "900", color: "#52b788", marginBottom: "0.25rem" }}>
+              24 000 <span style={{ fontSize: "0.9rem", color: "#c7cfcb", fontWeight: "600" }}>FCFA</span>
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "#8a968f", marginBottom: "1.25rem" }}>
+              Validité 1 An (-73% d&apos;économie)
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.6rem", fontSize: "0.85rem", color: "#c7cfcb" }}>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Accès VIP permanent toute l&apos;année
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Accompagnement conseiller matrimonial
+              </li>
+              <li style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <Check size={14} color="#52b788" /> Badge Prestige Âme Sacrée
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Checkout Form */}
-        <div
-          className="glass-panel"
-          style={{
-            padding: "2rem 2.5rem",
-            borderRadius: "28px",
-          }}
-        >
-          <h3 style={{ fontSize: "1.25rem", fontWeight: "900", marginBottom: "1.25rem", color: "#fbfbfb" }}>
-            Paiement Mobile Money Sécurisé (FCFA)
-          </h3>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
-            {[
-              { id: "MTN_MOMO", label: "MTN Mobile Money 🟡", desc: "Cameroun & Bénin" },
-              { id: "ORANGE_MONEY", label: "Orange Money 🟠", desc: "Cameroun & Côte d'Ivoire" },
-              { id: "WAVE", label: "Wave Money 🔵", desc: "Côte d'Ivoire & Bénin" },
-            ].map((method) => (
+        {/* Reçu Digital Officiel si validation réussie */}
+        {receipt ? (
+          <div
+            className="glass-panel"
+            style={{
+              padding: "2.5rem",
+              borderRadius: "28px",
+              border: "2px solid #52b788",
+              backgroundColor: "rgba(82, 183, 136, 0.08)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+            }}
+          >
+            <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
               <div
-                key={method.id}
-                onClick={() => setPaymentMethod(method.id)}
                 style={{
-                  padding: "1rem",
-                  borderRadius: "16px",
-                  backgroundColor: paymentMethod === method.id ? "rgba(212, 163, 115, 0.18)" : "rgba(255, 255, 255, 0.03)",
-                  border: paymentMethod === method.id ? "2px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.15)",
-                  cursor: "pointer",
-                  textAlign: "center",
-                  transition: "all 0.2s ease",
+                  width: "56px",
+                  height: "56px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(82, 183, 136, 0.2)",
+                  color: "#52b788",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 1rem",
                 }}
               >
-                <div style={{ fontWeight: "800", fontSize: "0.95rem", color: "#fbfbfb" }}>{method.label}</div>
-                <div style={{ fontSize: "0.75rem", color: "#8a968f", marginTop: "2px" }}>{method.desc}</div>
+                <FileCheck size={28} />
               </div>
-            ))}
-          </div>
+              <h2 style={{ fontSize: "1.6rem", fontWeight: "900", color: "#fbfbfb", margin: 0 }}>
+                Récépissé de Souscription Officiel
+              </h2>
+              <p style={{ color: "#52b788", fontWeight: "700", fontSize: "0.9rem", marginTop: "4px" }}>
+                Paiement validé avec succès par {receipt.operator} • Statut Privilège Actif
+              </p>
+            </div>
 
-          <form onSubmit={handleCheckout}>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#d4a373", marginBottom: "6px" }}>
-                Numéro de Téléphone Mobile Money (Format E.164)
-              </label>
-              <input
-                type="tel"
-                placeholder="+237 6XX XX XX XX ou +225 07XX XX XX XX"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+            <div
+              style={{
+                backgroundColor: "#070d09",
+                border: "1px solid rgba(212, 163, 115, 0.2)",
+                borderRadius: "18px",
+                padding: "1.5rem",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1.25rem",
+                marginBottom: "1.5rem",
+                fontSize: "0.88rem",
+              }}
+            >
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Numéro de Transaction</div>
+                <div style={{ fontWeight: "800", color: "#f4c07c" }}>{receipt.transactionId}</div>
+              </div>
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Date &amp; Heure</div>
+                <div style={{ fontWeight: "700", color: "#fbfbfb" }}>{receipt.date}</div>
+              </div>
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Formule Souscrite</div>
+                <div style={{ fontWeight: "700", color: "#fbfbfb" }}>{receipt.planName}</div>
+              </div>
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Montant Débité</div>
+                <div style={{ fontWeight: "900", color: "#52b788" }}>{receipt.amountFcfa.toLocaleString()} FCFA</div>
+              </div>
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Compte Mobile Money</div>
+                <div style={{ fontWeight: "700", color: "#fbfbfb" }}>{receipt.phoneNumber} ({receipt.operator})</div>
+              </div>
+              <div>
+                <div style={{ color: "#8a968f", fontSize: "0.78rem" }}>Validité de l&apos;Alliance</div>
+                <div style={{ fontWeight: "700", color: "#f4c07c" }}>Jusqu&apos;au {receipt.validUntil}</div>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+              <Link
+                href="/discover"
+                className="btn-primary"
+                style={{
+                  padding: "12px 28px",
+                  fontSize: "0.95rem",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                <Sparkles size={16} /> Profiter de mes 50 profils/jour
+              </Link>
+            </div>
+          </div>
+        ) : (
+          /* Formulaire de Checkout Mobile Money */
+          <div
+            className="glass-panel"
+            style={{
+              padding: "2rem 2.5rem",
+              borderRadius: "28px",
+              border: "1px solid rgba(212, 163, 115, 0.25)",
+            }}
+          >
+            <h3 style={{ fontSize: "1.3rem", fontWeight: "900", marginBottom: "1.25rem", color: "#fbfbfb" }}>
+              Règlement Mobile Money Sécurisé en FCFA
+            </h3>
+
+            {/* Sélecteur d'opérateur */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+              {[
+                { id: "WAVE", label: "Wave Money 🔵", desc: "Sénégal, Côte d'Ivoire & Bénin" },
+                { id: "ORANGE_MONEY", label: "Orange Money 🟠", desc: "Sénégal, CI, Cameroun, Mali" },
+                { id: "MTN_MOMO", label: "MTN MoMo 🟡", desc: "Côte d'Ivoire, Cameroun, Bénin" },
+              ].map((method) => (
+                <div
+                  key={method.id}
+                  onClick={() => setPaymentMethod(method.id)}
+                  style={{
+                    padding: "1rem",
+                    borderRadius: "16px",
+                    backgroundColor: paymentMethod === method.id ? "rgba(212, 163, 115, 0.18)" : "rgba(255, 255, 255, 0.03)",
+                    border: paymentMethod === method.id ? "2px solid #f4c07c" : "1px solid rgba(212, 163, 115, 0.15)",
+                    cursor: "pointer",
+                    textAlign: "center",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <div style={{ fontWeight: "800", fontSize: "0.95rem", color: "#fbfbfb" }}>{method.label}</div>
+                  <div style={{ fontSize: "0.75rem", color: "#8a968f", marginTop: "2px" }}>{method.desc}</div>
+                </div>
+              ))}
+            </div>
+
+            <form onSubmit={handleCheckout}>
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "6px" }}>
+                  Numéro de Téléphone {paymentMethod} (Format E.164)
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+221 77 000 00 00 ou +225 07 00 00 00"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "14px 16px",
+                    borderRadius: "14px",
+                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(212, 163, 115, 0.3)",
+                    color: "#fbfbfb",
+                    fontSize: "1rem",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isProcessing}
+                className="btn-primary"
                 style={{
                   width: "100%",
-                  padding: "14px 16px",
-                  borderRadius: "14px",
-                  backgroundColor: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(212, 163, 115, 0.3)",
-                  color: "#fbfbfb",
-                  fontSize: "1rem",
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isProcessing}
-              className="btn-primary"
-              style={{
-                width: "100%",
-                padding: "16px",
-                fontSize: "1.05rem",
-                opacity: isProcessing ? 0.7 : 1,
-              }}
-            >
-              {isProcessing ? (
-                "Validation Mobile Money en cours..."
-              ) : (
-                <>
-                  <Zap size={18} /> Valider l&apos;Abonnement (2 500 FCFA / mois)
-                </>
-              )}
-            </button>
-
-            {success && (
-              <div
-                style={{
-                  marginTop: "1rem",
-                  padding: "1rem",
-                  borderRadius: "14px",
-                  backgroundColor: "rgba(82, 183, 136, 0.15)",
-                  border: "1px solid rgba(82, 183, 136, 0.4)",
-                  color: "#52b788",
-                  fontWeight: "700",
-                  textAlign: "center",
-                  fontSize: "0.9rem",
+                  padding: "16px",
+                  fontSize: "1.05rem",
+                  opacity: isProcessing ? 0.7 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
                 }}
               >
-                🎉 Souscription réussie ! Votre compte bénéficie désormais du statut Privilège (50 profils/j).
-              </div>
-            )}
-          </form>
-        </div>
-
+                {isProcessing ? (
+                  "Traitement de l'autorisation Mobile Money..."
+                ) : (
+                  <>
+                    <Zap size={18} /> Confirmer le Règlement ({activePlanInfo.amount.toLocaleString()} FCFA pour {activePlanInfo.duration})
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        )}
       </main>
     </div>
   );

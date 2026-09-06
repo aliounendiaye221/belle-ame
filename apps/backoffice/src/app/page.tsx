@@ -7,6 +7,35 @@ import { ShieldCheck, Users, Flag, FileText, TrendingUp, DollarSign, Clock, Chec
 import { UserButton } from "@/lib/clerk-admin";
 
 export default function BackofficeDashboard() {
+  const [stats, setStats] = React.useState({
+    userCount: 0,
+    kycPendingCount: 0,
+    moderationCount: 0,
+    revenueFcfa: 0,
+  });
+
+  React.useEffect(() => {
+    try {
+      const p = localStorage.getItem("belleame_real_profile");
+      const kycRaw = localStorage.getItem("belleame_real_kyc_queue");
+      const kycList = kycRaw ? JSON.parse(kycRaw) : [];
+      const pendingKyc = kycList.filter((k: { status: string }) => k.status === "PENDING").length;
+
+      const receiptsRaw = localStorage.getItem("belleame_real_receipts");
+      const receipts = receiptsRaw ? JSON.parse(receiptsRaw) : [];
+      const totalRev = receipts.reduce((acc: number, curr: { amount?: number }) => acc + (curr.amount || 0), 0);
+
+      setStats({
+        userCount: p ? 1 : 0,
+        kycPendingCount: pendingKyc,
+        moderationCount: 0,
+        revenueFcfa: totalRev,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#0b130e", color: "#f8f9fa", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
       
@@ -44,7 +73,7 @@ export default function BackofficeDashboard() {
           
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
             <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Membres Inscrits Réels</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#ffffff" }}>0</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#ffffff" }}>{stats.userCount}</div>
             <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Lancement officiel ouvert</div>
           </div>
 
@@ -56,13 +85,13 @@ export default function BackofficeDashboard() {
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(230, 57, 70, 0.2)" }}>
             <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Signalements Modération SLA</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>0</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#52b788" }}>{stats.moderationCount}</div>
             <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>File vierge &lt; 24h</div>
           </div>
 
           <div style={{ backgroundColor: "#14231a", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
             <div style={{ fontSize: "0.85rem", color: "#a0aba4", marginBottom: "0.5rem" }}>Revenu MoMo FCFA Réel</div>
-            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>0 FCFA</div>
+            <div style={{ fontSize: "2rem", fontWeight: "800", color: "#d4a373" }}>{stats.revenueFcfa.toLocaleString()} FCFA</div>
             <div style={{ fontSize: "0.75rem", color: "#52b788", marginTop: "0.35rem" }}>Passerelles Wave & MoMo prêtes</div>
           </div>
 
@@ -79,7 +108,7 @@ export default function BackofficeDashboard() {
             <div style={{ backgroundColor: "#14231a", padding: "1.75rem", borderRadius: "20px", border: "1px solid rgba(82, 183, 136, 0.3)", height: "100%", boxSizing: "border-box" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <ShieldCheck size={28} color="#52b788" />
-                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>2 en attente</span>
+                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(82, 183, 136, 0.15)", color: "#52b788", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>{stats.kycPendingCount} en attente</span>
               </div>
               <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.5rem" }}>File de Vérification KYC</h3>
               <p style={{ fontSize: "0.85rem", color: "#a0aba4", margin: 0, lineHeight: "1.5" }}>
@@ -92,7 +121,7 @@ export default function BackofficeDashboard() {
             <div style={{ backgroundColor: "#14231a", padding: "1.75rem", borderRadius: "20px", border: "1px solid rgba(230, 57, 70, 0.3)", height: "100%", boxSizing: "border-box" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <Flag size={28} color="#e63946" />
-                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(230, 57, 70, 0.15)", color: "#e63946", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>2 signalements</span>
+                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(230, 57, 70, 0.15)", color: "#e63946", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>{stats.moderationCount} signalement</span>
               </div>
               <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.5rem" }}>Modération & SLA &lt; 24h</h3>
               <p style={{ fontSize: "0.85rem", color: "#a0aba4", margin: 0, lineHeight: "1.5" }}>
@@ -105,7 +134,7 @@ export default function BackofficeDashboard() {
             <div style={{ backgroundColor: "#14231a", padding: "1.75rem", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.3)", height: "100%", boxSizing: "border-box" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <Users size={28} color="#d4a373" />
-                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(212, 163, 115, 0.15)", color: "#d4a373", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>0 inscrit (Lancement)</span>
+                <span style={{ fontSize: "0.75rem", backgroundColor: "rgba(212, 163, 115, 0.15)", color: "#d4a373", padding: "0.25rem 0.6rem", borderRadius: "10px", fontWeight: "700" }}>{stats.userCount} membre(s)</span>
               </div>
               <h3 style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.5rem" }}>Annuaire Utilisateurs & Support</h3>
               <p style={{ fontSize: "0.85rem", color: "#a0aba4", margin: 0, lineHeight: "1.5" }}>

@@ -22,8 +22,34 @@ export default function UsersManagementPage() {
   const [showPii, setShowPii] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Démarrage à zéro compte fictif pour la mise en ligne officielle
   const [users, setUsers] = useState<UserItem[]>([]);
+
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem("belleame_real_profile");
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && p.id) {
+          setUsers([
+            {
+              id: p.id,
+              firstName: p.firstName || "Membre",
+              lastName: p.lastName || "Actif",
+              phone: p.phone || "+221770000000",
+              country: p.country || "Sénégal",
+              role: "MEMBRE",
+              tier: p.subscriptionTier === "ALLIANCE" || p.subscriptionTier === "SERENITE" ? "PREMIUM" : "FREE",
+              verifiedKyc: !!p.isIdentityVerified,
+              createdAt: new Date().toISOString().slice(0, 10),
+              activeSessionsCount: 1,
+            },
+          ]);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   const filteredUsers = users.filter((u) => 
     u.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||

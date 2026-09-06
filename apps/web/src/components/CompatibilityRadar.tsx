@@ -10,13 +10,21 @@ interface PillarScore {
   color: string;
 }
 
-interface CompatibilityRadarProps {
-  overallScore: number;
+export interface CompatibilityRadarProps {
+  overallScore?: number;
+  score?: number;
+  candidateName?: string;
+  valuesOverlap?: string[];
+  city?: string;
   pillars?: PillarScore[];
 }
 
 export default function CompatibilityRadar({
   overallScore,
+  score,
+  candidateName,
+  valuesOverlap,
+  city,
   pillars = [
     { label: "Foi & Spiritualité", score: 95, icon: <Compass size={14} />, color: "#52b788" },
     { label: "Projet Famille & Mariage", score: 92, icon: <Heart size={14} />, color: "#f4a261" },
@@ -24,10 +32,11 @@ export default function CompatibilityRadar({
     { label: "Valeurs Ancestrales & Diaspora", score: 90, icon: <Sparkles size={14} />, color: "#74c69d" },
   ],
 }: CompatibilityRadarProps) {
+  const effectiveScore = overallScore ?? score ?? 90;
   // SVG circular gauge calculations
   const radius = 38;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (overallScore / 100) * circumference;
+  const strokeDashoffset = circumference - (effectiveScore / 100) * circumference;
 
   return (
     <div
@@ -46,7 +55,7 @@ export default function CompatibilityRadar({
             Indice de Jaccard Déterministe
           </div>
           <div style={{ fontSize: "1rem", fontWeight: "800", color: "#fbfbfb", marginTop: "2px" }}>
-            Affinité Sacrée Recommandée
+            {candidateName ? `Affinité Sacrée avec ${candidateName}` : "Affinité Sacrée Recommandée"}
           </div>
         </div>
 
@@ -82,7 +91,7 @@ export default function CompatibilityRadar({
           </svg>
           <div style={{ position: "absolute", textAlign: "center" }}>
             <span style={{ fontSize: "1.25rem", fontWeight: "900", color: "#f4c07c", lineHeight: 1 }}>
-              {overallScore}%
+              {effectiveScore}%
             </span>
           </div>
         </div>

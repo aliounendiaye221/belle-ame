@@ -778,7 +778,7 @@ export default function HomePage() {
             Rejoignez plus de 9 400 célibataires certifiés en Afrique et en diaspora. L&apos;accès gratuit vous permet de créer votre profil vérifié dès aujourd&apos;hui.
           </p>
           <Link
-            href="/register"
+            href="/auth/login"
             className="btn-primary"
             style={{ padding: "16px 38px", fontSize: "1.05rem", borderRadius: "999px" }}
           >

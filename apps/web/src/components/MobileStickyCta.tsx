@@ -36,7 +36,7 @@ export default function MobileStickyCta() {
       </div>
 
       <Link
-        href="/register"
+        href="/auth/login"
         style={{
           background: "linear-gradient(135deg, #f4c07c, #d4a373)",
           color: "#070d09",

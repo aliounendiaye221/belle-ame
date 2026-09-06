@@ -29,41 +29,52 @@ export default function App() {
   // Profils pour la découverte
   const candidates = [
     {
-      id: "cand-1",
+      id: "cand-sn-01",
+      name: "Fatou",
+      age: 27,
+      city: "Dakar, Sénégal 🇸🇳",
+      profession: "Ingénieure Systèmes d'Information",
+      bio: "Attachement sincère aux valeurs familiales et spirituelles. Je recherche un partenaire d'honneur mûr pour bâtir un foyer vertueux et durable.",
+      score: 97,
+      photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
+      values: ["Foi Musulmane", "Respect des Aînés", "Non-Fumeur"],
+    },
+    {
+      id: "cand-ci-02",
+      name: "Jean-Marc",
+      age: 31,
+      city: "Abidjan, Côte d'Ivoire 🇨🇮",
+      profession: "Directeur Financier PME",
+      bio: "Homme travailleur, fidèle et engagé. En quête d'une épouse aimante avec qui construire un projet de vie axé sur l'amour et l'entraide mutuelle.",
+      score: 94,
+      photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
+      values: ["Foi Chrétienne", "Entrepreneuriat", "Projet d'Enfants"],
+    },
+    {
+      id: "cand-cm-03",
       name: "Grace",
       age: 26,
       city: "Douala, Cameroun 🇨🇲",
-      profession: "Architecte d'Intérieur",
-      bio: "Passionnée par le design, la spiritualité chrétienne et la cuisine traditionnelle. Cherche un compagnon sincère orienté mariage.",
+      profession: "Médecin Pédiatre",
+      bio: "Dévouée, pieuse et bienveillante. Je souhaite rencontrer un homme responsable, honnête et prêt pour l'engagement du mariage.",
       score: 96,
-      photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
-      values: ["Foi Chrétienne", "Projet Famille", "Respect"],
-    },
-    {
-      id: "cand-2",
-      name: "Marie-Joséphine",
-      age: 28,
-      city: "Abidjan, Côte d'Ivoire 🇨🇮",
-      profession: "Chef de Projet Marketing",
-      bio: "Rieuse, bienveillante et sincère dans mes démarches. J'aime les voyages en Afrique et la lecture.",
-      score: 92,
       photoUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80",
-      values: ["Foi", "Mariage", "Respect des aînés"],
+      values: ["Spiritualité", "Fidélité", "Bienveillance"],
     },
     {
-      id: "cand-3",
-      name: "Bertrand",
-      age: 31,
+      id: "cand-bj-04",
+      name: "Koffi",
+      age: 29,
       city: "Cotonou, Bénin 🇧🇯",
-      profession: "Ingénieur Logiciel",
-      bio: "Esprit calme, sportif et passionné d'entrepreneuriat. Je souhaite bâtir une famille basée sur la loyauté.",
-      score: 89,
-      photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
-      values: ["Projet Famille", "Foi", "Sport"],
+      profession: "Agronome & Entrepreneur Bio",
+      bio: "Passionné de nature et de développement rural. Je cherche une femme digne prête à cheminer ensemble vers une alliance sacrée.",
+      score: 92,
+      photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80",
+      values: ["Respect des Traditions", "Valeurs Chrétiennes", "Simplicité"],
     },
   ];
 
-  const currentCandidate = candidates[activeProfileIdx % candidates.length];
+  const currentCandidate = candidates[activeProfileIdx % candidates.length]!;
 
   // Chat message state
   const [chatMessages, setChatMessages] = useState([

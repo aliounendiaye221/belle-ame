@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Sparkles, Eye } from "lucide-react";
 
 interface SecretAdmirerTeaserProps {
+  count?: number;
   location?: string;
   compatibilityScore?: number;
   timeAgo?: string;
 }
 
 export default function SecretAdmirerTeaser({
+  count,
   location = "Afrique & Diaspora 🌍",
   compatibilityScore = 95,
   timeAgo = "À l'instant",
