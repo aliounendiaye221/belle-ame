@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
-  useEffect(() => {
-    window.location.href = "/auth/login";
-  }, []);
-
   return (
     <div
       style={{
@@ -15,11 +11,25 @@ export default function SignInPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        padding: "2rem 1rem",
       }}
     >
-      <div style={{ color: "#c7cfcb", fontSize: "0.95rem" }}>
-        Redirection vers la page de connexion sécurisée...
-      </div>
+      <SignIn
+        appearance={{
+          variables: {
+            colorPrimary: "#f4c07c",
+            colorBackground: "#122219",
+            colorText: "#fbfbfb",
+            colorTextSecondary: "#c7cfcb",
+            colorInputBackground: "#070d09",
+            colorInputText: "#ffffff",
+          },
+        }}
+        routing="path"
+        path="/sign-in"
+        signUpUrl="/sign-up"
+        fallbackRedirectUrl="/discover"
+      />
     </div>
   );
 }

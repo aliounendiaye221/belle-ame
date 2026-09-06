@@ -230,6 +230,26 @@ export default function LoginPage() {
             <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.5", margin: 0 }}>
               Accédez à votre sanctuaire matrimonial panafricain
             </p>
+            <div style={{ marginTop: "1rem" }}>
+              <Link
+                href="/sign-in"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "0.5rem 1.15rem",
+                  borderRadius: "999px",
+                  backgroundColor: "rgba(244, 192, 124, 0.12)",
+                  border: "1px solid #f4c07c",
+                  color: "#f4c07c",
+                  fontSize: "0.82rem",
+                  fontWeight: "700",
+                  textDecoration: "none",
+                }}
+              >
+                🔐 Passer par le guichet Clerk officiel (/sign-in) →
+              </Link>
+            </div>
           </div>
 
           {/* Auth Mode Toggle */}
