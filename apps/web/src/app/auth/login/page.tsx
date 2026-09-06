@@ -2,14 +2,19 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ShieldCheck, ArrowRight, Heart, Sparkles, CheckCircle2, Search, Globe, Lock } from "lucide-react";
+import { ShieldCheck, ArrowRight, Heart, Search, Mail, Phone, Lock } from "lucide-react";
 import { AFRICAN_COUNTRIES } from "@belle-ame/shared-types";
 import { authService } from "@/lib/auth-service";
 
+type AuthMode = "phone" | "email";
+
 export default function LoginPage() {
+  const [authMode, setAuthMode] = useState<AuthMode>("phone");
   const [selectedCountryCode, setSelectedCountryCode] = useState("SN");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,19 +42,17 @@ export default function LoginPage() {
     );
   }, [searchCountry]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber || !acceptTerms) return;
 
     setErrorMsg("");
     setIsSubmitting(true);
 
-    // Formatage strict E.164
     const cleanNumber = phoneNumber.replace(/[\s\-\(\)]/g, "");
     const fullPhoneNumber = `${activeCountry.dialCode}${cleanNumber.startsWith("0") ? cleanNumber.slice(1) : cleanNumber}`;
 
     try {
-      // Envoi OTP via le service d'authentification
       await authService.sendOtp(fullPhoneNumber, activeCountry.code);
       window.location.href = `/auth/otp?phone=${encodeURIComponent(fullPhoneNumber)}&promo=${encodeURIComponent(promoCode)}`;
     } catch (err: any) {
@@ -57,6 +60,40 @@ export default function LoginPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password || !acceptTerms) return;
+
+    setErrorMsg("");
+    setIsSubmitting(true);
+
+    try {
+      const result = await authService.loginWithEmail(email, password);
+      if (result.success) {
+        window.location.href = "/discover";
+        return;
+      }
+      setErrorMsg("Identifiants incorrects. Veuillez réessayer.");
+    } catch (err: any) {
+      setErrorMsg(err.message || "Erreur lors de la connexion.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const inputStyle = {
+    width: "100%",
+    backgroundColor: "#070d09",
+    border: "1.5px solid rgba(212, 163, 115, 0.35)",
+    color: "#ffffff",
+    padding: "0.85rem 1rem",
+    borderRadius: "16px",
+    fontSize: "0.95rem",
+    outline: "none",
+    fontWeight: "600" as const,
+    boxSizing: "border-box" as const,
   };
 
   return (
@@ -71,7 +108,7 @@ export default function LoginPage() {
         position: "relative",
       }}
     >
-      {/* Halo romantique de fond */}
+      {/* Halo de fond */}
       <div
         style={{
           position: "absolute",
@@ -132,10 +169,9 @@ export default function LoginPage() {
             textDecoration: "none",
             fontSize: "0.9rem",
             fontWeight: "600",
-            transition: "color 0.2s",
           }}
         >
-          ← Retour à l&apos;accueil
+          ← Retour
         </Link>
       </header>
 
@@ -177,191 +213,310 @@ export default function LoginPage() {
                 marginBottom: "1rem",
               }}
             >
-              <Heart size={16} fill="#e63946" color="#e63946" /> 54 Pays d&apos;Afrique & Diaspora Unie
+              <Heart size={16} fill="#e63946" color="#e63946" /> 54 Pays d&apos;Afrique & Diaspora
             </div>
             <h1 style={{ fontSize: "1.85rem", fontWeight: "900", color: "#fbfbfb", marginBottom: "0.5rem" }}>
-              Trouvez Votre Âme Sœur
+              Connexion Sécurisée
             </h1>
             <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.5", margin: 0 }}>
-              Entrez votre numéro de mobile. Un code de sécurité secret vous sera expédié instantanément.
+              Accédez à votre sanctuaire matrimonial panafricain
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.35rem" }}>
-            
-            {/* Panafrican Country Selector */}
-            <div>
-              <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
-                <span>Pays d&apos;Afrique & Indicatif</span>
-                <span style={{ fontSize: "0.75rem", color: "#52b788" }}>{activeCountry.flag} {activeCountry.name} ({activeCountry.dialCode})</span>
-              </label>
-
-              <div
-                style={{
-                  backgroundColor: "#070d09",
-                  border: "1px solid rgba(212, 163, 115, 0.35)",
-                  borderRadius: "16px",
-                  padding: "0.6rem 0.9rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "0.6rem",
-                }}
-              >
-                <Search size={16} color="#8a968f" />
-                <input
-                  type="text"
-                  placeholder="Rechercher un pays (ex: Sénégal, Côte d'Ivoire, RDC)..."
-                  value={searchCountry}
-                  onChange={(e) => setSearchCountry(e.target.value)}
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    color: "#ffffff",
-                    fontSize: "0.85rem",
-                    outline: "none",
-                    width: "100%",
-                  }}
-                />
-              </div>
-
-              <select
-                value={selectedCountryCode}
-                onChange={(e) => {
-                  setSelectedCountryCode(e.target.value);
-                  setSearchCountry("");
-                }}
-                style={{
-                  width: "100%",
-                  backgroundColor: "#0e1711",
-                  border: "1.5px solid rgba(212, 163, 115, 0.35)",
-                  color: "#ffffff",
-                  padding: "0.85rem 1rem",
-                  borderRadius: "16px",
-                  fontSize: "0.95rem",
-                  outline: "none",
-                  fontWeight: "600",
-                }}
-              >
-                {filteredCountries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.flag} {c.name} ({c.dialCode})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Mobile Phone Number Input */}
-            <div>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
-                Numéro de téléphone mobile
-              </label>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <div
-                  style={{
-                    backgroundColor: "rgba(244, 192, 124, 0.12)",
-                    border: "1px solid rgba(212, 163, 115, 0.3)",
-                    color: "#f4c07c",
-                    padding: "0.85rem 1.1rem",
-                    borderRadius: "16px",
-                    fontWeight: "800",
-                    fontSize: "0.95rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                  }}
-                >
-                  <span>{activeCountry.flag}</span>
-                  <span>{activeCountry.dialCode}</span>
-                </div>
-                <input
-                  type="tel"
-                  placeholder="Ex: 77 123 45 67"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  required
-                  style={{
-                    flex: 1,
-                    backgroundColor: "#070d09",
-                    border: "1.5px solid rgba(212, 163, 115, 0.35)",
-                    color: "#ffffff",
-                    padding: "0.85rem 1.2rem",
-                    borderRadius: "16px",
-                    fontSize: "1.05rem",
-                    outline: "none",
-                    fontWeight: "600",
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Promo Code WhatsApp */}
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
-                <label style={{ fontSize: "0.82rem", fontWeight: "600", color: "#c7cfcb" }}>
-                  Code Invitation Pionnier (Facultatif)
-                </label>
-                <span style={{ fontSize: "0.75rem", color: "#52b788", fontWeight: "700" }}>🎁 1 mois offert</span>
-              </div>
-              <input
-                type="text"
-                placeholder="Ex: PIONNIER-AFRIQUE"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                style={{
-                  width: "100%",
-                  backgroundColor: "#070d09",
-                  border: "1px solid rgba(212, 163, 115, 0.3)",
-                  color: "#ffffff",
-                  padding: "0.75rem 1rem",
-                  borderRadius: "14px",
-                  fontSize: "0.9rem",
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            {/* Checkbox Terms */}
-            <label style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", cursor: "pointer", fontSize: "0.82rem", color: "#c7cfcb", lineHeight: "1.4" }}>
-              <input
-                type="checkbox"
-                checked={acceptTerms}
-                onChange={(e) => setAcceptTerms(e.target.checked)}
-                style={{ marginTop: "0.2rem", accentColor: "#e63946", width: "17px", height: "17px" }}
-              />
-              <span>
-                Je déclare sur l&apos;honneur avoir au moins <strong>18 ans</strong> et j&apos;accepte les <Link href="/terms" style={{ color: "#f4c07c", textDecoration: "underline" }}>Conditions Générales</Link> et la <Link href="/settings/privacy" style={{ color: "#f4c07c", textDecoration: "underline" }}>Protection RGPD</Link>.
-              </span>
-            </label>
-
-            {errorMsg && (
-              <div style={{ color: "#e63946", fontSize: "0.85rem", textAlign: "center", fontWeight: "700" }}>
-                {errorMsg}
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={!phoneNumber || !acceptTerms || isSubmitting}
-              className="btn-primary"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                borderRadius: "999px",
-                fontSize: "1rem",
-                cursor: (!phoneNumber || !acceptTerms || isSubmitting) ? "not-allowed" : "pointer",
-                opacity: (!phoneNumber || !acceptTerms || isSubmitting) ? 0.6 : 1,
-              }}
-            >
-              {isSubmitting ? "Envoi du code secret..." : "Recevoir mon Code de Sécurité"} <ArrowRight size={18} />
-            </button>
-          </form>
-
-          {/* Social Proof Badge */}
+          {/* Auth Mode Toggle */}
           <div
             style={{
-              marginTop: "1.5rem",
+              display: "flex",
+              gap: "0.5rem",
+              marginBottom: "1.5rem",
+              backgroundColor: "#0e1711",
+              borderRadius: "14px",
+              padding: "4px",
+              border: "1px solid rgba(212, 163, 115, 0.2)",
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => { setAuthMode("phone"); setErrorMsg(""); }}
+              style={{
+                flex: 1,
+                padding: "0.65rem",
+                borderRadius: "12px",
+                border: "none",
+                backgroundColor: authMode === "phone" ? "rgba(244, 192, 124, 0.2)" : "transparent",
+                color: authMode === "phone" ? "#f4c07c" : "#8a968f",
+                fontWeight: "700",
+                fontSize: "0.85rem",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <Phone size={16} /> Téléphone
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAuthMode("email"); setErrorMsg(""); }}
+              style={{
+                flex: 1,
+                padding: "0.65rem",
+                borderRadius: "12px",
+                border: "none",
+                backgroundColor: authMode === "email" ? "rgba(244, 192, 124, 0.2)" : "transparent",
+                color: authMode === "email" ? "#f4c07c" : "#8a968f",
+                fontWeight: "700",
+                fontSize: "0.85rem",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <Mail size={16} /> Email
+            </button>
+          </div>
+
+          {/* Phone Auth Mode */}
+          {authMode === "phone" && (
+            <form onSubmit={handlePhoneSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.35rem" }}>
+              {/* Country Selector */}
+              <div>
+                <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
+                  <span>Pays & Indicatif</span>
+                  <span style={{ fontSize: "0.75rem", color: "#52b788" }}>{activeCountry.flag} {activeCountry.name} ({activeCountry.dialCode})</span>
+                </label>
+
+                <div
+                  style={{
+                    backgroundColor: "#070d09",
+                    border: "1px solid rgba(212, 163, 115, 0.35)",
+                    borderRadius: "16px",
+                    padding: "0.6rem 0.9rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    marginBottom: "0.6rem",
+                  }}
+                >
+                  <Search size={16} color="#8a968f" />
+                  <input
+                    type="text"
+                    placeholder="Rechercher un pays..."
+                    value={searchCountry}
+                    onChange={(e) => setSearchCountry(e.target.value)}
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "#ffffff",
+                      fontSize: "0.85rem",
+                      outline: "none",
+                      width: "100%",
+                    }}
+                  />
+                </div>
+
+                <select
+                  value={selectedCountryCode}
+                  onChange={(e) => {
+                    setSelectedCountryCode(e.target.value);
+                    setSearchCountry("");
+                  }}
+                  style={inputStyle}
+                >
+                  {filteredCountries.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.flag} {c.name} ({c.dialCode})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Phone Number */}
+              <div>
+                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
+                  Numéro de téléphone mobile
+                </label>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <div
+                    style={{
+                      backgroundColor: "rgba(244, 192, 124, 0.12)",
+                      border: "1px solid rgba(212, 163, 115, 0.3)",
+                      color: "#f4c07c",
+                      padding: "0.85rem 1.1rem",
+                      borderRadius: "16px",
+                      fontWeight: "800",
+                      fontSize: "0.95rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span>{activeCountry.flag}</span>
+                    <span>{activeCountry.dialCode}</span>
+                  </div>
+                  <input
+                    type="tel"
+                    placeholder="Ex: 77 123 45 67"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                    style={{
+                      ...inputStyle,
+                      flex: 1,
+                      fontSize: "1.05rem",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Promo Code */}
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                  <label style={{ fontSize: "0.82rem", fontWeight: "600", color: "#c7cfcb" }}>
+                    Code Invitation (Facultatif)
+                  </label>
+                  <span style={{ fontSize: "0.75rem", color: "#52b788", fontWeight: "700" }}>🎁 1 mois offert</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Ex: PIONNIER-AFRIQUE"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  style={{ ...inputStyle, fontSize: "0.9rem" }}
+                />
+              </div>
+
+              {/* Terms Checkbox */}
+              <label style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", cursor: "pointer", fontSize: "0.82rem", color: "#c7cfcb", lineHeight: "1.4" }}>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  style={{ marginTop: "0.2rem", accentColor: "#e63946", width: "17px", height: "17px" }}
+                />
+                <span>
+                  Je déclare sur l&apos;honneur avoir au moins <strong>18 ans</strong> et j&apos;accepte les <Link href="/terms" style={{ color: "#f4c07c", textDecoration: "underline" }}>Conditions Générales</Link> et la <Link href="/settings/privacy" style={{ color: "#f4c07c", textDecoration: "underline" }}>Protection RGPD</Link>.
+                </span>
+              </label>
+
+              {errorMsg && (
+                <div style={{ color: "#e63946", fontSize: "0.85rem", textAlign: "center", fontWeight: "700" }}>
+                  {errorMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={!phoneNumber || !acceptTerms || isSubmitting}
+                className="btn-primary"
+                style={{
+                  width: "100%",
+                  padding: "1rem",
+                  borderRadius: "999px",
+                  fontSize: "1rem",
+                  cursor: (!phoneNumber || !acceptTerms || isSubmitting) ? "not-allowed" : "pointer",
+                  opacity: (!phoneNumber || !acceptTerms || isSubmitting) ? 0.6 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                {isSubmitting ? "Envoi du code sécurisé..." : "Recevoir mon Code de Sécurité"} <ArrowRight size={18} />
+              </button>
+            </form>
+          )}
+
+          {/* Email Auth Mode */}
+          {authMode === "email" && (
+            <form onSubmit={handleEmailSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.35rem" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
+                  Adresse email
+                </label>
+                <input
+                  type="email"
+                  placeholder="votre.email@exemple.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={inputStyle}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.5rem" }}>
+                  Mot de passe
+                </label>
+                <input
+                  type="password"
+                  placeholder="Votre mot de passe"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Terms Checkbox */}
+              <label style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", cursor: "pointer", fontSize: "0.82rem", color: "#c7cfcb", lineHeight: "1.4" }}>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  style={{ marginTop: "0.2rem", accentColor: "#e63946", width: "17px", height: "17px" }}
+                />
+                <span>
+                  Je déclare sur l&apos;honneur avoir au moins <strong>18 ans</strong> et j&apos;accepte les <Link href="/terms" style={{ color: "#f4c07c", textDecoration: "underline" }}>Conditions Générales</Link>.
+                </span>
+              </label>
+
+              {errorMsg && (
+                <div style={{ color: "#e63946", fontSize: "0.85rem", textAlign: "center", fontWeight: "700" }}>
+                  {errorMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={!email || !password || !acceptTerms || isSubmitting}
+                className="btn-primary"
+                style={{
+                  width: "100%",
+                  padding: "1rem",
+                  borderRadius: "999px",
+                  fontSize: "1rem",
+                  cursor: (!email || !password || !acceptTerms || isSubmitting) ? "not-allowed" : "pointer",
+                  opacity: (!email || !password || !acceptTerms || isSubmitting) ? 0.6 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                {isSubmitting ? "Connexion en cours..." : "Se Connecter"} <ArrowRight size={18} />
+              </button>
+            </form>
+          )}
+
+          {/* Link to Sign Up */}
+          <div style={{ marginTop: "1.5rem", textAlign: "center", fontSize: "0.88rem", color: "#c7cfcb" }}>
+            Pas encore de compte ?{" "}
+            <Link href="/sign-up" style={{ color: "#f4c07c", fontWeight: "700", textDecoration: "none" }}>
+              Créer un profil certifié
+            </Link>
+          </div>
+
+          {/* Security Badge */}
+          <div
+            style={{
+              marginTop: "1.25rem",
               padding: "0.85rem 1rem",
               backgroundColor: "rgba(18, 34, 25, 0.6)",
               borderRadius: "16px",
@@ -375,7 +530,7 @@ export default function LoginPage() {
           >
             <ShieldCheck size={20} color="#52b788" style={{ flexShrink: 0 }} />
             <span>
-              <strong>Authentification 100% Sécurisée :</strong> Vos coordonnées demeurent strictement confidentielles et ne sont jamais transmises à des tiers.
+              <strong>Authentification 100% Sécurisée :</strong> Vos données sont chiffrées et ne sont jamais transmises à des tiers.
             </span>
           </div>
 

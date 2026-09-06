@@ -164,6 +164,7 @@ export default function DiscoverPage() {
 
       {/* Main Discover Layout */}
       <main
+        className="discover-layout"
         style={{
           flex: 1,
           maxWidth: "1140px",
@@ -179,6 +180,7 @@ export default function DiscoverPage() {
         <section style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           {/* Top Info Bar with Daily Quota & Modesty Switch */}
           <div
+            className="discover-info-bar"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -244,6 +246,7 @@ export default function DiscoverPage() {
 
           {/* Filtres Rapides par Pays Africains */}
           <div
+            className="discover-country-scroll"
             style={{
               display: "flex",
               gap: "0.5rem",
@@ -339,7 +342,7 @@ export default function DiscoverPage() {
               }}
             >
               {/* Photo Area with Modesty Mode */}
-              <div style={{ position: "relative", height: "460px", overflow: "hidden" }}>
+              <div className="discover-photo-area" style={{ position: "relative", height: "460px", overflow: "hidden" }}>
                 <img
                   src={candidate.photoUrl}
                   alt={candidate.firstName}
@@ -355,6 +358,7 @@ export default function DiscoverPage() {
 
                 {/* Top Floating Badges */}
                 <div
+                  className="discover-top-badges"
                   style={{
                     position: "absolute",
                     top: "16px",
@@ -389,7 +393,7 @@ export default function DiscoverPage() {
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                    <h2 style={{ fontSize: "2rem", fontWeight: "900", color: "#fbfbfb", margin: 0 }}>
+                    <h2 className="discover-card-name" style={{ fontSize: "2rem", fontWeight: "900", color: "#fbfbfb", margin: 0 }}>
                       {candidate.firstName}, {candidate.age}
                     </h2>
                   </div>
@@ -420,7 +424,7 @@ export default function DiscoverPage() {
               </div>
 
               {/* Bio & Values Preview */}
-              <div style={{ padding: "1.25rem 1.75rem", backgroundColor: "#102017", borderTop: "1px solid rgba(212, 163, 115, 0.12)" }}>
+              <div className="discover-card-bio" style={{ padding: "1.25rem 1.75rem", backgroundColor: "#102017", borderTop: "1px solid rgba(212, 163, 115, 0.12)" }}>
                 <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.6", margin: "0 0 1rem 0" }}>
                   &laquo; {candidate.bio} &raquo;
                 </p>
@@ -479,6 +483,7 @@ export default function DiscoverPage() {
 
               {/* Action Buttons: Pass & Like */}
               <div
+                className="discover-action-bar"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1.5fr",
@@ -540,7 +545,7 @@ export default function DiscoverPage() {
         </section>
 
         {/* Right Column: Streaks & Secret Admirer */}
-        <aside style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <aside className="discover-sidebar" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           {/* Streak Banner */}
           <StreakBanner />
 

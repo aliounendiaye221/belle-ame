@@ -19,6 +19,7 @@ interface ClerkAuthContextType {
   signOut: () => Promise<void>;
   openSignIn: () => void;
   openSignUp: () => void;
+  setUserSession: (user: ClerkUser) => void;
 }
 
 const ClerkAuthContext = createContext<ClerkAuthContextType>({
@@ -28,6 +29,7 @@ const ClerkAuthContext = createContext<ClerkAuthContextType>({
   signOut: async () => {},
   openSignIn: () => {},
   openSignUp: () => {},
+  setUserSession: () => {},
 });
 
 export function ClerkProvider({
@@ -38,7 +40,7 @@ export function ClerkProvider({
   appearance?: any;
 }) {
   const [user, setUser] = useState<ClerkUser | null>(null);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -47,27 +49,38 @@ export function ClerkProvider({
         try {
           setUser(JSON.parse(stored));
         } catch {
-          // ignore
+          // corrupted data, clear it
+          localStorage.removeItem("belleame_clerk_user");
         }
       }
+      setIsLoaded(true);
     }
   }, []);
 
   const signOut = async () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("belleame_clerk_user");
+      localStorage.removeItem("belleame_access_token");
       localStorage.removeItem("belleame_jwt_token");
+      sessionStorage.removeItem("belleame_pending_phone");
     }
     setUser(null);
     window.location.href = "/";
   };
 
   const openSignIn = () => {
-    window.location.href = "/sign-in";
+    window.location.href = "/auth/login";
   };
 
   const openSignUp = () => {
     window.location.href = "/sign-up";
+  };
+
+  const setUserSession = (newUser: ClerkUser) => {
+    setUser(newUser);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("belleame_clerk_user", JSON.stringify(newUser));
+    }
   };
 
   return (
@@ -79,6 +92,7 @@ export function ClerkProvider({
         signOut,
         openSignIn,
         openSignUp,
+        setUserSession,
       }}
     >
       {children}
@@ -93,7 +107,12 @@ export function useUser() {
 
 export function useClerk() {
   const ctx = useContext(ClerkAuthContext);
-  return { signOut: ctx.signOut, openSignIn: ctx.openSignIn, openSignUp: ctx.openSignUp };
+  return {
+    signOut: ctx.signOut,
+    openSignIn: ctx.openSignIn,
+    openSignUp: ctx.openSignUp,
+    setUserSession: ctx.setUserSession,
+  };
 }
 
 export function Show({
@@ -103,7 +122,8 @@ export function Show({
   when: "signed-in" | "signed-out";
   children: React.ReactNode;
 }) {
-  const { isSignedIn } = useContext(ClerkAuthContext);
+  const { isSignedIn, isLoaded } = useContext(ClerkAuthContext);
+  if (!isLoaded) return null;
   if (when === "signed-in" && isSignedIn) return <>{children}</>;
   if (when === "signed-out" && !isSignedIn) return <>{children}</>;
   return null;
@@ -117,7 +137,7 @@ export function SignInButton({
   mode?: "modal" | "redirect";
 }) {
   return (
-    <Link href="/sign-in" style={{ textDecoration: "none" }}>
+    <Link href="/auth/login" style={{ textDecoration: "none" }}>
       {children || <button type="button">Connexion</button>}
     </Link>
   );
@@ -239,16 +259,17 @@ export function UserButton({
   );
 }
 
-export function SignIn({ appearance }: { appearance?: any }) {
-  const [phoneOrEmail, setPhoneOrEmail] = useState("");
-  const [password, setPassword] = useState("");
+/* ============================================================
+   SignIn & SignUp components are kept for backward compatibility
+   but now redirect directly to the real auth pages.
+   ============================================================ */
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+export function SignIn({ appearance }: { appearance?: any }) {
+  useEffect(() => {
     if (typeof window !== "undefined") {
-      window.location.href = `/auth/login?phone=${encodeURIComponent(phoneOrEmail)}`;
+      window.location.href = "/auth/login";
     }
-  };
+  }, []);
 
   return (
     <div
@@ -260,102 +281,22 @@ export function SignIn({ appearance }: { appearance?: any }) {
         border: "1px solid rgba(212, 163, 115, 0.3)",
         padding: "2.25rem",
         boxShadow: "0 25px 50px rgba(0,0,0,0.6)",
+        textAlign: "center",
       }}
     >
-      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-        <h2 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#fbfbfb", marginBottom: "0.35rem" }}>
-          Connexion Sécurisée
-        </h2>
-        <p style={{ color: "#c7cfcb", fontSize: "0.88rem" }}>
-          Accédez à votre sanctuaire matrimonial « À Chacun Une Belle Âme »
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <div>
-          <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.4rem" }}>
-            Numéro de mobile ou Email
-          </label>
-          <input
-            type="text"
-            required
-            placeholder="Ex: +221 77 123 45 67"
-            value={phoneOrEmail}
-            onChange={(e) => setPhoneOrEmail(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: "#070d09",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-
-        <div>
-          <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.4rem" }}>
-            Mot de passe ou Code Secret
-          </label>
-          <input
-            type="password"
-            required
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: "#070d09",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn-primary"
-          style={{
-            width: "100%",
-            padding: "0.85rem",
-            borderRadius: "999px",
-            fontWeight: "800",
-            fontSize: "0.95rem",
-            marginTop: "0.5rem",
-            cursor: "pointer",
-          }}
-        >
-          Se Connecter avec Clerk
-        </button>
-      </form>
-
-      <div style={{ marginTop: "1.25rem", textAlign: "center", fontSize: "0.85rem", color: "#c7cfcb" }}>
-        Pas encore de compte ?{" "}
-        <Link href="/sign-up" style={{ color: "#f4c07c", fontWeight: "700" }}>
-          Créer un profil 18+
-        </Link>
+      <div style={{ color: "#c7cfcb", fontSize: "0.92rem" }}>
+        Redirection vers la page de connexion sécurisée...
       </div>
     </div>
   );
 }
 
 export function SignUp({ appearance }: { appearance?: any }) {
-  const [firstName, setFirstName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
     if (typeof window !== "undefined") {
-      window.location.href = `/auth/login?phone=${encodeURIComponent(phone)}`;
+      window.location.href = "/sign-up";
     }
-  };
+  }, []);
 
   return (
     <div
@@ -367,109 +308,11 @@ export function SignUp({ appearance }: { appearance?: any }) {
         border: "1px solid rgba(212, 163, 115, 0.3)",
         padding: "2.25rem",
         boxShadow: "0 25px 50px rgba(0,0,0,0.6)",
+        textAlign: "center",
       }}
     >
-      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-        <h2 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#fbfbfb", marginBottom: "0.35rem" }}>
-          Rejoindre l&apos;Alliance Sacrée
-        </h2>
-        <p style={{ color: "#c7cfcb", fontSize: "0.88rem" }}>
-          Inscription sécurisée certifiée par Clerk pour les majeurs d&apos;Afrique & Diaspora
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <div>
-          <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.4rem" }}>
-            Prénom
-          </label>
-          <input
-            type="text"
-            required
-            placeholder="Ex: Aminata"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: "#070d09",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-
-        <div>
-          <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.4rem" }}>
-            Numéro de téléphone mobile
-          </label>
-          <input
-            type="tel"
-            required
-            placeholder="Ex: +221 77 123 45 67"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: "#070d09",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-
-        <div>
-          <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#f4c07c", marginBottom: "0.4rem" }}>
-            Mot de passe
-          </label>
-          <input
-            type="password"
-            required
-            placeholder="Minimum 8 caractères"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: "#070d09",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn-primary"
-          style={{
-            width: "100%",
-            padding: "0.85rem",
-            borderRadius: "999px",
-            fontWeight: "800",
-            fontSize: "0.95rem",
-            marginTop: "0.5rem",
-            cursor: "pointer",
-          }}
-        >
-          Créer mon Compte Vérifié
-        </button>
-      </form>
-
-      <div style={{ marginTop: "1.25rem", textAlign: "center", fontSize: "0.85rem", color: "#c7cfcb" }}>
-        Déjà inscrit ?{" "}
-        <Link href="/sign-in" style={{ color: "#f4c07c", fontWeight: "700" }}>
-          Se connecter
-        </Link>
+      <div style={{ color: "#c7cfcb", fontSize: "0.92rem" }}>
+        Redirection vers la page d&apos;inscription...
       </div>
     </div>
   );

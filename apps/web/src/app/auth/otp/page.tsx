@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, ArrowRight, RefreshCw, KeyRound, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { ShieldCheck, ArrowRight, RefreshCw, KeyRound, AlertCircle } from "lucide-react";
 import { authService } from "@/lib/auth-service";
 
 export default function OtpPage() {
@@ -10,15 +10,30 @@ export default function OtpPage() {
   const [countdown, setCountdown] = useState(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [displayPhone, setDisplayPhone] = useState("+221 77 000 00 00");
+  const [displayPhone, setDisplayPhone] = useState("");
+  const [smsSentMessage, setSmsSentMessage] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedPhone = sessionStorage.getItem("belleame_pending_phone");
       const urlParams = new URLSearchParams(window.location.search);
       const phoneParam = urlParams.get("phone");
-      if (storedPhone) setDisplayPhone(storedPhone);
-      else if (phoneParam) setDisplayPhone(phoneParam);
+      const phone = storedPhone || phoneParam || "";
+      setDisplayPhone(phone);
+
+      if (phone) {
+        // Masquer partiellement le numéro pour la sécurité
+        const masked = phone.length > 6
+          ? phone.slice(0, 4) + " ••• •• " + phone.slice(-2)
+          : phone;
+        setSmsSentMessage(`Code de sécurité envoyé au ${masked}`);
+      }
+
+      // Auto-focus le premier champ
+      setTimeout(() => {
+        const firstInput = document.getElementById("otp-input-0");
+        firstInput?.focus();
+      }, 300);
     }
   }, []);
 
@@ -30,14 +45,25 @@ export default function OtpPage() {
 
   const handleChange = (index: number, value: string) => {
     const char = value.length > 1 ? value.slice(-1) : value;
+    // Only allow digits
+    if (char && !/^\d$/.test(char)) return;
+
     const newDigits = [...digits];
     newDigits[index] = char;
     setDigits(newDigits);
     setError("");
 
-    if (value && index < 5) {
+    if (char && index < 5) {
       const nextInput = document.getElementById(`otp-input-${index + 1}`);
       nextInput?.focus();
+    }
+
+    // Auto-submit when all 6 digits are filled
+    if (char && index === 5) {
+      const fullCode = newDigits.join("");
+      if (fullCode.length === 6) {
+        handleAutoVerify(fullCode);
+      }
     }
   };
 
@@ -48,21 +74,32 @@ export default function OtpPage() {
     }
   };
 
-  const handleVerify = async (e: React.FormEvent) => {
+  const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const code = digits.join("");
-    if (code.length < 6) {
-      setError("Veuillez saisir l'intégralité du code secret à 6 chiffres.");
-      return;
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (pasted.length > 0) {
+      const newDigits = [...digits];
+      for (let i = 0; i < pasted.length && i < 6; i++) {
+        newDigits[i] = pasted[i] || "";
+      }
+      setDigits(newDigits);
+      if (pasted.length === 6) {
+        handleAutoVerify(pasted);
+      } else {
+        const nextInput = document.getElementById(`otp-input-${Math.min(pasted.length, 5)}`);
+        nextInput?.focus();
+      }
     }
+  };
 
+  const handleAutoVerify = async (code: string) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     setError("");
 
     try {
       const result = await authService.verifyOtp(displayPhone, code);
       if (result.success) {
-        // Redirection vers l'onboarding pour compléter ou vérifier son profil
         if (result.profile && result.profile.kycStatus === "VERIFIED") {
           window.location.href = "/discover";
         } else {
@@ -70,7 +107,7 @@ export default function OtpPage() {
         }
         return;
       }
-      setError("Code OTP incorrect ou expiré. Veuillez réessayer.");
+      setError("Code incorrect ou expiré. Veuillez réessayer.");
     } catch (err: any) {
       setError(err?.message || "Erreur de validation. Veuillez vérifier votre saisie.");
     } finally {
@@ -78,11 +115,26 @@ export default function OtpPage() {
     }
   };
 
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const code = digits.join("");
+    if (code.length < 6) {
+      setError("Veuillez saisir les 6 chiffres de votre code de sécurité.");
+      return;
+    }
+    await handleAutoVerify(code);
+  };
+
   const handleResend = async () => {
     setCountdown(60);
     setDigits(["", "", "", "", "", ""]);
     setError("");
-    await authService.sendOtp(displayPhone);
+    try {
+      await authService.sendOtp(displayPhone);
+      setSmsSentMessage("Nouveau code de sécurité envoyé par SMS.");
+    } catch {
+      setError("Impossible de renvoyer le code. Veuillez réessayer.");
+    }
   };
 
   return (
@@ -170,34 +222,34 @@ export default function OtpPage() {
               Code de Sécurité
             </h1>
             <p style={{ color: "#c7cfcb", fontSize: "0.92rem", lineHeight: "1.5", margin: 0 }}>
-              Saisissez les 6 chiffres envoyés au <strong style={{ color: "#f4c07c" }}>{displayPhone}</strong>.
+              Saisissez les 6 chiffres envoyés par SMS à votre numéro.
             </p>
 
-            <div
-              style={{
-                marginTop: "1rem",
-                backgroundColor: "rgba(244, 192, 124, 0.1)",
-                border: "1px dashed rgba(244, 192, 124, 0.4)",
-                borderRadius: "14px",
-                padding: "0.65rem 1rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-                fontSize: "0.85rem",
-                color: "#f4c07c",
-              }}
-            >
-              <Sparkles size={16} />
-              <span>
-                Code test de validation immédiate : <strong style={{ letterSpacing: "2px" }}>123456</strong>
-              </span>
-            </div>
+            {smsSentMessage && (
+              <div
+                style={{
+                  marginTop: "1rem",
+                  backgroundColor: "rgba(82, 183, 136, 0.12)",
+                  border: "1px solid rgba(82, 183, 136, 0.35)",
+                  borderRadius: "14px",
+                  padding: "0.65rem 1rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  fontSize: "0.85rem",
+                  color: "#52b788",
+                }}
+              >
+                <ShieldCheck size={16} />
+                <span>{smsSentMessage}</span>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleVerify} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             {/* 6 digits input grid */}
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem" }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}>
               {digits.map((digit, idx) => (
                 <input
                   key={idx}
@@ -208,6 +260,8 @@ export default function OtpPage() {
                   value={digit}
                   onChange={(e) => handleChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
+                  onPaste={idx === 0 ? handlePaste : undefined}
+                  autoComplete="one-time-code"
                   style={{
                     width: "48px",
                     height: "56px",
@@ -253,9 +307,13 @@ export default function OtpPage() {
                 fontSize: "1rem",
                 cursor: (digits.join("").length < 6 || isSubmitting) ? "not-allowed" : "pointer",
                 opacity: (digits.join("").length < 6 || isSubmitting) ? 0.6 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
               }}
             >
-              {isSubmitting ? "Vérification en cours..." : "Valider & Démarrer l'Aventure"} <ArrowRight size={18} />
+              {isSubmitting ? "Vérification en cours..." : "Valider & Accéder à l'Espace"} <ArrowRight size={18} />
             </button>
 
             {/* Resend Countdown */}
@@ -284,31 +342,20 @@ export default function OtpPage() {
             </div>
           </form>
 
-          {/* Quick autofill helper in demo mode */}
+          {/* Security Footer */}
           <div
             style={{
               marginTop: "1.5rem",
-              padding: "0.75rem",
+              padding: "0.75rem 1rem",
               borderRadius: "14px",
-              backgroundColor: "rgba(82, 183, 136, 0.12)",
-              border: "1px dashed rgba(82, 183, 136, 0.35)",
+              backgroundColor: "rgba(18, 34, 25, 0.6)",
+              border: "1px solid rgba(82, 183, 136, 0.25)",
               textAlign: "center",
+              fontSize: "0.8rem",
+              color: "#8a968f",
             }}
           >
-            <button
-              type="button"
-              onClick={() => setDigits(["1", "2", "3", "4", "5", "6"])}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#52b788",
-                fontSize: "0.82rem",
-                fontWeight: "700",
-                cursor: "pointer",
-              }}
-            >
-              💡 Remplir automatiquement le code démo (123456)
-            </button>
+            🔐 Votre code est valable 10 minutes et ne peut être utilisé qu&apos;une seule fois.
           </div>
 
         </div>

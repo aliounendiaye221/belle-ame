@@ -396,7 +396,7 @@ h1, h2 {
   /* Page Découverte & Swipes */
   main {
     padding: 1rem 0.75rem !important;
-    padding-bottom: 5.5rem !important;
+    padding-bottom: 6.5rem !important;
   }
   .desktop-only-nav {
     display: none !important;
@@ -406,6 +406,64 @@ h1, h2 {
     grid-template-columns: 1fr !important;
     gap: 1.5rem !important;
   }
+
+  /* Discover Layout Mobile */
+  .discover-layout {
+    grid-template-columns: 1fr !important;
+    padding: 0.75rem 0.5rem !important;
+    padding-bottom: 6.5rem !important;
+    gap: 1rem !important;
+  }
+  .discover-sidebar {
+    display: none !important;
+  }
+  .discover-country-scroll {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 6px !important;
+  }
+  .discover-country-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .discover-country-scroll button {
+    flex-shrink: 0 !important;
+    font-size: 0.78rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+  .discover-action-bar {
+    grid-template-columns: 1fr 1.5fr !important;
+    padding: 0.85rem 0.75rem !important;
+    gap: 0.65rem !important;
+  }
+  .discover-action-bar button {
+    font-size: 0.85rem !important;
+    padding: 0.75rem 0.5rem !important;
+    min-height: 48px !important;
+  }
+  .discover-photo-area {
+    height: 340px !important;
+  }
+  .discover-top-badges {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .discover-top-badges span {
+    font-size: 0.72rem !important;
+    padding: 4px 8px !important;
+  }
+  .discover-info-bar {
+    flex-direction: column !important;
+    gap: 0.65rem !important;
+    padding: 0.65rem 0.85rem !important;
+  }
+  .discover-card-bio {
+    padding: 0.85rem 1rem !important;
+  }
+  .discover-card-name {
+    font-size: 1.5rem !important;
+  }
+
   .glass-panel {
     border-radius: 20px !important;
     padding: 1.25rem !important;
@@ -417,6 +475,11 @@ h1, h2 {
     padding: 12px 20px !important;
     font-size: 0.95rem !important;
     min-height: 48px !important;
+  }
+
+  /* Header mobile compact */
+  header {
+    padding: 0.75rem 0.85rem !important;
   }
 
   /* Évite le zoom intempestif sur iOS Safari */

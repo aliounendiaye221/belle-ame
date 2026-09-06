@@ -1,6 +1,12 @@
-import { SignIn } from "@/lib/clerk-client";
+"use client";
+
+import { useEffect } from "react";
 
 export default function SignInPage() {
+  useEffect(() => {
+    window.location.href = "/auth/login";
+  }, []);
+
   return (
     <div
       style={{
@@ -9,58 +15,11 @@ export default function SignInPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "2rem 1rem",
-        position: "relative",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          width: "450px",
-          height: "450px",
-          background: "radial-gradient(circle, rgba(244, 192, 124, 0.15) 0%, rgba(230, 57, 70, 0.08) 50%, transparent 70%)",
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        }}
-      />
-      <SignIn
-        appearance={{
-          elements: {
-            rootBox: {
-              boxShadow: "0 25px 60px rgba(0,0,0,0.7), 0 0 35px rgba(212, 163, 115, 0.2)",
-              borderRadius: "24px",
-              overflow: "hidden",
-            },
-            card: {
-              backgroundColor: "#122219",
-              border: "1px solid rgba(212, 163, 115, 0.3)",
-            },
-            headerTitle: {
-              color: "#fbfbfb",
-              fontWeight: "800",
-            },
-            headerSubtitle: {
-              color: "#c7cfcb",
-            },
-            formButtonPrimary: {
-              background: "linear-gradient(135deg, #f4c07c 0%, #e07a5f 100%)",
-              color: "#070d09",
-              fontWeight: "700",
-              "&:hover": {
-                opacity: 0.9,
-              },
-            },
-            formFieldInput: {
-              backgroundColor: "#070d09",
-              borderColor: "rgba(212, 163, 115, 0.3)",
-              color: "#ffffff",
-            },
-            footerActionLink: {
-              color: "#f4c07c",
-            },
-          },
-        }}
-      />
+      <div style={{ color: "#c7cfcb", fontSize: "0.95rem" }}>
+        Redirection vers la page de connexion sécurisée...
+      </div>
     </div>
   );
 }
