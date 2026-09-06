@@ -17,6 +17,7 @@ import {
   X,
   Sparkles,
   Shield,
+  ExternalLink,
 } from "lucide-react";
 import { UserButton, useUser } from "@/lib/clerk-admin";
 import { backofficeStore } from "@/lib/backoffice-store";
@@ -28,7 +29,7 @@ interface AdminNavbarProps {
 
 export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
   const pathname = usePathname();
-  const { signOut } = useUser();
+  const { user, signOut } = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState({ kycPending: 0, moderationPending: 0 });
 
@@ -38,6 +39,11 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
       kycPending: s.kycPending,
       moderationPending: s.moderationPending,
     });
+  }, [pathname]);
+
+  // Fermer le tiroir mobile lors du changement de page
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
   }, [pathname]);
 
   const navLinks = [
@@ -67,13 +73,14 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
     <>
       <header
         style={{
-          padding: "0.85rem 1.5rem",
-          borderBottom: "1px solid rgba(212, 163, 115, 0.18)",
-          backgroundColor: "#14231a",
+          padding: "0.85rem 1.25rem",
+          borderBottom: "1px solid rgba(212, 163, 115, 0.2)",
+          backgroundColor: "#0d1a12",
           position: "sticky",
           top: 0,
-          zIndex: 50,
+          zIndex: 60,
           backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
         }}
       >
         <div
@@ -83,24 +90,25 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
         >
           {/* Brand & Module Title */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
             <Link
               href="/"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.75rem",
+                gap: "0.65rem",
                 textDecoration: "none",
                 color: "inherit",
               }}
             >
               <div
                 style={{
-                  width: "38px",
-                  height: "38px",
+                  width: "36px",
+                  height: "36px",
                   borderRadius: "50%",
                   background: "linear-gradient(135deg, #d4a373, #f4c07c)",
                   color: "#0b130e",
@@ -109,16 +117,17 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
                   justifyContent: "center",
                   fontWeight: "900",
                   fontSize: "1.1rem",
+                  flexShrink: 0,
                   boxShadow: "0 0 15px rgba(244, 192, 124, 0.35)",
                 }}
               >
                 Â
               </div>
-              <div>
-                <div style={{ fontWeight: "900", fontSize: "1rem", color: "#fbfbfb", lineHeight: 1.2 }}>
+              <div style={{ overflow: "hidden" }}>
+                <div style={{ fontWeight: "900", fontSize: "0.95rem", color: "#fbfbfb", lineHeight: 1.2, whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
                   {title || "Super Admin"}
                 </div>
-                <div style={{ fontSize: "0.72rem", color: "#d4a373", fontWeight: "700" }}>
+                <div style={{ fontSize: "0.7rem", color: "#d4a373", fontWeight: "700", whiteSpace: "nowrap" }}>
                   {subtitle || "« À Chacun Une Belle Âme »"}
                 </div>
               </div>
@@ -131,7 +140,7 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.5rem",
+              gap: "0.35rem",
             }}
           >
             {navLinks.map((link) => {
@@ -141,10 +150,10 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
                   key={link.href}
                   href={link.href}
                   style={{
-                    padding: "6px 12px",
+                    padding: "6px 11px",
                     borderRadius: "12px",
                     textDecoration: "none",
-                    fontSize: "0.85rem",
+                    fontSize: "0.82rem",
                     fontWeight: isActive ? "800" : "600",
                     color: isActive ? "#070d09" : "#c7cfcb",
                     backgroundColor: isActive ? "#f4c07c" : "transparent",
@@ -176,7 +185,7 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
           </nav>
 
           {/* Controls: User button & Mobile burger */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", flexShrink: 0 }}>
             <UserButton />
 
             {/* Mobile Menu Toggle Button */}
@@ -184,9 +193,10 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="mobile-admin-burger"
+              aria-label="Menu Mobile"
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(212, 163, 115, 0.25)",
+                backgroundColor: "rgba(244, 192, 124, 0.1)",
+                border: "1px solid rgba(212, 163, 115, 0.3)",
                 color: "#f4c07c",
                 borderRadius: "10px",
                 width: "40px",
@@ -207,15 +217,15 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
       <div
         className="mobile-quick-scroll-bar"
         style={{
-          backgroundColor: "#0d1a12",
+          backgroundColor: "#070d09",
           borderBottom: "1px solid rgba(212, 163, 115, 0.15)",
-          padding: "8px 12px",
+          padding: "7px 10px",
           display: "flex",
-          gap: "8px",
+          gap: "6px",
           overflowX: "auto",
           whiteSpace: "nowrap",
           WebkitOverflowScrolling: "touch",
-          zIndex: 40,
+          zIndex: 50,
         }}
       >
         {navLinks.map((link) => {
@@ -228,7 +238,7 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
                 padding: "6px 12px",
                 borderRadius: "999px",
                 textDecoration: "none",
-                fontSize: "0.78rem",
+                fontSize: "0.76rem",
                 fontWeight: isActive ? "800" : "600",
                 color: isActive ? "#070d09" : "#c7cfcb",
                 backgroundColor: isActive ? "#f4c07c" : "rgba(255, 255, 255, 0.04)",
@@ -237,6 +247,7 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
                 alignItems: "center",
                 gap: "5px",
                 flexShrink: 0,
+                minHeight: "32px",
               }}
             >
               {link.icon}
@@ -260,80 +271,126 @@ export default function AdminNavbar({ title, subtitle }: AdminNavbarProps) {
         })}
       </div>
 
-      {/* Mobile Full Screen Drawer if Burger Toggled */}
+      {/* Mobile Full Screen Sliding Drawer if Burger Toggled */}
       {isMobileMenuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            top: "58px",
-            backgroundColor: "rgba(11, 19, 14, 0.98)",
-            zIndex: 90,
-            padding: "1.5rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.75rem",
-          }}
-        >
-          <div style={{ fontSize: "0.8rem", color: "#d4a373", fontWeight: "800", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-            Modules de Gestion Super Admin
-          </div>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                padding: "14px 16px",
-                borderRadius: "14px",
-                backgroundColor: pathname === link.href ? "rgba(244, 192, 124, 0.15)" : "rgba(255, 255, 255, 0.03)",
-                border: pathname === link.href ? "1.5px solid #f4c07c" : "1px solid rgba(255, 255, 255, 0.06)",
-                color: pathname === link.href ? "#f4c07c" : "#fbfbfb",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                fontWeight: "700",
-                fontSize: "0.95rem",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                {link.icon}
-                <span>{link.label}</span>
-              </div>
-              {link.badge && (
-                <span style={{ backgroundColor: link.badgeColor, color: "#070d09", padding: "2px 8px", borderRadius: "999px", fontSize: "0.75rem", fontWeight: "900" }}>
-                  {link.badge}
-                </span>
-              )}
-            </Link>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              signOut();
-            }}
+        <>
+          <div
+            className="mobile-drawer-overlay"
+            onClick={() => setIsMobileMenuOpen(false)}
             style={{
-              marginTop: "auto",
-              padding: "14px",
-              borderRadius: "14px",
-              backgroundColor: "rgba(230, 57, 70, 0.15)",
-              border: "1px solid #e63946",
-              color: "#ff858d",
-              fontWeight: "800",
-              fontSize: "0.95rem",
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+              backdropFilter: "blur(6px)",
+              zIndex: 80,
+            }}
+          />
+          <div
+            style={{
+              position: "fixed",
+              top: "58px",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "#0b160f",
+              zIndex: 90,
+              padding: "1.25rem 1rem",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              cursor: "pointer",
+              flexDirection: "column",
+              gap: "0.6rem",
+              overflowY: "auto",
+              WebkitOverflowScrolling: "touch",
             }}
           >
-            <LogOut size={18} /> Déconnexion Sécurisée
-          </button>
-        </div>
+            <div style={{ fontSize: "0.78rem", color: "#d4a373", fontWeight: "800", textTransform: "uppercase", marginBottom: "0.25rem", letterSpacing: "0.05em" }}>
+              Navigation Administration
+            </div>
+
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    padding: "12px 14px",
+                    borderRadius: "14px",
+                    backgroundColor: isActive ? "rgba(244, 192, 124, 0.15)" : "rgba(255, 255, 255, 0.03)",
+                    border: isActive ? "1.5px solid #f4c07c" : "1px solid rgba(255, 255, 255, 0.06)",
+                    color: isActive ? "#f4c07c" : "#fbfbfb",
+                    textDecoration: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    fontWeight: "700",
+                    fontSize: "0.92rem",
+                    minHeight: "48px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {link.icon}
+                    <span>{link.label}</span>
+                  </div>
+                  {link.badge && (
+                    <span style={{ backgroundColor: link.badgeColor, color: "#070d09", padding: "2px 8px", borderRadius: "999px", fontSize: "0.75rem", fontWeight: "900" }}>
+                      {link.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+
+            <div style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              <Link
+                href="https://belle-ame-web.vercel.app"
+                target="_blank"
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: "14px",
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  color: "#c7cfcb",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  fontSize: "0.85rem",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                  minHeight: "44px",
+                }}
+              >
+                <span>Ouvrir l&apos;Appli Web Membres</span>
+                <ExternalLink size={15} />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  signOut();
+                }}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: "14px",
+                  backgroundColor: "rgba(230, 57, 70, 0.15)",
+                  border: "1px solid #e63946",
+                  color: "#ff858d",
+                  fontWeight: "800",
+                  fontSize: "0.9rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  cursor: "pointer",
+                  minHeight: "46px",
+                }}
+              >
+                <LogOut size={16} /> Déconnexion Sécurisée
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

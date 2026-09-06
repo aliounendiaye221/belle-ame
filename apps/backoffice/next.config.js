@@ -7,6 +7,11 @@ const nextConfig = {
   experimental: {
     outputFileTracingRoot: path.resolve(__dirname, "../../"),
   },
+  env: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+      "pk_test_d2FudGVkLXNlYXNuYWlsLTY5NzcuY2xlcmsuYWNjb3VudHMuZGV2JA",
+  },
   images: {
     remotePatterns: [
       {

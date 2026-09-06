@@ -56,7 +56,7 @@ export default function BackofficeDashboard() {
     >
       <AdminNavbar title="Tableau de Bord Super Admin" subtitle="« À Chacun Une Belle Âme » Production" />
 
-      <main style={{ flex: 1, padding: "2rem 1.5rem", maxWidth: "1400px", width: "100%", margin: "0 auto" }}>
+      <main className="admin-container" style={{ flex: 1 }}>
         
         {/* Top Header with Quick Refresh */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
@@ -94,7 +94,7 @@ export default function BackofficeDashboard() {
         </div>
 
         {/* 4 KPI Main Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem", marginBottom: "2.5rem" }}>
+        <div className="admin-kpi-grid">
           
           {/* Card 1 : Utilisateurs Réels */}
           <Link
