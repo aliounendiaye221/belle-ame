@@ -2,310 +2,515 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, CheckCircle2, XCircle, FileText, UserCheck, Eye, ArrowLeft, RefreshCcw, Lock } from "lucide-react";
-import { UserButton } from "@/lib/clerk-admin";
-
-interface KycItem {
-  id: string;
-  userId: string;
-  fullName: string;
-  country: string;
-  birthDate: string;
-  documentType: string;
-  documentUrl: string;
-  selfieUrl: string;
-  similarityScore: number;
-  submittedAt: string;
-}
+import {
+  ShieldCheck,
+  CheckCircle2,
+  XCircle,
+  FileText,
+  UserCheck,
+  Eye,
+  ArrowLeft,
+  RefreshCcw,
+  Lock,
+  Sparkles,
+  AlertCircle,
+  ZoomIn,
+  X,
+} from "lucide-react";
+import AdminNavbar from "@/components/AdminNavbar";
+import { backofficeStore, BackofficeKycItem } from "@/lib/backoffice-store";
 
 export default function KycQueuePage() {
-  const [queue, setQueue] = useState<KycItem[]>([]);
+  const [queue, setQueue] = useState<BackofficeKycItem[]>([]);
   const [selectedId, setSelectedId] = useState("");
-  const selectedItem = queue.find((q) => q.id === selectedId) || queue[0];
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("Document illisible ou flou");
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  const loadQueue = () => {
-    if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("belleame_real_kyc_queue");
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          const pending = parsed.filter((item: any) => item.status === "PENDING");
-          setQueue(pending);
-          if (pending.length > 0) setSelectedId(pending[0].id);
-          else setSelectedId("");
-        } catch {
-          setQueue([]);
-        }
-      }
+  const loadData = () => {
+    const list = backofficeStore.getKycQueue();
+    setQueue(list);
+    const pending = list.filter((k) => k.status === "PENDING");
+    if (pending.length > 0) {
+      setSelectedId(pending[0]!.id);
+    } else if (list.length > 0) {
+      setSelectedId(list[0]!.id);
     }
   };
 
   useEffect(() => {
-    loadQueue();
+    loadData();
   }, []);
 
+  const pendingCount = queue.filter((k) => k.status === "PENDING").length;
+  const selectedItem = queue.find((q) => q.id === selectedId) || queue[0];
+
   const handleApprove = (id: string) => {
-    const item = queue.find((q) => q.id === id);
-    if (!item) return;
-
-    if (typeof window !== "undefined") {
-      // 1. Mettre à jour dans la file d'attente
-      const rawQueue = localStorage.getItem("belleame_real_kyc_queue");
-      if (rawQueue) {
-        try {
-          const allQueue = JSON.parse(rawQueue);
-          const target = allQueue.find((q: any) => q.id === id);
-          if (target) target.status = "APPROVED";
-          localStorage.setItem("belleame_real_kyc_queue", JSON.stringify(allQueue));
-        } catch {}
-      }
-
-      // 2. Mettre à jour le profil utilisateur
-      const rawProfile = localStorage.getItem("belleame_real_profile");
-      if (rawProfile) {
-        try {
-          const prof = JSON.parse(rawProfile);
-          prof.isIdentityVerified = true;
-          prof.kycStatus = "VERIFIED";
-          localStorage.setItem("belleame_real_profile", JSON.stringify(prof));
-        } catch {}
-      }
-
-      // 3. Enregistrer dans le journal d'audit
-      const rawAudit = localStorage.getItem("belleame_real_audit_logs") || "[]";
-      try {
-        const auditLogs = JSON.parse(rawAudit);
-        auditLogs.unshift({
-          id: `audit-${Date.now()}`,
-          timestamp: new Date().toISOString(),
-          adminId: "adm-mod-01 (Modérateur Assermenté)",
-          action: "KYC_APPROVED",
-          targetUser: item.userId,
-          ipAddress: "127.0.0.1",
-          details: `Approbation officielle de la pièce d'identité (${item.documentType}) pour ${item.fullName}. Score facial certifié ${item.similarityScore}%.`,
-        });
-        localStorage.setItem("belleame_real_audit_logs", JSON.stringify(auditLogs));
-      } catch {}
-    }
-
-    const remaining = queue.filter((q) => q.id !== id);
-    setQueue(remaining);
-    if (remaining.length > 0) setSelectedId(remaining[0]!.id);
-    else setSelectedId("");
+    backofficeStore.approveKyc(id);
+    setFeedbackMessage({
+      type: "success",
+      text: `Dossier de ${selectedItem?.fullName} approuvé avec succès ! Le badge officiel Âme Pure 🛡️ est désormais actif.`,
+    });
+    loadData();
+    setTimeout(() => setFeedbackMessage(null), 3500);
   };
 
-  const handleReject = (id: string) => {
-    const item = queue.find((q) => q.id === id);
-    if (!item) return;
-
-    if (typeof window !== "undefined") {
-      const rawQueue = localStorage.getItem("belleame_real_kyc_queue");
-      if (rawQueue) {
-        try {
-          const allQueue = JSON.parse(rawQueue);
-          const target = allQueue.find((q: any) => q.id === id);
-          if (target) {
-            target.status = "REJECTED";
-            target.moderatorNotes = "Document non conforme ou illisible";
-          }
-          localStorage.setItem("belleame_real_kyc_queue", JSON.stringify(allQueue));
-        } catch {}
-      }
-
-      const rawProfile = localStorage.getItem("belleame_real_profile");
-      if (rawProfile) {
-        try {
-          const prof = JSON.parse(rawProfile);
-          prof.isIdentityVerified = false;
-          prof.kycStatus = "REJECTED";
-          localStorage.setItem("belleame_real_profile", JSON.stringify(prof));
-        } catch {}
-      }
-
-      const rawAudit = localStorage.getItem("belleame_real_audit_logs") || "[]";
-      try {
-        const auditLogs = JSON.parse(rawAudit);
-        auditLogs.unshift({
-          id: `audit-${Date.now()}`,
-          timestamp: new Date().toISOString(),
-          adminId: "adm-mod-01 (Modérateur Assermenté)",
-          action: "KYC_REJECTED",
-          targetUser: item.userId,
-          ipAddress: "127.0.0.1",
-          details: `Rejet du dossier KYC pour ${item.fullName} (motif : Document non conforme).`,
-        });
-        localStorage.setItem("belleame_real_audit_logs", JSON.stringify(auditLogs));
-      } catch {}
-    }
-
-    const remaining = queue.filter((q) => q.id !== id);
-    setQueue(remaining);
-    if (remaining.length > 0) setSelectedId(remaining[0]!.id);
-    else setSelectedId("");
+  const handleConfirmReject = () => {
+    if (!selectedItem) return;
+    backofficeStore.rejectKyc(selectedItem.id, rejectReason);
+    setShowRejectModal(false);
+    setFeedbackMessage({
+      type: "error",
+      text: `Dossier de ${selectedItem.fullName} refusé pour le motif : ${rejectReason}. Notification transmise.`,
+    });
+    loadData();
+    setTimeout(() => setFeedbackMessage(null), 3500);
   };
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#0b130e", color: "#f8f9fa", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
-      {/* Admin Navbar */}
-      <header style={{ padding: "1rem 2rem", borderBottom: "1px solid rgba(212, 163, 115, 0.15)", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#14231a" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ width: "36px", height: "36px", borderRadius: "50%", backgroundColor: "#d4a373", color: "#0b130e", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
-            Â
-          </div>
-          <div>
-            <div style={{ fontWeight: "800", fontSize: "1.1rem" }}>Back-Office Administration</div>
-            <div style={{ fontSize: "0.7rem", color: "#52b788", fontWeight: "600" }}>🔒 Portée RBAC : Modération &amp; Vérification KYC</div>
-          </div>
-        </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#070d09",
+        color: "#f8f9fa",
+        fontFamily: "var(--font-sans, system-ui, sans-serif)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <AdminNavbar title="File KYC & Certification 18+" subtitle="Examen Assermenté d'Identité" />
 
-        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-          <nav style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
-            <Link href="/" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Dashboard</Link>
-            <Link href="/kyc" style={{ color: "#d4a373", fontWeight: "700", textDecoration: "none", borderBottom: "2px solid #d4a373", paddingBottom: "0.25rem", fontSize: "0.9rem" }}>File KYC ({queue.length})</Link>
-            <Link href="/moderation" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Modération SLA</Link>
-            <Link href="/users" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Utilisateurs</Link>
-            <Link href="/audit" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>Piste d&apos;Audit</Link>
-            <Link href="/growth" style={{ color: "#a0aba4", textDecoration: "none", fontWeight: "500", fontSize: "0.9rem" }}>WhatsApp Growth</Link>
-          </nav>
-          <UserButton />
-        </div>
-      </header>
-
-      <main style={{ flex: 1, padding: "1.5rem", display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
-        {/* Left Sidebar: Queue List */}
-        <div style={{ width: "340px", backgroundColor: "#14231a", borderRadius: "20px", border: "1px solid rgba(212, 163, 115, 0.2)", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#d4a373", margin: 0 }}>
-              Demandes KYC ({queue.length})
-            </h3>
+      {/* Lightbox Modal for Document Zoom */}
+      {zoomImage && (
+        <div
+          onClick={() => setZoomImage(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(12px)",
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }}>
+            <img
+              src={zoomImage}
+              alt="Pièce agrandie"
+              style={{ width: "100%", height: "100%", maxHeight: "85vh", objectFit: "contain", borderRadius: "16px", border: "2px solid #f4c07c" }}
+            />
             <button
-              onClick={loadQueue}
-              title="Actualiser la file"
-              style={{ background: "none", border: "none", color: "#a0aba4", cursor: "pointer" }}
+              onClick={() => setZoomImage(null)}
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                backgroundColor: "#e63946",
+                color: "#fff",
+                border: "none",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <RefreshCcw size={16} />
+              <X size={20} />
             </button>
           </div>
-
-          {queue.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "2.5rem 1rem", color: "#a0aba4", fontSize: "0.9rem" }}>
-              <CheckCircle2 size={36} color="#52b788" style={{ margin: "0 auto 0.75rem" }} />
-              <div>Toutes les demandes KYC sont traitées.</div>
-              <div style={{ fontSize: "0.78rem", color: "#7a8780", marginTop: "4px" }}>
-                Les nouvelles soumissions des utilisateurs lors de l&apos;onboarding apparaîtront ici automatiquement.
-              </div>
-            </div>
-          ) : (
-            queue.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => setSelectedId(item.id)}
-                style={{
-                  backgroundColor: selectedId === item.id ? "rgba(212, 163, 115, 0.15)" : "#081c15",
-                  border: selectedId === item.id ? "1px solid #d4a373" : "1px solid rgba(212, 163, 115, 0.15)",
-                  borderRadius: "14px",
-                  padding: "1rem",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <div style={{ fontWeight: "700", fontSize: "0.95rem", marginBottom: "0.25rem" }}>{item.fullName}</div>
-                <div style={{ fontSize: "0.8rem", color: "#a0aba4", marginBottom: "0.5rem" }}>
-                  {item.country} • {item.documentType}
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem" }}>
-                  <span style={{ color: "#52b788", fontWeight: "600" }}>Score IA : {item.similarityScore}%</span>
-                  <span style={{ color: "#7a8780" }}>{new Date(item.submittedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                </div>
-              </div>
-            ))
-          )}
         </div>
+      )}
 
-        {/* Right Main Inspection Area */}
-        {selectedItem ? (
-          <div style={{ flex: 1, backgroundColor: "#14231a", borderRadius: "24px", border: "1px solid rgba(212, 163, 115, 0.25)", padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(212, 163, 115, 0.15)", paddingBottom: "1rem" }}>
-              <div>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: "800", marginBottom: "0.25rem" }}>{selectedItem.fullName}</h2>
-                <div style={{ fontSize: "0.85rem", color: "#a0aba4" }}>
-                  ID Utilisateur: <code>{selectedItem.userId}</code> | Date de naissance: {selectedItem.birthDate} (18+ Validé)
-                </div>
-              </div>
-              <div style={{ backgroundColor: "rgba(82, 183, 136, 0.15)", border: "1px solid #52b788", padding: "0.5rem 1rem", borderRadius: "20px", color: "#52b788", fontWeight: "700", fontSize: "0.85rem" }}>
-                Score de Correspondance Faciale : {selectedItem.similarityScore}%
-              </div>
+      {/* Rejection Modal with Motives */}
+      {showRejectModal && selectedItem && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.8)",
+            backdropFilter: "blur(10px)",
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div
+            style={{
+              maxWidth: "480px",
+              width: "100%",
+              backgroundColor: "#14231a",
+              border: "1.5px solid rgba(230, 57, 70, 0.4)",
+              borderRadius: "24px",
+              padding: "2rem",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#ff858d", marginBottom: "0.5rem" }}>
+              <XCircle size={22} />
+              <h3 style={{ fontSize: "1.25rem", fontWeight: "900", margin: 0 }}>Motif de Refus Officiel</h3>
             </div>
+            <p style={{ color: "#a0aba4", fontSize: "0.85rem", marginBottom: "1.25rem" }}>
+              Indiquez la raison motivant le rejet de la pièce fournie par <strong>{selectedItem.fullName}</strong>.
+            </p>
 
-            {/* Side-by-Side Verification View */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-              {/* Document Image */}
-              <div style={{ backgroundColor: "#081c15", borderRadius: "16px", padding: "1rem", border: "1px solid rgba(212, 163, 115, 0.2)" }}>
-                <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#d4a373", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <FileText size={16} /> Pièce d&apos;Identité Officielle ({selectedItem.documentType})
-                </div>
-                <img
-                  src={selectedItem.documentUrl}
-                  alt="Document"
-                  style={{ width: "100%", height: "240px", objectFit: "contain", borderRadius: "12px", backgroundColor: "#000" }}
-                />
-              </div>
-
-              {/* Live Selfie Image */}
-              <div style={{ backgroundColor: "#081c15", borderRadius: "16px", padding: "1rem", border: "1px solid rgba(82, 183, 136, 0.2)" }}>
-                <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#52b788", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <UserCheck size={16} /> Selfie de Contrôle Liveness Live
-                </div>
-                <img
-                  src={selectedItem.selfieUrl}
-                  alt="Selfie"
-                  style={{ width: "100%", height: "240px", objectFit: "contain", borderRadius: "12px", backgroundColor: "#000" }}
-                />
-              </div>
-            </div>
-
-            {/* Approval / Rejection Actions */}
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem" }}>
-              <button
-                type="button"
-                onClick={() => handleReject(selectedItem.id)}
+            <div style={{ marginBottom: "1.25rem" }}>
+              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: "700", color: "#d4a373", marginBottom: "6px" }}>
+                Raison du Refus
+              </label>
+              <select
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
                 style={{
-                  backgroundColor: "rgba(230, 57, 70, 0.15)",
-                  border: "1px solid #e63946",
-                  color: "#e63946",
-                  padding: "0.9rem 1.75rem",
-                  borderRadius: "25px",
-                  fontWeight: "700",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
+                  width: "100%",
+                  padding: "12px 14px",
+                  borderRadius: "14px",
+                  backgroundColor: "#070d09",
+                  border: "1px solid rgba(212, 163, 115, 0.3)",
+                  color: "#fbfbfb",
+                  fontSize: "16px",
+                  outline: "none",
                 }}
               >
-                <XCircle size={18} /> Rejeter la pièce KYC
+                <option value="Document illisible ou flou">Document illisible ou flou (Résolution insuffisante)</option>
+                <option value="Non-concordance faciale (Selfie vs Pièce)">Non-concordance faciale (Score &lt; 85%)</option>
+                <option value="Pièce d'identité expirée">Pièce d&apos;identité expirée ou caduque</option>
+                <option value="Document tronqué / Bords coupés">Document tronqué / Angles coupés</option>
+                <option value="Suspicion de falsification numérique">Suspicion de retouche ou falsification</option>
+              </select>
+            </div>
+
+            <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setShowRejectModal(false)}
+                style={{
+                  padding: "10px 18px",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: "transparent",
+                  color: "#c7cfcb",
+                  cursor: "pointer",
+                  fontWeight: "600",
+                }}
+              >
+                Annuler
               </button>
-
               <button
                 type="button"
-                onClick={() => handleApprove(selectedItem.id)}
+                onClick={handleConfirmReject}
                 style={{
-                  backgroundColor: "#52b788",
-                  color: "#0b130e",
+                  padding: "10px 20px",
+                  borderRadius: "12px",
                   border: "none",
-                  padding: "0.9rem 2rem",
-                  borderRadius: "25px",
-                  fontWeight: "800",
+                  backgroundColor: "#e63946",
+                  color: "#ffffff",
                   cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
+                  fontWeight: "800",
                 }}
               >
-                <CheckCircle2 size={18} /> Approuver &amp; Attribuer Badge KYC 🛡️
+                Confirmer le Refus
               </button>
             </div>
           </div>
-        ) : null}
+        </div>
+      )}
+
+      {/* Main Container */}
+      <main style={{ flex: 1, padding: "2rem 1.5rem", maxWidth: "1400px", width: "100%", margin: "0 auto" }}>
+        
+        {/* Feedback Alert Banner */}
+        {feedbackMessage && (
+          <div
+            style={{
+              padding: "1rem 1.25rem",
+              borderRadius: "16px",
+              backgroundColor: feedbackMessage.type === "success" ? "rgba(82, 183, 136, 0.15)" : "rgba(230, 57, 70, 0.15)",
+              border: feedbackMessage.type === "success" ? "1px solid #52b788" : "1px solid #e63946",
+              color: feedbackMessage.type === "success" ? "#52b788" : "#ff858d",
+              marginBottom: "1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontWeight: "700",
+              fontSize: "0.9rem",
+            }}
+          >
+            {feedbackMessage.type === "success" ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
+            <span>{feedbackMessage.text}</span>
+          </div>
+        )}
+
+        {/* Title Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ backgroundColor: pendingCount > 0 ? "rgba(244, 192, 124, 0.2)" : "rgba(82, 183, 136, 0.2)", color: pendingCount > 0 ? "#f4c07c" : "#52b788", padding: "3px 10px", borderRadius: "999px", fontSize: "0.75rem", fontWeight: "800" }}>
+                {pendingCount} En Attente d&apos;Examen
+              </span>
+            </div>
+            <h1 style={{ fontSize: "1.75rem", fontWeight: "900", margin: "0.4rem 0 0 0", color: "#ffffff" }}>
+              Validation des Dossiers d&apos;Identité Officielle
+            </h1>
+          </div>
+
+          <button
+            type="button"
+            onClick={loadData}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 16px",
+              borderRadius: "12px",
+              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              border: "1px solid rgba(212, 163, 115, 0.25)",
+              color: "#f4c07c",
+              fontSize: "0.82rem",
+              fontWeight: "700",
+              cursor: "pointer",
+            }}
+          >
+            <RefreshCcw size={14} /> Rafraîchir la File
+          </button>
+        </div>
+
+        {/* 2-Column Responsive Workspace */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", alignItems: "start" }}>
+          
+          {/* Left Column : Dossiers List */}
+          <div style={{ backgroundColor: "#14231a", borderRadius: "24px", border: "1px solid rgba(212, 163, 115, 0.2)", padding: "1.25rem" }}>
+            <h3 style={{ fontSize: "1rem", fontWeight: "800", color: "#f4c07c", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "6px" }}>
+              <FileText size={16} /> Liste des Candidats ({queue.length})
+            </h3>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {queue.map((item) => {
+                const isSelected = item.id === selectedId;
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedId(item.id)}
+                    style={{
+                      padding: "1rem",
+                      borderRadius: "16px",
+                      backgroundColor: isSelected ? "rgba(244, 192, 124, 0.12)" : "rgba(255, 255, 255, 0.02)",
+                      border: isSelected ? "1.5px solid #f4c07c" : "1px solid rgba(255, 255, 255, 0.06)",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    <img
+                      src={item.avatarUrl}
+                      alt={item.fullName}
+                      style={{ width: "48px", height: "48px", borderRadius: "50%", objectFit: "cover", border: "1.5px solid #d4a373" }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div style={{ fontWeight: "800", fontSize: "0.95rem", color: "#ffffff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {item.fullName}, {item.age} ans
+                        </div>
+                        <span
+                          style={{
+                            fontSize: "0.68rem",
+                            fontWeight: "900",
+                            padding: "2px 8px",
+                            borderRadius: "999px",
+                            backgroundColor: item.status === "APPROVED" ? "rgba(82, 183, 136, 0.2)" : item.status === "REJECTED" ? "rgba(230, 57, 70, 0.2)" : "rgba(244, 192, 124, 0.2)",
+                            color: item.status === "APPROVED" ? "#52b788" : item.status === "REJECTED" ? "#ff858d" : "#f4c07c",
+                          }}
+                        >
+                          {item.status === "APPROVED" ? "VALIDÉ" : item.status === "REJECTED" ? "REFUSÉ" : "EN ATTENTE"}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: "0.78rem", color: "#a0aba4", marginTop: "2px" }}>
+                        {item.country} • {item.documentType} • Score {item.similarityScore}%
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column : Detail Inspector */}
+          {selectedItem ? (
+            <div style={{ backgroundColor: "#14231a", borderRadius: "24px", border: "1px solid rgba(212, 163, 115, 0.25)", padding: "1.75rem" }}>
+              
+              {/* Header Candidate Info */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem", borderBottom: "1px solid rgba(212, 163, 115, 0.15)", paddingBottom: "1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  <img
+                    src={selectedItem.avatarUrl}
+                    alt={selectedItem.fullName}
+                    style={{ width: "64px", height: "64px", borderRadius: "50%", objectFit: "cover", border: "2px solid #f4c07c" }}
+                  />
+                  <div>
+                    <h2 style={{ fontSize: "1.3rem", fontWeight: "900", color: "#ffffff", margin: 0 }}>
+                      {selectedItem.fullName}
+                    </h2>
+                    <div style={{ fontSize: "0.82rem", color: "#d4a373", fontWeight: "700", marginTop: "2px" }}>
+                      {selectedItem.profession} • {selectedItem.country}
+                    </div>
+                    <div style={{ fontSize: "0.75rem", color: "#a0aba4", marginTop: "2px" }}>
+                      Date de naissance déclarée : {selectedItem.birthDate} ({selectedItem.age} ans révolus)
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: "0.75rem", color: "#a0aba4" }}>Score Biométrique Facial</div>
+                  <div style={{ fontSize: "1.8rem", fontWeight: "900", color: selectedItem.similarityScore >= 85 ? "#52b788" : "#f4a261" }}>
+                    {selectedItem.similarityScore}%
+                  </div>
+                  <div style={{ fontSize: "0.7rem", color: selectedItem.similarityScore >= 85 ? "#52b788" : "#f4a261", fontWeight: "700" }}>
+                    {selectedItem.similarityScore >= 85 ? "Liveness & Concordance Forte" : "Vérification Manuelle Requise"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Document & Selfie Side-by-Side Comparison */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.25rem", marginBottom: "1.75rem" }}>
+                
+                {/* Official ID Document */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.8rem", fontWeight: "800", color: "#f4c07c" }}>
+                      Pièce Officielle ({selectedItem.documentType})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setZoomImage(selectedItem.documentUrl)}
+                      style={{ background: "none", border: "none", color: "#d4a373", fontSize: "0.75rem", cursor: "pointer", display: "flex", alignItems: "center", gap: "3px" }}
+                    >
+                      <ZoomIn size={12} /> Agrandir
+                    </button>
+                  </div>
+                  <div
+                    onClick={() => setZoomImage(selectedItem.documentUrl)}
+                    style={{
+                      height: "190px",
+                      borderRadius: "16px",
+                      overflow: "hidden",
+                      border: "1px solid rgba(212, 163, 115, 0.3)",
+                      backgroundColor: "#070d09",
+                      cursor: "pointer",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={selectedItem.documentUrl}
+                      alt="Document KYC"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+
+                {/* Selfie Comparison */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.8rem", fontWeight: "800", color: "#52b788" }}>
+                      Selfie de Contrôle en Direct
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setZoomImage(selectedItem.selfieUrl)}
+                      style={{ background: "none", border: "none", color: "#52b788", fontSize: "0.75rem", cursor: "pointer", display: "flex", alignItems: "center", gap: "3px" }}
+                    >
+                      <ZoomIn size={12} /> Agrandir
+                    </button>
+                  </div>
+                  <div
+                    onClick={() => setZoomImage(selectedItem.selfieUrl)}
+                    style={{
+                      height: "190px",
+                      borderRadius: "16px",
+                      overflow: "hidden",
+                      border: "1px solid rgba(82, 183, 136, 0.3)",
+                      backgroundColor: "#070d09",
+                      cursor: "pointer",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={selectedItem.selfieUrl}
+                      alt="Selfie Biométrique"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Action Buttons: 100% Functional Approve / Reject */}
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", paddingTop: "1rem", borderTop: "1px solid rgba(212, 163, 115, 0.15)" }}>
+                <button
+                  type="button"
+                  onClick={() => handleApprove(selectedItem.id)}
+                  disabled={selectedItem.status === "APPROVED"}
+                  style={{
+                    flex: 1,
+                    minWidth: "160px",
+                    padding: "14px 20px",
+                    borderRadius: "14px",
+                    border: "none",
+                    background: selectedItem.status === "APPROVED" ? "#1b4332" : "linear-gradient(135deg, #52b788 0%, #2d6a4f 100%)",
+                    color: "#ffffff",
+                    fontWeight: "900",
+                    fontSize: "0.95rem",
+                    cursor: selectedItem.status === "APPROVED" ? "not-allowed" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    boxShadow: "0 4px 15px rgba(82, 183, 136, 0.3)",
+                  }}
+                >
+                  <CheckCircle2 size={18} />
+                  {selectedItem.status === "APPROVED" ? "Dossier Déjà Approuvé" : "Approuver Officiellement 🛡️"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowRejectModal(true)}
+                  disabled={selectedItem.status === "REJECTED"}
+                  style={{
+                    padding: "14px 24px",
+                    borderRadius: "14px",
+                    border: "1px solid rgba(230, 57, 70, 0.5)",
+                    backgroundColor: "rgba(230, 57, 70, 0.12)",
+                    color: "#ff858d",
+                    fontWeight: "800",
+                    fontSize: "0.95rem",
+                    cursor: selectedItem.status === "REJECTED" ? "not-allowed" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <XCircle size={18} />
+                  {selectedItem.status === "REJECTED" ? "Dossier Rejeté" : "Rejeter la Pièce"}
+                </button>
+              </div>
+
+            </div>
+          ) : (
+            <div style={{ backgroundColor: "#14231a", borderRadius: "24px", padding: "3rem", textAlign: "center", color: "#a0aba4" }}>
+              Sélectionnez un dossier à examiner dans la colonne de gauche.
+            </div>
+          )}
+
+        </div>
+
       </main>
     </div>
   );

@@ -26,6 +26,7 @@ import CompatibilityRadar from "@/components/CompatibilityRadar";
 import MatchCelebrationModal from "@/components/MatchCelebrationModal";
 import SecretAdmirerTeaser from "@/components/SecretAdmirerTeaser";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { realPlatformStore, RealCandidate } from "@/lib/real-platform-store";
 
 export default function DiscoverPage() {
@@ -124,7 +125,7 @@ export default function DiscoverPage() {
       >
         <BrandLogo size="md" />
 
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
           <Link
             href="/discover"
             style={{
@@ -547,6 +548,8 @@ export default function DiscoverPage() {
           <SecretAdmirerTeaser count={3} />
         </aside>
       </main>
+
+      <MobileBottomNav activeTab="discover" />
     </div>
   );
 }

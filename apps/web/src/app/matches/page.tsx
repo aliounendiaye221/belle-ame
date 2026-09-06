@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ShieldCheck, MessageCircle, Crown, Sparkles, Clock, CheckCircle, Flame, ArrowRight, Lock } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { realPlatformStore, RealMatch } from "@/lib/real-platform-store";
 
 export default function MatchesPage() {
@@ -44,7 +45,7 @@ export default function MatchesPage() {
       >
         <BrandLogo size="md" />
 
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
           <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Découverte
           </Link>
@@ -99,33 +100,33 @@ export default function MatchesPage() {
               borderRadius: "14px",
               backgroundColor: "rgba(224, 122, 95, 0.15)",
               border: "1px solid rgba(224, 122, 95, 0.35)",
-              color: "#f4a261",
-              fontSize: "0.78rem",
-              fontWeight: "700",
               display: "flex",
               alignItems: "center",
-              gap: "6px",
+              gap: "8px",
             }}
           >
-            <Clock size={15} /> Règle anti-ghosting : 24h pour initier l&apos;échange
+            <Flame size={16} color="#e07a5f" className="animate-flame" />
+            <span style={{ fontSize: "0.78rem", color: "#f4a261", fontWeight: "700" }}>
+              Messagerie Réelle Débloquée
+            </span>
           </div>
         </div>
 
         {/* Matches List */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {matches.length === 0 ? (
             <div
               className="glass-panel"
               style={{
+                padding: "3.5rem 2rem",
                 textAlign: "center",
-                padding: "3.5rem 1.5rem",
-                borderRadius: "24px",
-                border: "1px dashed rgba(212, 163, 115, 0.3)",
+                borderRadius: "28px",
+                border: "1px dashed rgba(212, 163, 115, 0.25)",
               }}
             >
-              <Sparkles size={44} color="#d4a373" style={{ margin: "0 auto 1rem", opacity: 0.8 }} />
+              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✨</div>
               <h3 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#fbfbfb", marginBottom: "0.5rem" }}>
-                Zéro faux profil. Aucune correspondance simulée.
+                Aucune correspondance pour l&apos;instant
               </h3>
               <p style={{ color: "#c7cfcb", fontSize: "0.9rem", maxWidth: "460px", margin: "0 auto 1.5rem", lineHeight: "1.5" }}>
                 Votre espace est vierge et intègre. Explorez les profils certifiés de la communauté et envoyez vos premiers cœurs réels.
@@ -152,6 +153,7 @@ export default function MatchesPage() {
                   textDecoration: "none",
                   gap: "1.25rem",
                   position: "relative",
+                  flexWrap: "wrap",
                   border: match.unread ? "1.5px solid rgba(244, 192, 124, 0.45)" : "1px solid rgba(212, 163, 115, 0.18)",
                 }}
               >
@@ -268,6 +270,9 @@ export default function MatchesPage() {
         </div>
 
       </main>
+
+      {/* Floating Glass Bottom Navigation for Mobile */}
+      <MobileBottomNav activeTab="matches" />
     </div>
   );
 }

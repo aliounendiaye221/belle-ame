@@ -20,6 +20,7 @@ import {
 import { AFRICAN_COUNTRIES } from "@belle-ame/shared-types";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 export default function SettingsPage() {
   const [isSaved, setIsSaved] = useState(false);
@@ -408,7 +409,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Section 4 : Raccourcis de Sécurité et RGPD */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
             <Link
               href="/settings/privacy"
               style={{
@@ -503,6 +504,9 @@ export default function SettingsPage() {
         </form>
 
       </main>
+
+      {/* Floating Glass Bottom Navigation for Mobile */}
+      <MobileBottomNav activeTab="settings" />
     </div>
   );
 }

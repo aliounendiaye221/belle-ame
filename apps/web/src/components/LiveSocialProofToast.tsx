@@ -59,6 +59,7 @@ export default function LiveSocialProofToast() {
 
   return (
     <div
+      className="live-social-proof-toast-container"
       style={{
         position: "fixed",
         bottom: "24px",

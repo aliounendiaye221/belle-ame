@@ -428,7 +428,7 @@ export default function OnboardingPage() {
                   )}
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
                   <div>
                     <label style={{ display: "block", fontSize: "0.85rem", color: "#f4c07c", fontWeight: "700", marginBottom: "0.4rem" }}>
                       Pays de résidence
@@ -580,7 +580,7 @@ export default function OnboardingPage() {
                   </select>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
                   <div>
                     <label style={{ display: "block", fontSize: "0.85rem", color: "#f4c07c", fontWeight: "700", marginBottom: "0.4rem" }}>
                       Profession
@@ -663,7 +663,7 @@ export default function OnboardingPage() {
               </p>
 
               {/* Galerie de photos */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.85rem", marginBottom: "1.25rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
                 {formData.photos.map((photoUrl, idx) => (
                   <div
                     key={idx}

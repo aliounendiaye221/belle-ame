@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { realPlatformStore, RealUserProfile } from "@/lib/real-platform-store";
 import { storageService } from "@/lib/storage-service";
 
@@ -155,7 +156,7 @@ export default function ProfilePage() {
       >
         <BrandLogo size="md" />
 
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
           <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Découverte
           </Link>
@@ -220,7 +221,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Tiered Unlocked Rewards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem" }}>
             {milestones.map((m, idx) => (
               <div
                 key={idx}
@@ -506,6 +507,9 @@ export default function ProfilePage() {
           </form>
         </div>
       </main>
+
+      {/* Floating Glass Bottom Navigation for Mobile */}
+      <MobileBottomNav activeTab="profile" />
     </div>
   );
 }

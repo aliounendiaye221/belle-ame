@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { realPlatformStore, PaymentReceipt } from "@/lib/real-platform-store";
 
 export default function SubscriptionPage() {
@@ -113,7 +114,7 @@ export default function SubscriptionPage() {
         </div>
 
         {/* Pricing Tier Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "3rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
           {/* Tier 1 : Pass Découverte */}
           <div
             onClick={() => { setSelectedPlan("PASS"); setReceipt(null); }}
@@ -349,7 +350,7 @@ export default function SubscriptionPage() {
             </h3>
 
             {/* Sélecteur d'opérateur */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
               {[
                 { id: "WAVE", label: "Wave Money 🔵", desc: "Sénégal, Côte d'Ivoire & Bénin" },
                 { id: "ORANGE_MONEY", label: "Orange Money 🟠", desc: "Sénégal, CI, Cameroun, Mali" },
@@ -426,6 +427,9 @@ export default function SubscriptionPage() {
           </div>
         )}
       </main>
+
+      {/* Floating Glass Bottom Navigation for Mobile */}
+      <MobileBottomNav activeTab="subscription" />
     </div>
   );
 }

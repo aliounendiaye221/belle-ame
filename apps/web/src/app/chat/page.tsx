@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import LiveSocialProofToast from "@/components/LiveSocialProofToast";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 interface ConversationItem {
   id: string;
@@ -104,7 +105,7 @@ export default function ChatInboxPage() {
       >
         <BrandLogo size="md" />
 
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+        <nav className="desktop-only-nav" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
           <Link href="/discover" style={{ color: "#c7cfcb", textDecoration: "none", fontWeight: "500", fontSize: "0.92rem" }}>
             Découverte
           </Link>
@@ -418,6 +419,9 @@ export default function ChatInboxPage() {
         </div>
 
       </main>
+
+      {/* Floating Glass Bottom Navigation for Mobile */}
+      <MobileBottomNav activeTab="matches" />
     </div>
   );
 }

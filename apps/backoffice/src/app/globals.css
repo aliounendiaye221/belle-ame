@@ -168,15 +168,28 @@ tr:hover td {
   to { transform: rotate(360deg); }
 }
 
+@media (min-width: 993px) {
+  .mobile-admin-burger,
+  .mobile-quick-scroll-bar {
+    display: none !important;
+  }
+}
+
 /* =========================================================
-   RESPONSIVE MOBILE FIRST POUR LE BACK-OFFICE ADMIN (320px-768px)
+   RESPONSIVE MOBILE FIRST POUR LE BACK-OFFICE ADMIN (320px-992px)
    ========================================================= */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+  .desktop-admin-nav {
+    display: none !important;
+  }
+  .mobile-admin-burger {
+    display: flex !important;
+  }
+  .mobile-quick-scroll-bar {
+    display: flex !important;
+  }
   header {
     padding: 0.75rem 1rem !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.75rem !important;
   }
 
   header > div:first-child {
@@ -208,7 +221,9 @@ tr:hover td {
 
   /* Cartes de KPIs en 1 seule colonne ou 2 sur tablette */
   div[style*="gridTemplateColumns: repeat(4, 1fr)"],
-  div[style*="grid-template-columns: repeat(4, 1fr)"] {
+  div[style*="grid-template-columns: repeat(4, 1fr)"],
+  div[style*="gridTemplateColumns: repeat(3, 1fr)"],
+  div[style*="grid-template-columns: repeat(3, 1fr)"] {
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
   }

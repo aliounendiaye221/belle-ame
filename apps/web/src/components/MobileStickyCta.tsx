@@ -5,15 +5,26 @@ import Link from "next/link";
 import { Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function MobileStickyCta() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    try {
+      const p = localStorage.getItem("belleame_real_profile");
+      if (p) setIsLoggedIn(true);
+    } catch {
+      // ignore
+    }
+  }, []);
+
   return (
     <div
       className="mobile-sticky-bar"
       style={{
         position: "fixed",
-        bottom: "16px",
-        left: "16px",
-        right: "16px",
-        zIndex: 99,
+        bottom: "max(14px, env(safe-area-inset-bottom))",
+        left: "14px",
+        right: "14px",
+        zIndex: 49,
         background: "rgba(16, 32, 23, 0.95)",
         backdropFilter: "blur(20px)",
         border: "1px solid rgba(212, 163, 115, 0.4)",
@@ -31,12 +42,12 @@ export default function MobileStickyCta() {
           <ShieldCheck size={13} /> 9 240+ Profils Vérifiés
         </span>
         <span style={{ fontSize: "0.85rem", color: "#fbfbfb", fontWeight: 700 }}>
-          Votre moitié vous attend
+          {isLoggedIn ? "Reprenez vos échanges" : "Votre moitié vous attend"}
         </span>
       </div>
 
       <Link
-        href="/auth/login"
+        href={isLoggedIn ? "/discover" : "/auth/login"}
         style={{
           background: "linear-gradient(135deg, #f4c07c, #d4a373)",
           color: "#070d09",
@@ -52,7 +63,7 @@ export default function MobileStickyCta() {
           flexShrink: 0,
         }}
       >
-        Rejoindre <ArrowRight size={14} />
+        {isLoggedIn ? "Mon Espace" : "Rejoindre"} <ArrowRight size={14} />
       </Link>
     </div>
   );

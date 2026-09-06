@@ -135,7 +135,7 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
       {/* Header Conversation */}
       <header
         style={{
-          padding: "0.85rem 1.5rem",
+          padding: "0.85rem 1rem",
           borderBottom: "1px solid rgba(212, 163, 115, 0.18)",
           display: "flex",
           justifyContent: "space-between",
@@ -147,8 +147,8 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
           zIndex: 40,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <Link href="/matches" style={{ color: "#f4c07c", textDecoration: "none", display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <Link href="/matches" style={{ color: "#f4c07c", textDecoration: "none", display: "flex", alignItems: "center", padding: "4px" }}>
             <ArrowLeft size={22} />
           </Link>
 
@@ -185,7 +185,7 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <button
             type="button"
             onClick={() => setShowCallModal(true)}
@@ -195,15 +195,15 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
               border: "1px solid rgba(244, 192, 124, 0.3)",
               color: "#f4c07c",
               borderRadius: "50%",
-              width: "36px",
-              height: "36px",
+              width: "40px",
+              height: "40px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <PhoneCall size={17} />
+            <PhoneCall size={18} />
           </button>
 
           <button
@@ -215,15 +215,15 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
               border: "1px solid rgba(230, 57, 70, 0.3)",
               color: "#ff858d",
               borderRadius: "50%",
-              width: "36px",
-              height: "36px",
+              width: "40px",
+              height: "40px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Flag size={16} />
+            <Flag size={17} />
           </button>
         </div>
       </header>
@@ -346,7 +346,7 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
       {/* Saisie de Message */}
       <footer
         style={{
-          padding: "1rem 1.5rem",
+          padding: "0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px))",
           backgroundColor: "rgba(18, 34, 25, 0.95)",
           borderTop: "1px solid rgba(212, 163, 115, 0.18)",
           backdropFilter: "blur(20px)",
@@ -375,7 +375,7 @@ export default function ChatPage({ params }: { params: { matchId: string } }) {
               padding: "0.85rem 1.25rem",
               borderRadius: "999px",
               outline: "none",
-              fontSize: "0.92rem",
+              fontSize: "16px",
             }}
           />
           <button
